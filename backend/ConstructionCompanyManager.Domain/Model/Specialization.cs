@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace ConstructionCompanyManager.Domain.Model
 {
-    internal class Specialization
+    public class Specialization
     {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public List<Employee> Employees { get; set; }
+        public List<Employee> MainSpecializationEmployees { get; set; }
     }
 }
