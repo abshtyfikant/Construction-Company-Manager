@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csproj", "{6FA23DFE-66A6-4A6D-8B88-57AD84F67D2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{6FA23DFE-66A6-4A6D-8B88-57AD84F67D2A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{4287CCC3-7FB2-4D10-8E18-1B86BB7B25CE}"
 EndProject
@@ -15,13 +15,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{E7D7CB76-1
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{6938B10C-FA4B-4427-8541-0B5910E48243}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConstructionCompanyManager.Application", "ConstructionCompanyManager.Application\ConstructionCompanyManager.Application.csproj", "{D9C20D72-2084-4C71-A480-EFFBBE07E4AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConstructionCompanyManager.Application", "ConstructionCompanyManager.Application\ConstructionCompanyManager.Application.csproj", "{D9C20D72-2084-4C71-A480-EFFBBE07E4AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConstructionCompanyManager.Domain", "ConstructionCompanyManager.Domain\ConstructionCompanyManager.Domain.csproj", "{F170FD0A-0FC7-40BA-90C1-FDA318F8332E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConstructionCompanyManager.Domain", "ConstructionCompanyManager.Domain\ConstructionCompanyManager.Domain.csproj", "{F170FD0A-0FC7-40BA-90C1-FDA318F8332E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConstructionCompanyManager.Infrastructure", "ConstructionCompanyManager.Infrastructure\ConstructionCompanyManager.Infrastructure.csproj", "{17DA4291-3DA4-42D7-866E-6142E6AABD79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConstructionCompanyManager.Infrastructure", "ConstructionCompanyManager.Infrastructure\ConstructionCompanyManager.Infrastructure.csproj", "{17DA4291-3DA4-42D7-866E-6142E6AABD79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConstructionCompanyManager.Tests", "ConstructionCompanyManager.Tests\ConstructionCompanyManager.Tests.csproj", "{CD426759-8FA6-4A68-84DB-5EA49E387055}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConstructionCompanyManager.Tests", "ConstructionCompanyManager.Tests\ConstructionCompanyManager.Tests.csproj", "{CD426759-8FA6-4A68-84DB-5EA49E387055}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{670D7184-F494-4DDC-84E4-3C1FC363590F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{CD426759-8FA6-4A68-84DB-5EA49E387055}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD426759-8FA6-4A68-84DB-5EA49E387055}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD426759-8FA6-4A68-84DB-5EA49E387055}.Release|Any CPU.Build.0 = Release|Any CPU
+		{670D7184-F494-4DDC-84E4-3C1FC363590F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{670D7184-F494-4DDC-84E4-3C1FC363590F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{670D7184-F494-4DDC-84E4-3C1FC363590F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{670D7184-F494-4DDC-84E4-3C1FC363590F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,6 +65,7 @@ Global
 		{F170FD0A-0FC7-40BA-90C1-FDA318F8332E} = {CF890452-15CB-44AB-9496-D1B6A0D12EB8}
 		{17DA4291-3DA4-42D7-866E-6142E6AABD79} = {065E444F-BE55-4580-BBAC-88311EC7BBEB}
 		{CD426759-8FA6-4A68-84DB-5EA49E387055} = {E7D7CB76-1D96-48CD-A23F-89E5402B44A3}
+		{670D7184-F494-4DDC-84E4-3C1FC363590F} = {6938B10C-FA4B-4427-8541-0B5910E48243}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {819F865F-FDD8-4ED1-927C-0E354DA098E5}
