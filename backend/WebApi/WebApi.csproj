@@ -16,8 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ConstructionCompanyManager.Application\ConstructionCompanyManager.Application.csproj" />
-    <ProjectReference Include="..\ConstructionCompanyManager.Infrastructure\ConstructionCompanyManager.Infrastructure.csproj" />
+    <ProjectReference Include="..\ConstructionCompanyManager.Application\Application.csproj" />
+    <ProjectReference Include="..\ConstructionCompanyManager.Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

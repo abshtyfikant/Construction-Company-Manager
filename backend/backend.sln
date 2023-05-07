@@ -15,13 +15,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{E7D7CB76-1
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{6938B10C-FA4B-4427-8541-0B5910E48243}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConstructionCompanyManager.Application", "ConstructionCompanyManager.Application\ConstructionCompanyManager.Application.csproj", "{D9C20D72-2084-4C71-A480-EFFBBE07E4AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "ConstructionCompanyManager.Application\Application.csproj", "{D9C20D72-2084-4C71-A480-EFFBBE07E4AB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConstructionCompanyManager.Domain", "ConstructionCompanyManager.Domain\ConstructionCompanyManager.Domain.csproj", "{F170FD0A-0FC7-40BA-90C1-FDA318F8332E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "ConstructionCompanyManager.Domain\Domain.csproj", "{F170FD0A-0FC7-40BA-90C1-FDA318F8332E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConstructionCompanyManager.Infrastructure", "ConstructionCompanyManager.Infrastructure\ConstructionCompanyManager.Infrastructure.csproj", "{17DA4291-3DA4-42D7-866E-6142E6AABD79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "ConstructionCompanyManager.Infrastructure\Infrastructure.csproj", "{17DA4291-3DA4-42D7-866E-6142E6AABD79}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConstructionCompanyManager.Tests", "ConstructionCompanyManager.Tests\ConstructionCompanyManager.Tests.csproj", "{CD426759-8FA6-4A68-84DB-5EA49E387055}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "ConstructionCompanyManager.Tests\Tests.csproj", "{CD426759-8FA6-4A68-84DB-5EA49E387055}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
