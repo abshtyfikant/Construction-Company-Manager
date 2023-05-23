@@ -9,10 +9,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace ConstructionCompanyManager.Infrastructure.Migrations
+namespace Infrastructure.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20230505210111_InitialCreate")]
+    [Migration("20230523222503_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -557,7 +557,7 @@ namespace ConstructionCompanyManager.Infrastructure.Migrations
                     b.HasOne("ConstructionCompanyManager.Domain.Model.Specialization", "MainSpecialization")
                         .WithMany("MainSpecializationEmployees")
                         .HasForeignKey("MainSpecializationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("MainSpecialization");
@@ -566,13 +566,13 @@ namespace ConstructionCompanyManager.Infrastructure.Migrations
             modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.EmployeeSpecialization", b =>
                 {
                     b.HasOne("ConstructionCompanyManager.Domain.Model.Employee", "Employee")
-                        .WithMany()
+                        .WithMany("EmployeeSpecializations")
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ConstructionCompanyManager.Domain.Model.Specialization", "Specialization")
-                        .WithMany()
+                        .WithMany("EmployeeSpecializations")
                         .HasForeignKey("SpecializationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -695,6 +695,8 @@ namespace ConstructionCompanyManager.Infrastructure.Migrations
                     b.Navigation("Assigments");
 
                     b.Navigation("Comments");
+
+                    b.Navigation("EmployeeSpecializations");
                 });
 
             modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.Resource", b =>
@@ -717,6 +719,8 @@ namespace ConstructionCompanyManager.Infrastructure.Migrations
 
             modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.Specialization", b =>
                 {
+                    b.Navigation("EmployeeSpecializations");
+
                     b.Navigation("MainSpecializationEmployees");
                 });
 #pragma warning restore 612, 618

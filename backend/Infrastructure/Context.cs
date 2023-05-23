@@ -42,12 +42,13 @@ namespace ConstructionCompanyManager.Infrastructure
                 .HasOne(e => e.MainSpecialization)
                 .WithMany(e => e.MainSpecializationEmployees)
                 .HasForeignKey(e => e.MainSpecializationId)
-                .IsRequired();
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Employee>()
                 .HasMany(e => e.Services)
                 .WithMany(e => e.Employees)
                 .UsingEntity<Assigment>();
+
 
             builder.Entity<Employee>()
             .HasMany(p => p.Services)

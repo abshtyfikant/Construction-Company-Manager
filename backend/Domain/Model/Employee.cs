@@ -15,6 +15,7 @@ namespace ConstructionCompanyManager.Domain.Model
         public double RatePerHour { get; set; }
         public int MainSpecializationId { get; set; }
         public Specialization MainSpecialization { get; set; }
+        public List<EmployeeSpecialization> EmployeeSpecializations { get; set; }
         public List<Specialization> Specializations { get; set; }
         public List<Comment> Comments { get; set; }
         public List<Assigment> Assigments { get; set; }
