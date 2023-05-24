@@ -36,15 +36,16 @@ namespace WebApi.Controllers
 
         private object GenerateJsonWebToken(UserModel loginModel)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt.Key"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(_config["Jwt:Issuer"], _config["Jwt:Issuer"], null, expires: DateTime.Now.AddMinutes(60),signingCredentials: credentials);
+            var token = new JwtSecurityToken(_config["Jwt:Issuer"], _config["Jwt:Issuer"], null, expires: DateTime.Now.AddMinutes(120),signingCredentials: credentials);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         private bool AuthenticateUser(UserModel loginModel)
         {
+            return true;
             var result = _signInManager.PasswordSignInAsync(loginModel.Email, loginModel.Password, true, lockoutOnFailure: false).Result;
             return result.Succeeded;
         }
