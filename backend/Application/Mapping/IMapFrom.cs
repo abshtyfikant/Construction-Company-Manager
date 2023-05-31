@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConstructionCompanyManager.Application.Mapping
+namespace Application.Mapping
 {
     public interface IMapFrom<T>
     {

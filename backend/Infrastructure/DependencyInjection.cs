@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConstructionCompanyManager.Infrastructure
+namespace Infrastructure
 {
     public static class DependencyInjection
     {

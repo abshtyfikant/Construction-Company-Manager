@@ -14,3 +14,4 @@ namespace Application.Interfaces
         void DeleteService(int id);
     }
 }
+ 
