@@ -1,5 +1,5 @@
-using ConstructionCompanyManager.Application;
-using ConstructionCompanyManager.Infrastructure;
+using Application;
+using Infrastructure;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;

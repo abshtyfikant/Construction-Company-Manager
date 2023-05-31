@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConstructionCompanyManager.Domain.Model
+namespace Domain.Model
 {
     public class Specialization
     {

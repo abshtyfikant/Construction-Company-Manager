@@ -1,5 +1,5 @@
-﻿using ConstructionCompanyManager.Domain.Model;
-using ConstructionCompanyManager.Infrastructure;
+﻿using Domain.Model;
+using Infrastructure;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;

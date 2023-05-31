@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConstructionCompanyManager.Application
+namespace Application
 {
     public static class DependencyInjection
     {

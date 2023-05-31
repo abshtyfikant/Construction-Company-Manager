@@ -45,7 +45,6 @@ namespace WebApi.Controllers
 
         private bool AuthenticateUser(UserModel loginModel)
         {
-            return true;
             var result = _signInManager.PasswordSignInAsync(loginModel.Email, loginModel.Password, true, lockoutOnFailure: false).Result;
             return result.Succeeded;
         }

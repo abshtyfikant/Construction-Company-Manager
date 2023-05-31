@@ -1,4 +1,4 @@
-﻿using ConstructionCompanyManager.Domain.Model;
+﻿using Domain.Model;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,7 +8,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConstructionCompanyManager.Infrastructure
+namespace Infrastructure
 {
     public class Context : IdentityDbContext
     {
