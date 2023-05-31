@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -10,6 +11,13 @@ namespace WebApi.Controllers
     [Authorize]
     public class ServiceController : ControllerBase
     {
+        private readonly IServiceService _serviceService;
+
+        public ServiceController(IServiceService serviceService)
+        {
+            _serviceService = serviceService;
+        }
+
         // GET: api/<ServiceController>
         [HttpGet]
         public IEnumerable<string> Get()
