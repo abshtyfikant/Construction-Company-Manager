@@ -11,8 +11,8 @@ namespace Infrastructure.Repositories
 {
     public class ServiceRepository : IServiceRepository
     {
-        private readonly Context _context;
-        public ServiceRepository(Context context)
+        private readonly ApplicationDbContext _context;
+        public ServiceRepository(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -40,7 +40,7 @@ namespace Infrastructure.Repositories
             return services;
         }
 
-        public Service GetServiceById(int serviceId)
+        public Service GetService(int serviceId)
         {
             var service = _context.Services.FirstOrDefault(i => i.Id == serviceId);
             return service;

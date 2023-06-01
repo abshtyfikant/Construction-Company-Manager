@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using WebApi.Models;
 
 namespace WebApi.Controllers
 {
@@ -22,7 +23,7 @@ namespace WebApi.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Login([FromBody] UserModel loginModel)
+        public IActionResult Login([FromBody] User loginModel)
         {
             IActionResult response = Unauthorized();
             var success = AuthenticateUser(loginModel);
@@ -34,7 +35,7 @@ namespace WebApi.Controllers
             return response;
         }
 
-        private object GenerateJsonWebToken(UserModel loginModel)
+        private object GenerateJsonWebToken(User loginModel)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -43,9 +44,9 @@ namespace WebApi.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private bool AuthenticateUser(UserModel loginModel)
+        private bool AuthenticateUser(User loginModel)
         {
-            var result = _signInManager.PasswordSignInAsync(loginModel.Email, loginModel.Password, true, lockoutOnFailure: false).Result;
+            var result = _signInManager.PasswordSignInAsync(loginModel.Username, loginModel.Password, true, lockoutOnFailure: false).Result;
             return result.Succeeded;
         }
     }

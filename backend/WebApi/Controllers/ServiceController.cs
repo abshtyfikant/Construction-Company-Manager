@@ -19,7 +19,9 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<ServiceForListDto>> Get()
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public ActionResult<IEnumerable<ServiceForListDto>> GetAll()
         {
             var model = _serviceService.GetServicesForList();
             if(model == null)
@@ -30,10 +32,21 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public string Get(int id)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public ActionResult<ServiceDetailsDto> Get(int id)
         {
-            return "value";
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+            var service = _serviceService.GetService(id);
+            if (service == null)
+            {
+                return NotFound();
+            }
+            return Ok(service);
         }
-
     }
 }
