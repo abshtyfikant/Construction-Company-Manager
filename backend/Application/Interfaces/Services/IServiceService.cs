@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Interfaces
+namespace Application.Interfaces.Services
 {
     public interface IServiceService
     {
@@ -17,4 +17,3 @@ namespace Application.Interfaces
         void DeleteService(int id);
     }
 }
- 

@@ -1,8 +1,8 @@
 ﻿using Application.DTO.Service;
-using Application.Interfaces;
+using Application.Interfaces.Services;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Domain.Interfaces;
+using Domain.Interfaces.Repository;
 using Domain.Model;
 using System;
 using System.Collections.Generic;
