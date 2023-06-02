@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Interfaces.Services
+namespace Domain.Interfaces.Services
 {
     public interface IDateTimeProvider
     {
-        DateTime UtcNow {  get; }
+        DateTime UtcNow { get; }
     }
 }

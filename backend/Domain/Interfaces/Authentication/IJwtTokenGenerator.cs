@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Interfaces
+namespace Application.Interfaces.Authentication
 {
-    public interface IUserRepository
+    public interface IJwtTokenGenerator
     {
-        User? GetUserByEmail(string email);
-        void Add(User user);
+        string GenerateToken(User user);
     }
 }

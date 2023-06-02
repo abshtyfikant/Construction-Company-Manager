@@ -1,6 +1,6 @@
 ﻿using Application.Interfaces.Authentication;
-using Application.Interfaces.Services;
-using Domain.Interfaces;
+using Domain.Interfaces.Repository;
+using Domain.Interfaces.Services;
 using Infrastructure.Authentication;
 using Infrastructure.Repositories;
 using Infrastructure.Services;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Interfaces.Authentication;
-using Domain.Interfaces;
+using Domain.Interfaces.Repository;
 using Domain.Model;
 
 namespace Application.Services.Authentication
@@ -36,13 +36,10 @@ namespace Application.Services.Authentication
             };
             _userRepository.Add(user);
 
-            var token = _jwtTokenGenerator.GenerateToken(user.Id, firstName, lastName);
+            var token = _jwtTokenGenerator.GenerateToken(user);
             
             return new AuthenticationResult(
-                user.Id,
-                firstName,
-                lastName,
-                email,
+                user,
                 token);
         }
 
@@ -58,13 +55,10 @@ namespace Application.Services.Authentication
                 throw new Exception("Invalid password");
             }
 
-            var token = _jwtTokenGenerator.GenerateToken(user.Id, user.FirstName, user.LastName);
+            var token = _jwtTokenGenerator.GenerateToken(user);
 
             return new AuthenticationResult(
-                user.Id,
-                user.FirstName,
-                user.LastName,
-                email,
+                user,
                 token);
         }
     }

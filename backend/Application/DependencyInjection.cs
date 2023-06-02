@@ -1,5 +1,5 @@
-﻿using Application.Interfaces;
-using Application.Interfaces.Authentication;
+﻿using Application.Interfaces.Authentication;
+using Application.Interfaces.Services;
 using Application.Services;
 using Application.Services.Authentication;
 using Microsoft.Extensions.DependencyInjection;
