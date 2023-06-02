@@ -4,7 +4,6 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -12,11 +11,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230523222503_InitialCreate")]
-    partial class InitialCreate
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,7 +22,7 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.Assigment", b =>
+            modelBuilder.Entity("Domain.Model.Assigment", b =>
                 {
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
@@ -44,7 +41,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Assigments");
                 });
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.Client", b =>
+            modelBuilder.Entity("Domain.Model.Client", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -69,7 +66,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Clients");
                 });
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.Comment", b =>
+            modelBuilder.Entity("Domain.Model.Comment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -96,7 +93,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.Employee", b =>
+            modelBuilder.Entity("Domain.Model.Employee", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -129,7 +126,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.EmployeeSpecialization", b =>
+            modelBuilder.Entity("Domain.Model.EmployeeSpecialization", b =>
                 {
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
@@ -144,7 +141,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("SpecializationAssigments");
                 });
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.Material", b =>
+            modelBuilder.Entity("Domain.Model.Material", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -176,7 +173,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Materials");
                 });
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.Report", b =>
+            modelBuilder.Entity("Domain.Model.Report", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -215,7 +212,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Reports");
                 });
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.Resource", b =>
+            modelBuilder.Entity("Domain.Model.Resource", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -235,7 +232,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Resources");
                 });
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.Service", b =>
+            modelBuilder.Entity("Domain.Model.Service", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -275,7 +272,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Services");
                 });
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.ServiceResource", b =>
+            modelBuilder.Entity("Domain.Model.ServiceResource", b =>
                 {
                     b.Property<int>("ResourceId")
                         .HasColumnType("int");
@@ -299,7 +296,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("ResourceAllocations");
                 });
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.Specialization", b =>
+            modelBuilder.Entity("Domain.Model.Specialization", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -314,6 +311,33 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Specializations");
+                });
+
+            modelBuilder.Entity("Domain.Model.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -461,10 +485,12 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -501,10 +527,12 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -514,15 +542,15 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.Assigment", b =>
+            modelBuilder.Entity("Domain.Model.Assigment", b =>
                 {
-                    b.HasOne("ConstructionCompanyManager.Domain.Model.Employee", "Employee")
+                    b.HasOne("Domain.Model.Employee", "Employee")
                         .WithMany("Assigments")
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ConstructionCompanyManager.Domain.Model.Service", "Service")
+                    b.HasOne("Domain.Model.Service", "Service")
                         .WithMany("Assigments")
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -533,15 +561,15 @@ namespace Infrastructure.Migrations
                     b.Navigation("Service");
                 });
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.Comment", b =>
+            modelBuilder.Entity("Domain.Model.Comment", b =>
                 {
-                    b.HasOne("ConstructionCompanyManager.Domain.Model.Employee", "Employee")
+                    b.HasOne("Domain.Model.Employee", "Employee")
                         .WithMany("Comments")
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ConstructionCompanyManager.Domain.Model.Service", "Service")
+                    b.HasOne("Domain.Model.Service", "Service")
                         .WithMany("Comments")
                         .HasForeignKey("ServiceID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -552,9 +580,9 @@ namespace Infrastructure.Migrations
                     b.Navigation("Service");
                 });
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.Employee", b =>
+            modelBuilder.Entity("Domain.Model.Employee", b =>
                 {
-                    b.HasOne("ConstructionCompanyManager.Domain.Model.Specialization", "MainSpecialization")
+                    b.HasOne("Domain.Model.Specialization", "MainSpecialization")
                         .WithMany("MainSpecializationEmployees")
                         .HasForeignKey("MainSpecializationId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -563,15 +591,15 @@ namespace Infrastructure.Migrations
                     b.Navigation("MainSpecialization");
                 });
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.EmployeeSpecialization", b =>
+            modelBuilder.Entity("Domain.Model.EmployeeSpecialization", b =>
                 {
-                    b.HasOne("ConstructionCompanyManager.Domain.Model.Employee", "Employee")
+                    b.HasOne("Domain.Model.Employee", "Employee")
                         .WithMany("EmployeeSpecializations")
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ConstructionCompanyManager.Domain.Model.Specialization", "Specialization")
+                    b.HasOne("Domain.Model.Specialization", "Specialization")
                         .WithMany("EmployeeSpecializations")
                         .HasForeignKey("SpecializationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -582,9 +610,9 @@ namespace Infrastructure.Migrations
                     b.Navigation("Specialization");
                 });
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.Material", b =>
+            modelBuilder.Entity("Domain.Model.Material", b =>
                 {
-                    b.HasOne("ConstructionCompanyManager.Domain.Model.Service", "Service")
+                    b.HasOne("Domain.Model.Service", "Service")
                         .WithMany("Materials")
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -593,9 +621,9 @@ namespace Infrastructure.Migrations
                     b.Navigation("Service");
                 });
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.Report", b =>
+            modelBuilder.Entity("Domain.Model.Report", b =>
                 {
-                    b.HasOne("ConstructionCompanyManager.Domain.Model.Service", "Service")
+                    b.HasOne("Domain.Model.Service", "Service")
                         .WithMany("Reports")
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -604,9 +632,9 @@ namespace Infrastructure.Migrations
                     b.Navigation("Service");
                 });
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.Service", b =>
+            modelBuilder.Entity("Domain.Model.Service", b =>
                 {
-                    b.HasOne("ConstructionCompanyManager.Domain.Model.Client", "Client")
+                    b.HasOne("Domain.Model.Client", "Client")
                         .WithMany("Services")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -615,15 +643,15 @@ namespace Infrastructure.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.ServiceResource", b =>
+            modelBuilder.Entity("Domain.Model.ServiceResource", b =>
                 {
-                    b.HasOne("ConstructionCompanyManager.Domain.Model.Resource", "Resource")
+                    b.HasOne("Domain.Model.Resource", "Resource")
                         .WithMany("ServiceResources")
                         .HasForeignKey("ResourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ConstructionCompanyManager.Domain.Model.Service", "Service")
+                    b.HasOne("Domain.Model.Service", "Service")
                         .WithMany("ServiceResources")
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -685,12 +713,12 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.Client", b =>
+            modelBuilder.Entity("Domain.Model.Client", b =>
                 {
                     b.Navigation("Services");
                 });
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.Employee", b =>
+            modelBuilder.Entity("Domain.Model.Employee", b =>
                 {
                     b.Navigation("Assigments");
 
@@ -699,12 +727,12 @@ namespace Infrastructure.Migrations
                     b.Navigation("EmployeeSpecializations");
                 });
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.Resource", b =>
+            modelBuilder.Entity("Domain.Model.Resource", b =>
                 {
                     b.Navigation("ServiceResources");
                 });
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.Service", b =>
+            modelBuilder.Entity("Domain.Model.Service", b =>
                 {
                     b.Navigation("Assigments");
 
@@ -717,7 +745,7 @@ namespace Infrastructure.Migrations
                     b.Navigation("ServiceResources");
                 });
 
-            modelBuilder.Entity("ConstructionCompanyManager.Domain.Model.Specialization", b =>
+            modelBuilder.Entity("Domain.Model.Specialization", b =>
                 {
                     b.Navigation("EmployeeSpecializations");
 

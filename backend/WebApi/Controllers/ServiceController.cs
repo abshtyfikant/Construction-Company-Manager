@@ -10,7 +10,7 @@ namespace WebApi.Controllers
     [ApiController]
     [Authorize]
     public class ServiceController : ControllerBase
-    {
+    { 
         private readonly IServiceService _serviceService;
 
         public ServiceController(IServiceService serviceService)
@@ -21,7 +21,7 @@ namespace WebApi.Controllers
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public ActionResult<IEnumerable<ServiceForListDto>> GetAll()
+        public ActionResult<IEnumerable<ServiceForListDto>> Get()
         {
             var model = _serviceService.GetServicesForList();
             if(model == null)

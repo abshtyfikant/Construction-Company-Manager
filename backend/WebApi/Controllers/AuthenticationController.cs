@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Authentication;
@@ -7,6 +8,7 @@ namespace WebApi.Controllers
 {
     [Route("auth")]
     [ApiController]
+    [AllowAnonymous]
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationService _authenticationService;

@@ -11,51 +11,51 @@ namespace Infrastructure.Repositories
 {
     public class ServiceRepository : IServiceRepository
     {
-        private readonly ApplicationDbContext _context;
-        public ServiceRepository(ApplicationDbContext context)
+        private readonly ApplicationDbContext _dbContext;
+        public ServiceRepository(ApplicationDbContext dbContext)
         {
-            _context = context;
+            _dbContext = dbContext;
         }
 
         public int AddService(Service service)
         {
-            _context.Services.Add(service);
-            _context.SaveChanges();
+            _dbContext.Services.Add(service);
+            _dbContext.SaveChanges();
             return service.Id;
         }
 
         public void DeleteService(int serviceId)
         {
-            var service = _context.Services.Find(serviceId);
+            var service = _dbContext.Services.Find(serviceId);
             if (service != null)
             {
-                _context.Services.Remove(service);
-                _context.SaveChanges();
+                _dbContext.Services.Remove(service);
+                _dbContext.SaveChanges();
             }
         }
 
         public IQueryable<Service> GetAllServices()
         {
-            var services = _context.Services;
+            var services = _dbContext.Services;
             return services;
         }
 
         public Service GetService(int serviceId)
         {
-            var service = _context.Services.FirstOrDefault(i => i.Id == serviceId);
+            var service = _dbContext.Services.FirstOrDefault(i => i.Id == serviceId);
             return service;
         }
 
         public void UpdateService(Service service)
         {
-            _context.Attach(service);
-            _context.Entry(service).Property("ServiceType").IsModified = true;
-            _context.Entry(service).Property("BeginDate").IsModified = true;
-            _context.Entry(service).Property("EndDate").IsModified = true;
-            _context.Entry(service).Property("ServiceStatus").IsModified = true;
-            _context.Entry(service).Property("PaymentStatus").IsModified = true;
-            _context.Entry(service).Property("City").IsModified = true;
-            _context.SaveChanges();
+            _dbContext.Attach(service);
+            _dbContext.Entry(service).Property("ServiceType").IsModified = true;
+            _dbContext.Entry(service).Property("BeginDate").IsModified = true;
+            _dbContext.Entry(service).Property("EndDate").IsModified = true;
+            _dbContext.Entry(service).Property("ServiceStatus").IsModified = true;
+            _dbContext.Entry(service).Property("PaymentStatus").IsModified = true;
+            _dbContext.Entry(service).Property("City").IsModified = true;
+            _dbContext.SaveChanges();
         }
     }
 }
