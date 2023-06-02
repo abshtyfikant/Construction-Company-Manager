@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTO
+namespace Application.Interfaces.Services
 {
-    internal class ListServiceForList
+    public interface IDateTimeProvider
     {
+        DateTime UtcNow {  get; }
     }
 }

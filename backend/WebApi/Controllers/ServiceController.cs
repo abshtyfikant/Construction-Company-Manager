@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.DTO.Service;
+using Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,28 +19,34 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<string> Get()
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public ActionResult<IEnumerable<ServiceForListDto>> GetAll()
         {
-            return new string[] { "value1", "value2" };
+            var model = _serviceService.GetServicesForList();
+            if(model == null)
+            {
+                return NotFound();
+            }
+            return Ok(model);
         }
 
         [HttpGet("{id:int}")]
-        public string Get(int id)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public ActionResult<ServiceDetailsDto> Get(int id)
         {
-            return "value";
-        }
-
-        // POST api/<ServiceController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-
-        // DELETE api/<ServiceController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+            var service = _serviceService.GetService(id);
+            if (service == null)
+            {
+                return NotFound();
+            }
+            return Ok(service);
         }
     }
 }

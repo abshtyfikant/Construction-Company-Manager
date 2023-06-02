@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure
 {
-    public class Context : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext
     {
 
         public DbSet<Assigment> Assigments { get; set; }
@@ -25,9 +25,9 @@ namespace Infrastructure
         public DbSet<ServiceResource> ResourceAllocations { get; set; }
         public DbSet<Specialization> Specializations { get; set; }
 
-        public Context(DbContextOptions options) : base(options)
-        {
-        }
+        public ApplicationDbContext(DbContextOptions options) 
+            : base(options)
+        { }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

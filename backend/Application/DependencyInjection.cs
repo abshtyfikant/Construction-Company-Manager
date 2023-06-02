@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Application.Interfaces;
+using Application.Interfaces.Authentication;
+using Application.Services;
+using Application.Services.Authentication;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +16,8 @@ namespace Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
+            services.AddTransient<IServiceService, ServiceService>();
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             return services;
         }

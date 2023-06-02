@@ -12,7 +12,7 @@ namespace Domain.Interfaces
         void DeleteService(int serviceId);
         int AddService(Service service);
         IQueryable<Service> GetAllServices();
-        Service GetServiceById(int serviceId);
+        Service GetService(int serviceId);
         void UpdateService(Service service);
     }
 }
