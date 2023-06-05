@@ -17,6 +17,12 @@ namespace Application.Services
         private readonly IServiceRepository _serviceRepo;
         private readonly IMapper _mapper;
 
+        public ServiceService(IMapper mapper, IServiceRepository serviceRepo)
+        {
+            _mapper = mapper;
+            _serviceRepo = serviceRepo;
+        }
+
         public int AddService(NewServiceDto album)
         {
             var alb = _mapper.Map<Service>(album);

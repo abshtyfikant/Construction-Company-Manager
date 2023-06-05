@@ -10,7 +10,7 @@ namespace WebApi.Controllers
         public IActionResult Error()
         {
             Exception? exception = HttpContext.Features.Get<IExceptionHandlerFeature>()?.Error;
-            return Problem(title: exception?.Message, statusCode: 400);
+            return Problem(title: exception?.Message);
         }
     }
 }

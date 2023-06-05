@@ -21,7 +21,7 @@ namespace Application.DTO.Service
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Domain.Model.Service, ServiceForListDto>()
+            profile.CreateMap<Domain.Model.Service, ServiceDetailsDto>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Id))
                 .ForMember(d => d.ServiceType, opt => opt.MapFrom(s => s.ServiceType))
                 .ForMember(d => d.BeginDate, opt => opt.MapFrom(s => s.BeginDate))
