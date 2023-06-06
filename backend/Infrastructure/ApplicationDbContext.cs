@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : DbContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Assigment> Assigments { get; set; }
