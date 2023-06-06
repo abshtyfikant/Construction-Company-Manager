@@ -1,5 +1,4 @@
-﻿using Application.DTO.Raport;
-using Application.DTO.Report;
+﻿using Application.DTO.Report;
 using Application.DTO.Service;
 using System;
 using System.Collections.Generic;

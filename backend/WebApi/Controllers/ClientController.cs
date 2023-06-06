@@ -1,33 +1,29 @@
-﻿using Application.DTO.Report;
+﻿using Application.DTO.Client;
 using Application.DTO.Service;
-using Application.Interfaces.Reports;
 using Application.Interfaces.Services;
-using Domain.Interfaces.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class ReportController : ControllerBase
+    public class ClientController : ControllerBase
     {
-        private readonly IReportService _reportservice;
+        private readonly IClientService _clientService;
 
-        public ReportController(IReportService reportService)
+        public ClientController(IClientService clientService)
         {
-            _reportservice = reportService;
+            _clientService = clientService;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-
-        public ActionResult<IEnumerable<ServiceForListDto>> Get()
+        public ActionResult<IEnumerable<ClientDto>> Get()
         {
-            var list = _reportservice.GetReportsForList();
+            var list = _clientService.GetClientsForList();
             return Ok(list);
         }
 
@@ -35,33 +31,33 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<ServiceDetailsDto> Get(int id)
+        public ActionResult<ClientDto> Get(int id)
         {
             if (id == 0)
             {
                 return BadRequest();
             }
-            var report = _reportservice.GetReport(id);
-            if (report == null)
+            var service = _clientService.GetClient(id);
+            if (service == null)
             {
                 return NotFound();
             }
-            return Ok(report);
+            return Ok(service);
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult Create([FromBody] NewReportDto newReport)
+        public ActionResult Create([FromBody] NewClientDto newClient)
         {
             if (ModelState.IsValid)
             {
-                if (newReport.Id > 0)
+                if (newClient.Id > 0)
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError);
                 }
-                _reportservice.AddReport(newReport);
+                _clientService.AddClient(newClient);
                 return Ok();
             }
             return BadRequest();

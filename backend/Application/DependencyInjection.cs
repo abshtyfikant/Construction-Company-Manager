@@ -17,9 +17,10 @@ namespace Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddTransient<IServiceService, ServiceService>();
-            services.AddTransient<IReportService, ReportService>();
-            services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IServiceService, ServiceService>();
+            services.AddScoped<IReportService, ReportService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IClientService, ClientService>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             return services;
         }

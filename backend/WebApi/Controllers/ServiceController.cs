@@ -22,8 +22,8 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<ServiceForListDto>> Get()
         {
-            var model = _serviceService.GetServicesForList();
-            return Ok(model);
+            var list = _serviceService.GetServicesForList();
+            return Ok(list);
         }
 
         [HttpGet("{id:int}")]
@@ -48,7 +48,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public  ActionResult<NewServiceDto> Create ([FromBody]NewServiceDto newService)
+        public  ActionResult Create ([FromBody]NewServiceDto newService)
         {
             if (ModelState.IsValid)
             { 
