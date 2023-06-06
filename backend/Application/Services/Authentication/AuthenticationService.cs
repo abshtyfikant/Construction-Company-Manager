@@ -32,7 +32,7 @@ namespace Application.Services.Authentication
                 FirstName = firstName,
                 LastName = lastName,
                 Email = email,
-                Password = password
+                HashedPassword = PasswordHasher.Hash(password)
             };
             _userRepository.Add(user);
 
@@ -50,7 +50,8 @@ namespace Application.Services.Authentication
                 throw new Exception("User with given email does not exists");
             }
 
-            if(user.Password != password)
+            bool isPasswordCorrect = PasswordHasher.Verify(password, user.HashedPassword);
+            if (!isPasswordCorrect)
             {
                 throw new Exception("Invalid password");
             }
