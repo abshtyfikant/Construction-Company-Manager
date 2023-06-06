@@ -19,6 +19,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("register")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult Register (RegisterRequest request)
         {
             var authResult = _authenticationService.Register(
@@ -38,6 +39,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("login")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult Login(LoginRequest request)
         {
             var authResult = _authenticationService.Login(

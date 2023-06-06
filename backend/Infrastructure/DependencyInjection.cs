@@ -22,6 +22,7 @@ namespace Infrastructure
             services.AddAuth(configuration);
             services.AddScoped<IServiceRepository, ServiceRepository>();
             services.AddScoped<IReportRepository, ReportRepository>();
+            services.AddScoped<IClientRepository, ClientRepository>();
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
             services.AddScoped<IUserRepository, UserRepository>();

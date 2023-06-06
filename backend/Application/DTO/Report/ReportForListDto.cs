@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTO.Raport
+namespace Application.DTO.Report
 {
     public class ReportForListDto : IMapFrom<Domain.Model.Report>
     {
