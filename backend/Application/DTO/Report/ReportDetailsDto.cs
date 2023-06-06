@@ -19,6 +19,7 @@ namespace Application.DTO.Report
         public DateTime EndDate { get; set; }
         public decimal Amount { get; set; }
         public string City { get; set; }
+        public string Author { get; set; }
 
         public static void Mapping(Profile profile)
         {
@@ -30,8 +31,9 @@ namespace Application.DTO.Report
                 .ForMember(d => d.BeginDate, opt => opt.MapFrom(s => s.BeginDate))
                 .ForMember(d => d.EndDate, opt => opt.MapFrom(s => s.EndDate))
                 .ForMember(d => d.Amount, opt => opt.MapFrom(s => s.Amount))
-                .ForMember(d => d.City, opt => opt.MapFrom(s => s.City));   
-            
+                .ForMember(d => d.City, opt => opt.MapFrom(s => s.City))
+                .ForMember(d => d.Author, opt => opt.MapFrom(s => s.User.FirstName + " " + s.User.LastName));
+
         }
     }
 }

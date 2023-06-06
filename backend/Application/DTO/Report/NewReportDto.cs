@@ -20,6 +20,7 @@ namespace Application.DTO.Report
         public DateTime EndDate { get; set; }
         public decimal Amount { get; set; }
         public string City { get; set; }
+        public Guid UserId { get; set; }
 
         public static void Mapping(Profile profile)
         {
@@ -39,6 +40,7 @@ namespace Application.DTO.Report
             RuleFor(x => x.Amount).NotEmpty();
             RuleFor(x => x.City).NotEmpty().MaximumLength(50);
             RuleFor(x => x.City).NotEmpty().MaximumLength(255);
+            RuleFor(x => x.UserId).NotEmpty();
         }
     }
 }

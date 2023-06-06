@@ -33,6 +33,12 @@ namespace Infrastructure
         {
             base.OnModelCreating(builder);
 
+            builder.Entity<Report>()
+                .HasOne(e => e.User)
+                .WithMany(e => e.Reports)
+                .HasForeignKey(e => e.UserId)
+                .IsRequired();
+
             builder.Entity<Employee>()
                 .HasMany(e => e.Specializations)
                 .WithMany(e => e.Employees)
