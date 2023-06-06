@@ -1,0 +1,37 @@
+﻿using Application.DTO.Service;
+using Application.Mapping;
+using AutoMapper;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Application.DTO.Report
+{
+    public class ReportDetailsDto : IMapFrom<Domain.Model.Report>
+    {
+        public int Id { get; set; }
+        public int ServiceId { get; set; }
+        public string ReportType { get; set; }
+        public string Description { get; set; }
+        public DateTime BeginDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public decimal Amount { get; set; }
+        public string City { get; set; }
+
+        public static void Mapping(Profile profile)
+        {
+            profile.CreateMap<Domain.Model.Report, ReportDetailsDto>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Id))
+                .ForMember(d => d.ServiceId, opt => opt.MapFrom(s => s.ServiceId))
+                .ForMember(d => d.ReportType, opt => opt.MapFrom(s => s.ReportType))
+                .ForMember(d => d.Description, opt => opt.MapFrom(s => s.Description))
+                .ForMember(d => d.BeginDate, opt => opt.MapFrom(s => s.BeginDate))
+                .ForMember(d => d.EndDate, opt => opt.MapFrom(s => s.EndDate))
+                .ForMember(d => d.Amount, opt => opt.MapFrom(s => s.Amount))
+                .ForMember(d => d.City, opt => opt.MapFrom(s => s.City));   
+            
+        }
+    }
+}

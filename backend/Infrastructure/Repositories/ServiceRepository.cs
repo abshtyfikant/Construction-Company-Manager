@@ -19,6 +19,10 @@ namespace Infrastructure.Repositories
 
         public int AddService(Service service)
         {
+            if (!_dbContext.Clients.Any(s => s.Id == service.ClientId))
+            {
+                throw new Exception("Client not found");
+            }
             _dbContext.Services.Add(service);
             _dbContext.SaveChanges();
             return service.Id;

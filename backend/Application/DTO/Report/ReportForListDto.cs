@@ -1,4 +1,5 @@
 ﻿using Application.DTO.Service;
+using Application.Mapping;
 using AutoMapper;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Application.DTO.Raport
 {
-    public class ReportForListDto
+    public class ReportForListDto : IMapFrom<Domain.Model.Report>
     {
         public int Id { get; set; }
         public string ReportType { get; set; }
@@ -16,7 +17,7 @@ namespace Application.DTO.Raport
         public DateTime EndDate { get; set; }
         public string Description { get; set; }
 
-        public void Mapping(Profile profile)
+        public static void Mapping(Profile profile)
         {
             profile.CreateMap<Domain.Model.Report, ReportForListDto>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Id))

@@ -1,28 +1,33 @@
-﻿using Application.DTO.Service;
+﻿using Application.DTO.Report;
+using Application.DTO.Service;
+using Application.Interfaces.Reports;
 using Application.Interfaces.Services;
+using Domain.Interfaces.Repository;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Security.Claims;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class ServiceController : ControllerBase
-    { 
-        private readonly IServiceService _serviceService;
+    public class ReportController : ControllerBase
+    {
+        private readonly IReportService _reportservice;
 
-        public ServiceController(IServiceService serviceService)
+        public ReportController(IReportService reportService)
         {
-            _serviceService = serviceService;
+            _reportservice = reportService;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+
         public ActionResult<IEnumerable<ServiceForListDto>> Get()
         {
-            var model = _serviceService.GetServicesForList();
+            var model = _reportservice.GetReportsForList();
             return Ok(model);
         }
 
@@ -36,30 +41,30 @@ namespace WebApi.Controllers
             {
                 return BadRequest();
             }
-            var service = _serviceService.GetService(id);
-            if (service == null)
+            var report = _reportservice.GetReport(id);
+            if (report == null)
             {
                 return NotFound();
             }
-            return Ok(service);
+            return Ok(report);
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public  ActionResult<NewServiceDto> Create ([FromBody]NewServiceDto newService)
+        public ActionResult Create([FromBody] NewReportDto newReport)
         {
             if (ModelState.IsValid)
-            { 
-                if (newService.Id > 0)
+            {
+                if (newReport.Id > 0)
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError);
                 }
-                _serviceService.AddService(newService);
+                _reportservice.AddReport(newReport);
                 return Ok();
             }
             return BadRequest();
-        }   
+        }
     }
 }
