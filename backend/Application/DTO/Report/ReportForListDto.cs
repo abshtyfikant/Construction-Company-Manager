@@ -16,7 +16,7 @@ namespace Application.DTO.Raport
         public DateTime EndDate { get; set; }
         public string Description { get; set; }
 
-        public void Mapping(Profile profile)
+        public static void Mapping(Profile profile)
         {
             profile.CreateMap<Domain.Model.Report, ReportForListDto>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Id))

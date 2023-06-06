@@ -23,10 +23,10 @@ namespace Application.Services
             _serviceRepo = serviceRepo;
         }
 
-        public int AddService(NewServiceDto album)
+        public int AddService(NewServiceDto service)
         {
-            var alb = _mapper.Map<Service>(album);
-            var id = _serviceRepo.AddService(alb);
+            var ser = _mapper.Map<Service>(service);
+            var id = _serviceRepo.AddService(ser);
             return id;
         }
 

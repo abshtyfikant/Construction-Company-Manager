@@ -16,7 +16,7 @@ namespace Application.DTO.Service
         public DateTime EndDate { get; set; }
         public string City { get; set; }
 
-        public void Mapping(Profile profile)
+        public static void Mapping(Profile profile)
         {
             profile.CreateMap<NewServiceDto, Domain.Model.Service>().ReverseMap();
         }
