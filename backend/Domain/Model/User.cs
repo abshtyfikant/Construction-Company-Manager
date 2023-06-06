@@ -13,5 +13,6 @@ namespace Domain.Model
         public string LastName { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string HashedPassword { get; set; } = null!;
+        public List<Report> Reports { get; set; }
     }
 }

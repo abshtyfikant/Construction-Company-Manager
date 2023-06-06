@@ -16,6 +16,7 @@ namespace Application.DTO.Report
         public DateTime BeginDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Description { get; set; }
+        public string Author { get; set; }
 
         public static void Mapping(Profile profile)
         {
@@ -24,7 +25,8 @@ namespace Application.DTO.Report
                 .ForMember(d => d.ReportType, opt => opt.MapFrom(s => s.ReportType))
                 .ForMember(d => d.BeginDate, opt => opt.MapFrom(s => s.BeginDate))
                 .ForMember(d => d.EndDate, opt => opt.MapFrom(s => s.EndDate))
-                .ForMember(d => d.Description, opt => opt.MapFrom(s => s.Description));
+                .ForMember(d => d.Description, opt => opt.MapFrom(s => s.Description))
+                .ForMember(d => d.Author, opt => opt.MapFrom(s => s.User.FirstName + " " + s.User.LastName));
         }
     }
 }

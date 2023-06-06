@@ -5,6 +5,7 @@ using Application.Interfaces.Services;
 using Domain.Interfaces.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -12,7 +13,7 @@ namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
+    [Authorize]
     public class ReportController : ControllerBase
     {
         private readonly IReportService _reportservice;
@@ -61,6 +62,7 @@ namespace WebApi.Controllers
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError);
                 }
+                newReport.UserId = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 _reportservice.AddReport(newReport);
                 return Ok();
             }
