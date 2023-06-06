@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces.Authentication;
+using Application.Interfaces.Reports;
 using Application.Interfaces.Services;
 using Application.Services;
 using Application.Services.Authentication;
@@ -17,6 +18,7 @@ namespace Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddTransient<IServiceService, ServiceService>();
+            services.AddTransient<IReportService, ReportService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             return services;

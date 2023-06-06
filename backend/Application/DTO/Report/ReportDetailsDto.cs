@@ -1,4 +1,5 @@
 ﻿using Application.DTO.Service;
+using Application.Mapping;
 using AutoMapper;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Application.DTO.Report
 {
-    public class ReportDetailsDto
+    public class ReportDetailsDto : IMapFrom<Domain.Model.Report>
     {
         public int Id { get; set; }
         public int ServiceId { get; set; }

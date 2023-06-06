@@ -8,7 +8,7 @@ namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [AllowAnonymous]
     public class ServiceController : ControllerBase
     { 
         private readonly IServiceService _serviceService;
@@ -19,22 +19,17 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<ServiceForListDto>> Get()
         {
             var model = _serviceService.GetServicesForList();
-            if(model == null)
-            {
-                return NotFound();
-            }
             return Ok(model);
         }
 
         [HttpGet("{id:int}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<ServiceDetailsDto> Get(int id)
         {
             if (id == 0)
@@ -48,5 +43,23 @@ namespace WebApi.Controllers
             }
             return Ok(service);
         }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public  ActionResult<NewServiceDto> Create ([FromBody]NewServiceDto newService)
+        {
+            if (ModelState.IsValid)
+            { 
+                if (newService.Id > 0)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+                _serviceService.AddService(newService);
+                return Ok();
+            }
+            return BadRequest();
+        }   
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Application.DTO.Service;
+using Application.Mapping;
 using AutoMapper;
 using FluentValidation;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.DTO.Report
 {
-    public class NewReportDto
+    public class NewReportDto : IMapFrom<Domain.Model.Report>
     {
         public int Id { get; set; }
         public int ServiceId { get; set; }

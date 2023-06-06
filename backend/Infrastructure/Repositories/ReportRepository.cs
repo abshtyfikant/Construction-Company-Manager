@@ -18,6 +18,10 @@ namespace Infrastructure.Repositories
 
         public int AddReport(Report report)
         {
+            if(!_dbContext.Services.Any(s => s.Id == report.ServiceId))
+            {
+                throw new Exception("Service not found");
+            }
             _dbContext.Reports.Add(report);
             _dbContext.SaveChanges();
             return report.Id;
