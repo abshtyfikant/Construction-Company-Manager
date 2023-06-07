@@ -13,7 +13,7 @@ namespace Application.Interfaces.Services
         List<ServiceForListDto> GetServicesForList();
         object GetService(int serviceId);
         object GetServiceForEdit(int id);
-        object UpdateService();
+        object UpdateService(NewServiceDto newService);
         void DeleteService(int id);
     }
 }

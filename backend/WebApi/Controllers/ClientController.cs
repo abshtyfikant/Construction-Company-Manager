@@ -1,6 +1,7 @@
-﻿using Application.DTO.Client;
+﻿   using Application.DTO.Client;
 using Application.DTO.Service;
 using Application.Interfaces.Services;
+using Domain.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,7 @@ namespace WebApi.Controllers
             return Ok(list);
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:int}", Name = "GetClient")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -46,7 +47,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult Create([FromBody] NewClientDto newClient)
@@ -57,8 +58,37 @@ namespace WebApi.Controllers
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError);
                 }
-                _clientService.AddClient(newClient);
-                return Ok();
+                var clientId = _clientService.AddClient(newClient);
+                return CreatedAtRoute("GetClient", new { id = clientId }, newClient);
+            }
+            return BadRequest();
+        }
+
+        [HttpDelete("{id:int}", Name = "DeleteClient")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult Delete(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+            _clientService.DeleteClient(id);
+            return NoContent();
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult Update([FromBody] NewClientDto newClient)
+        {
+            if (ModelState.IsValid)
+            {
+                if (newClient.Id > 0)
+                {
+                    _clientService.UpdateClient(newClient);
+                    return NoContent();
+                }
             }
             return BadRequest();
         }

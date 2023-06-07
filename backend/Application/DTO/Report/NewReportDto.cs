@@ -40,7 +40,6 @@ namespace Application.DTO.Report
             RuleFor(x => x.Amount).NotEmpty();
             RuleFor(x => x.City).NotEmpty().MaximumLength(50);
             RuleFor(x => x.City).NotEmpty().MaximumLength(255);
-            RuleFor(x => x.UserId).NotEmpty();
         }
     }
 }

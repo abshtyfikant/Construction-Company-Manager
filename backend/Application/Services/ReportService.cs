@@ -1,4 +1,5 @@
-﻿using Application.DTO.Report;
+﻿using Application.DTO.Client;
+using Application.DTO.Report;
 using Application.DTO.Service;
 using Application.Interfaces.Reports;
 using AutoMapper;
@@ -8,6 +9,7 @@ using Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,7 +35,7 @@ namespace Application.Services
 
         public void DeleteReport(int reportId)
         {
-            throw new NotImplementedException();
+            _reporteRepo.DeleteReport(reportId);
         }
 
         public object GetReport(int reportId)
@@ -56,9 +58,11 @@ namespace Application.Services
             return reports;
         }
 
-        public object UpdateReport()
+        public object UpdateReport(NewReportDto newReport)
         {
-            throw new NotImplementedException();
+            var report = _mapper.Map<Report>(newReport);
+            _reporteRepo.UpdateReport(report);
+            return report;
         }
     }
 }

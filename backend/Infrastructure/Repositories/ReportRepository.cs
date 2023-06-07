@@ -51,7 +51,14 @@ namespace Infrastructure.Repositories
 
         public void UpdateReport(Report report)
         {
-            throw new NotImplementedException();
+            _dbContext.Attach(report);
+            _dbContext.Entry(report).Property("ReportType").IsModified = true;
+            _dbContext.Entry(report).Property("Description").IsModified = true;
+            _dbContext.Entry(report).Property("BeginDate").IsModified = true;
+            _dbContext.Entry(report).Property("EndDate").IsModified = true;
+            _dbContext.Entry(report).Property("Amount").IsModified = true;
+            _dbContext.Entry(report).Property("City").IsModified = true;
+            _dbContext.SaveChanges();
         }
     }
 }

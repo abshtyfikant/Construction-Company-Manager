@@ -13,7 +13,7 @@ namespace Application.Interfaces.Services
         List<ClientDto> GetClientsForList();
         object GetClient(int clientId);
         object GetClientForEdit(int clientId);
-        object UpdateClient();
+        object UpdateClient(NewClientDto newClient);
         void DeleteClient(int clientId);
     }
 }
