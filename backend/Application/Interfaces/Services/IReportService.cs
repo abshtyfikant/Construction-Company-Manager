@@ -14,7 +14,7 @@ namespace Application.Interfaces.Reports
         List<ReportForListDto> GetReportsForList();
         object GetReport(int reportId);
         object GetReportForEdit(int reportId);
-        object UpdateReport();
+        object UpdateReport(NewReportDto newReport);
         void DeleteReport(int reportId);
     }
 }

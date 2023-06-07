@@ -7,6 +7,7 @@ using Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -32,7 +33,7 @@ namespace Application.Services
 
         public void DeleteService(int id)
         {
-            throw new NotImplementedException();
+            _serviceRepo.DeleteService(id);
         }
 
         public object GetService(int serviceId)
@@ -56,9 +57,11 @@ namespace Application.Services
 ;
         }
 
-        public object UpdateService()
+        public object UpdateService(NewServiceDto newService)
         {
-            throw new NotImplementedException();
+            var service = _mapper.Map<Service>(newService);
+            _serviceRepo.UpdateService(service);
+            return service;
         }
     }
 }

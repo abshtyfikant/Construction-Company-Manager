@@ -1,5 +1,6 @@
 ﻿using Domain.Interfaces.Repository;
 using Domain.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,7 +48,11 @@ namespace Infrastructure.Repositories
 
         public void UpdateClient(Client client)
         {
-            throw new NotImplementedException();
+            _dbContext.Attach(client);
+            _dbContext.Entry(client).Property("FirstName").IsModified = true;
+            _dbContext.Entry(client).Property("LastName").IsModified = true;
+            _dbContext.Entry(client).Property("City").IsModified = true;
+            _dbContext.SaveChanges();
         }
     }
 }

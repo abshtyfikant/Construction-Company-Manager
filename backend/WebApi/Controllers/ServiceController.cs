@@ -1,4 +1,6 @@
-﻿using Application.DTO.Service;
+﻿using Application.DTO.Report;
+using Application.DTO.Service;
+using Application.Interfaces.Reports;
 using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +28,7 @@ namespace WebApi.Controllers
             return Ok(list);
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:int}", Name = "GetService")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -45,7 +47,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public  ActionResult Create ([FromBody]NewServiceDto newService)
@@ -56,10 +58,39 @@ namespace WebApi.Controllers
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError);
                 }
-                _serviceService.AddService(newService);
-                return Ok();
+                var serviceId = _serviceService.AddService(newService);
+                return CreatedAtRoute("GetService", new {id = serviceId }, newService);
             }
             return BadRequest();
-        }   
+        }
+
+        [HttpDelete("{id:int}", Name = "DeleteService")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult Delete(int id)
+        {
+            if(id == 0)
+            {
+                return BadRequest();
+            }
+            _serviceService.DeleteService(id);
+            return NoContent();
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult Update([FromBody] NewServiceDto newService)
+        {
+            if (ModelState.IsValid)
+            {
+                if (newService.Id > 0)
+                {
+                    _serviceService.UpdateService(newService);
+                    return NoContent();
+                }
+            }
+            return BadRequest();
+        }
     }
 }

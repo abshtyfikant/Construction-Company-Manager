@@ -8,6 +8,7 @@ using Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -34,7 +35,7 @@ namespace Application.Services
 
         public void DeleteClient(int clientId)
         {
-            throw new NotImplementedException();
+            _clientRepo.DeleteClient(clientId);
         }
 
         public object GetClient(int clientId)
@@ -57,9 +58,11 @@ namespace Application.Services
             return clients;
         }
 
-        public object UpdateClient()
+        public object UpdateClient(NewClientDto newClient)
         {
-            throw new NotImplementedException();
+            var client = _mapper.Map<Client>(newClient);
+            _clientRepo.UpdateClient(client);
+            return client;
         }
     }
 }
