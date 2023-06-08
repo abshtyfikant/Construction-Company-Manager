@@ -1,4 +1,4 @@
-const reportsData = [];
+const reservationsData = [];
 
 const startDate = new Date('2023-05-01');
 
@@ -6,7 +6,7 @@ for (let i = 1; i <= 200; i++) {
   const endDate = new Date(startDate);
   endDate.setDate(endDate.getDate() + 4);
 
-  const report = {
+  const reservation = {
     rodzaj: `Raport ${i}`,
     dataOd: formatDate(startDate),
     dataDo: formatDate(endDate),
@@ -14,7 +14,7 @@ for (let i = 1; i <= 200; i++) {
     opis: `Opis raportu losowy z liczba test raportu ${i}`
   };
 
-  reportsData.push(report);
+  reservationsData.push(reservation);
 
   startDate.setDate(startDate.getDate() + 1);
 }
@@ -27,4 +27,4 @@ function formatDate(date) {
   return `${year}-${month}-${day}`;
 }
 
-export default reportsData;
+export default reservationsData;

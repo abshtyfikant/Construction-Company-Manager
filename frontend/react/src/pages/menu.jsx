@@ -19,7 +19,7 @@ function Menu() {
             <div><Link to="/raporty">Raporty</Link> <GraySquareWithPlus /></div>
             {/* <div><Link to="/generowanie-raportu">Generowanie raportu</Link> <GraySquareWithPlus /></div> */}
             <div><Link to="/rezerwacje">Rezerwacje</Link> <GraySquareWithPlus /></div>
-            <div><Link to="/formularz-rejestracji">Formularz rezerwacji</Link></div>
+            <div><Link to="/formularz-rezerwacji">Formularz rezerwacji</Link></div>
             <div><Link to="/stan-zasobow">Stan zasobów</Link></div>
             <div><Link to="/pracownicy">Pracownicy</Link></div>
         </nav>

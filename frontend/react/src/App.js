@@ -18,7 +18,7 @@ function App() {
           <Route path="/raporty" element={<Reports />} />
           <Route path="/generowanie-raportu" element={<ReportGeneration />} />
           <Route path="/rezerwacje" element={<Reservations />} />
-          <Route path="/formularz-rejestracji" element={<ReservationsForm />} />
+          <Route path="/formularz-rezerwacji" element={<ReservationsForm />} />
           <Route path="/stan-zasobow" element={<Menu />} />
           <Route path="/pracownicy" element={<Workers />} />
         </Routes>
