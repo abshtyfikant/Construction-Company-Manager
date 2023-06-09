@@ -7,6 +7,8 @@ import Reports from './pages/reports.jsx';
 import Reservations from './pages/reservations.jsx';
 import ReservationsForm from './pages/reservationsForm.jsx';
 import Workers from './pages/workers.jsx';
+import EditReservation from './pages/editReservation.jsx';
+import Resources from './pages/resources.jsx';
 
 function App() {
   return (
@@ -18,9 +20,10 @@ function App() {
           <Route path="/raporty" element={<Reports />} />
           <Route path="/generowanie-raportu" element={<ReportGeneration />} />
           <Route path="/rezerwacje" element={<Reservations />} />
-          <Route path="/formularz-rejestracji" element={<ReservationsForm />} />
-          <Route path="/stan-zasobow" element={<Menu />} />
+          <Route path="/formularz-rezerwacji" element={<ReservationsForm />} />
           <Route path="/pracownicy" element={<Workers />} />
+          <Route path="/edytuj-rezerwacje" element={<EditReservation />} />
+          <Route path="/stan-zasobow" element={<Resources />} />
         </Routes>
       </div>
     </Router>
