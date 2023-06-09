@@ -3,10 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp, faCaretDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import GridMenuHeader from '../components/gridMenuHeader';
 import reservationsData from '../models/reservationsData';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import classes from './styles/reservations.module.css';
 
 function Reservations() {
+  const navigate = useNavigate();
   const [reservations, setReservations] = useState(reservationsData);
   const [sortBy, setSortBy] = useState(''); // Kolumna, według której sortujemy
   const [sortOrder, setSortOrder] = useState(null); // Kierunek sortowania (asc/desc/null)
@@ -15,6 +16,7 @@ function Reservations() {
   const reservationsPerPage = 10; // Liczba raportów na stronie
   const maxVisiblePages = 5; // Maksymalna liczba widocznych stron paginacji
   const ellipsis = '...'; // Symbol kropek
+  const [openDetails, setOpenDetails] = useState(false);
 
   // Funkcja sortująca raporty po kliknięciu w nagłówek kolumny
   const sortReservations = (column) => {
@@ -89,18 +91,52 @@ function Reservations() {
     const currentReservations = sortedReservations.slice(indexOfFirstReservation, indexOfLastReservation);
 
     // Renderowanie wierszy raportów
-    return currentReservations.map((report, index) => (
-      <tr key={index}>
-        <td>{report.id}</td>
-        <td>{report.typ}</td>
-        <td>{report.dataOd}</td>
-        <td>{report.dataDo}</td>
-        <td>{report.miasto}</td>
-        <td>{report.statusUslugi}</td>
-        <td className={classes.alignLeft}>{report.statusPlatnosci}</td>
-      </tr>
+    return currentReservations.map((reservation, index) => (
+      <>
+        <tr key={index} onClick={() => setOpenDetails((prev) => !prev)}>
+          <td>{reservation.id}</td>
+          <td>{reservation.typ}</td>
+          <td>{reservation.dataOd}</td>
+          <td>{reservation.dataDo}</td>
+          <td>{reservation.miasto}</td>
+          <td>{reservation.statusUslugi}</td>
+          <td className={classes.alignLeft}>{reservation.statusPlatnosci}</td>
+          <td className={classes.alignRight}>
+            <FontAwesomeIcon icon={faCaretDown} className={classes.sortIcon} />
+          </td>
+        </tr>
+        {openDetails ? (
+          <tr className={classes.dropdownDetails}>
+            <td colSpan={3}>
+              <p>Klient:</p>
+              <p>Zespół wykonawczy:</p>
+            </td>
+            <td colSpan={3}>
+              <p>Przydział zasobów:</p>
+              <p>Materiały:</p>
+            </td>
+            <td colSpan={3}>
+              <p>Koszt materiałów:</p>
+              <p>Koszt pracowników:</p>
+              <p
+                className={classes.editReservation}
+                onClick={() => { navigate("/edytuj-rezerwacje", { state: { reservation: reservation } }) }}
+              >
+                modyfikuj rezerwację
+              </p>
+              <p>generuj raport</p>
+              <p>+ Dodaj komentarz</p>
+            </td>
+          </tr>
+        )
+          : null}
+      </>
     ));
   };
+
+  const openReservationDetails = () => {
+
+  }
 
   // Funkcja zmieniająca aktualną stronę
   const handlePageChange = (pageNumber) => {
@@ -228,7 +264,7 @@ function Reservations() {
                 <div className={classes.thAlignLeft}>
                   <p>Status płatności</p>
                   <div className={classes.thAlignRight}>
-                  <Link to="/formularz-rezerwacji">+ Nowa rezerwacja</Link>
+                    <Link to="/formularz-rezerwacji">+ Nowa rezerwacja</Link>
                   </div>
                 </div>
               </th>

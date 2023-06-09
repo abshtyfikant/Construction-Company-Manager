@@ -3,7 +3,7 @@ import GridMenuHeader from '../components/gridMenuHeader';
 
 function Workers() {
   return (
-    <GridMenuHeader headerTitle="Workers" />
+    <GridMenuHeader headerTitle="Pracownicy" />
   );
 }
 

@@ -16,12 +16,24 @@ function Menu() {
       </div>
       <section className='center-container'>
         <nav>
-            <div><Link to="/raporty">Raporty</Link> <GraySquareWithPlus /></div>
-            {/* <div><Link to="/generowanie-raportu">Generowanie raportu</Link> <GraySquareWithPlus /></div> */}
-            <div><Link to="/rezerwacje">Rezerwacje</Link> <GraySquareWithPlus /></div>
-            <div><Link to="/formularz-rezerwacji">Formularz rezerwacji</Link></div>
-            <div><Link to="/stan-zasobow">Stan zasobów</Link></div>
-            <div><Link to="/pracownicy">Pracownicy</Link></div>
+          <div>
+            <Link className='menu-element' to="/raporty">Raporty</Link>
+            <Link to='/generowanie-raportu'><GraySquareWithPlus /></Link>
+          </div>
+          {/* <div><Link to="/generowanie-raportu">Generowanie raportu</Link> <GraySquareWithPlus /></div> */}
+          <div>
+            <Link className='menu-element' to="/rezerwacje">Rezerwacje</Link>
+            <Link to='/formularz-rezerwacji'><GraySquareWithPlus /></Link>
+          </div>
+          <div>
+            <Link className='menu-element' to="/formularz-rezerwacji">Formularz rezerwacji</Link>
+          </div>
+          <div>
+            <Link className='menu-element' to="/stan-zasobow">Stan zasobów</Link>
+          </div>
+          <div>
+            <Link className='menu-element' to="/pracownicy">Pracownicy</Link>
+          </div>
         </nav>
       </section>
     </section>

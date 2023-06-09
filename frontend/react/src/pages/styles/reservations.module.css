@@ -46,7 +46,7 @@
   .reservations .table tbody td:nth-child(1) {
     border-left: 1px solid black;
   }
-  .reservations .table tbody td:nth-child(7) {
+  .reservations .table tbody td:nth-child(8) {
     border-right: 1px solid black;
   }
   
@@ -60,6 +60,13 @@
     text-align: left;
   }
   
+  .reservations .table .dropdownDetails {
+    background-color: #f2f2f2;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    width: 100%;
+  }
+
   .reservations .pagination {
     display: flex;
     justify-content: center;
