@@ -11,8 +11,8 @@ namespace Domain.Model
         public int Id { get; set; }
         public int ServiceID { get; set; }
         public Service Service { get; set; }
-        public int EmployeeId { get; set; }
-        public Employee Employee { get; set; }
+        public Guid UserId { get; set; }
+        public User User { get; set; }
         public string Content { get; set; }
     }
 }

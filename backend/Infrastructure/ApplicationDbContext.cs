@@ -73,10 +73,10 @@ namespace Infrastructure
                     j.HasKey(t => new { t.EmployeeId, t.ServiceId });
                 });
 
-            builder.Entity<Employee>()
+            builder.Entity<User>()
                 .HasMany(e => e.Comments)
-                .WithOne(e => e.Employee)
-                .HasForeignKey(e => e.EmployeeId)
+                .WithOne(e => e.User)
+                .HasForeignKey(e => e.UserId)
                 .IsRequired();
 
             builder.Entity<Service>()

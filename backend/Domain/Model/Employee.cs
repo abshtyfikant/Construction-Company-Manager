@@ -17,7 +17,6 @@ namespace Domain.Model
         public Specialization MainSpecialization { get; set; }
         public List<EmployeeSpecialization> EmployeeSpecializations { get; set; }
         public List<Specialization> Specializations { get; set; }
-        public List<Comment> Comments { get; set; }
         public List<Assigment> Assigments { get; set; }
         public ICollection<Service> Services { get; set; }
     }
