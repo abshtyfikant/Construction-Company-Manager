@@ -14,5 +14,6 @@ namespace Domain.Model
         public string Email { get; set; } = null!;
         public string HashedPassword { get; set; } = null!;
         public List<Report> Reports { get; set; }
+        public List<Comment> Comments { get; set; }
     }
 }
