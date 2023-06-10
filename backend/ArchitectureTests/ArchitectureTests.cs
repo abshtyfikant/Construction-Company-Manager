@@ -1,7 +1,7 @@
 using NetArchTest.Rules;
 using System.Reflection;
 
-namespace ArchitectureTests
+namespace Tests
 {
     public class ArchitectureTests
     {
