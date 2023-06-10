@@ -7,11 +7,15 @@ for (let i = 1; i <= 200; i++) {
   endDate.setDate(endDate.getDate() + 4);
 
   const reservation = {
-    rodzaj: `Raport ${i}`,
-    dataOd: formatDate(startDate),
-    dataDo: formatDate(endDate),
-    autor: `Autor ${i}`,
-    opis: `Opis raportu losowy z liczba test raportu ${i}`
+    id: i, 
+    serviceId: i,
+    reportType: `Raport ${i}`,
+    beginDate: formatDate(startDate),
+    endDate: formatDate(endDate),
+    author: `Autor ${i}`,
+    description: `Opis raportu losowy z liczba test raportu ${i}`,
+    amount: i,
+    city: `Miasto ${i}`,
   };
 
   reservationsData.push(reservation);
