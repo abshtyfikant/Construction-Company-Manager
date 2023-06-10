@@ -3,11 +3,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp, faCaretDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import GridMenuHeader from '../components/gridMenuHeader';
 import reservationsData from '../models/reservationsData';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLoaderData, useNavigate, defer, json } from 'react-router-dom';
 import classes from './styles/reservations.module.css';
 
 function Reservations() {
   const navigate = useNavigate();
+   //odkomentować po połączeniu z backendem
+  //const { reservations } = useLoaderData();
+
+  //usunac po połączeniu z backendem
   const [reservations, setReservations] = useState(reservationsData);
   const [sortBy, setSortBy] = useState(''); // Kolumna, według której sortujemy
   const [sortOrder, setSortOrder] = useState(null); // Kierunek sortowania (asc/desc/null)
@@ -18,7 +22,7 @@ function Reservations() {
   const ellipsis = '...'; // Symbol kropek
   const [openDetails, setOpenDetails] = useState(false);
 
-  // Funkcja sortująca raporty po kliknięciu w nagłówek kolumny
+  // Funkcja sortująca rezerwacje po kliknięciu w nagłówek kolumny
   const sortReservations = (column) => {
     if (sortBy === column) {
       if (sortOrder === 'asc') {
@@ -69,7 +73,7 @@ function Reservations() {
     setIsDefaultSort(true);
   }, [currentPage]);
 
-  // Funkcja renderująca raporty na aktualnej stronie
+  // Funkcja renderująca rezerwacje na aktualnej stronie
   const renderReservations = () => {
     // Sortowanie raportów
     let sortedReservations = [...reservations];
@@ -85,22 +89,22 @@ function Reservations() {
       });
     }
 
-    // Paginacja raportów
+    // Paginacja rezerwacji
     const indexOfLastReservation = currentPage * reservationsPerPage;
     const indexOfFirstReservation = indexOfLastReservation - reservationsPerPage;
     const currentReservations = sortedReservations.slice(indexOfFirstReservation, indexOfLastReservation);
 
-    // Renderowanie wierszy raportów
+    // Renderowanie wierszy rezerwacji
     return currentReservations.map((reservation, index) => (
       <>
         <tr key={index} onClick={() => setOpenDetails((prev) => !prev)}>
           <td>{reservation.id}</td>
-          <td>{reservation.typ}</td>
-          <td>{reservation.dataOd}</td>
-          <td>{reservation.dataDo}</td>
-          <td>{reservation.miasto}</td>
-          <td>{reservation.statusUslugi}</td>
-          <td className={classes.alignLeft}>{reservation.statusPlatnosci}</td>
+          <td>{reservation.serviceType}</td>
+          <td>{reservation.beginDate}</td>
+          <td>{reservation.endDate}</td>
+          <td>{reservation.city}</td>
+          <td>{reservation.serviceStatus}</td>
+          <td className={classes.alignLeft}>{reservation.paymentStatus}</td>
           <td className={classes.alignRight}>
             <FontAwesomeIcon icon={faCaretDown} className={classes.sortIcon} />
           </td>
@@ -235,24 +239,24 @@ function Reservations() {
                   Id usługi {renderSortIcons('id')}
                 </div>
               </th>
-              <th onClick={() => sortReservations('typ')}>
+              <th onClick={() => sortReservations('serviceType')}>
                 <div>
-                  Typ usługi {renderSortIcons('typ')}
+                  Typ usługi {renderSortIcons('serviceType')}
                 </div>
               </th>
-              <th onClick={() => sortReservations('dataOd')}>
+              <th onClick={() => sortReservations('beginDate')}>
                 <div>
-                  Data od {renderSortIcons('dataOd')}
+                  Data od {renderSortIcons('beginDate')}
                 </div>
               </th>
-              <th onClick={() => sortReservations('dataDo')}>
+              <th onClick={() => sortReservations('endDate')}>
                 <div>
-                  Data do {renderSortIcons('dataDo')}
+                  Data do {renderSortIcons('endDate')}
                 </div>
               </th>
-              <th onClick={() => sortReservations('miasto')}>
+              <th onClick={() => sortReservations('city')}>
                 <div>
-                  Miasto {renderSortIcons('miasto')}
+                  Miasto {renderSortIcons('city')}
                 </div>
               </th>
               <th>
@@ -279,3 +283,29 @@ function Reservations() {
 }
 
 export default Reservations;
+
+async function loadReservations() {
+  const response = await fetch('');
+
+  if (!response.ok) {
+    // return { isError: true, message: 'Could not fetch events.' };
+    // throw new Response(JSON.stringify({ message: 'Could not fetch events.' }), {
+    //   status: 500,
+    // });
+    throw json(
+      { message: 'Could not fetch reservations.' },
+      {
+        status: 500,
+      }
+    );
+  } else {
+    const resData = await response.json();
+    return resData;
+  }
+}
+
+export async function loader() {
+  return defer({
+    reservations: loadReservations(),
+  });
+}

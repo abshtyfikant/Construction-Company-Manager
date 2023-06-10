@@ -3,9 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp, faCaretDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import GridMenuHeader from '../components/gridMenuHeader';
 import reportsData from '../models/reportsData';
-import { Link } from 'react-router-dom';
+import { Link, useLoaderData, defer, json } from 'react-router-dom';
 
 function Reports() {
+  //odkomentować po połączeniu z backendem
+  //const { reports } = useLoaderData();
+
+  //usunac po połączeniu z backendem
   const [reports, setReports] = useState(reportsData);
   const [sortBy, setSortBy] = useState(''); // Kolumna, według której sortujemy
   const [sortOrder, setSortOrder] = useState(null); // Kierunek sortowania (asc/desc/null)
@@ -90,11 +94,11 @@ function Reports() {
     // Renderowanie wierszy raportów
     return currentReports.map((report, index) => (
       <tr key={index}>
-        <td>{report.rodzaj}</td>
-        <td>{report.dataOd}</td>
-        <td>{report.dataDo}</td>
-        <td>{report.autor}</td>
-        <td className='align-left'>{report.opis}</td>
+        <td>{report.reportType}</td>
+        <td>{report.beginDate}</td>
+        <td>{report.endDate}</td>
+        <td>{report.author}</td>
+        <td className='align-left'>{report.description}</td>
       </tr>
     ));
   };
@@ -191,31 +195,31 @@ function Reports() {
         <table className="table">
           <thead>
             <tr>
-              <th onClick={() => sortReports('rodzaj')}>
+              <th onClick={() => sortReports('reportType')}>
                 <div>
-                  Rodzaj raportu {renderSortIcons('rodzaj')}
+                  Rodzaj raportu {renderSortIcons('reportType')}
                 </div>
               </th>
-              <th onClick={() => sortReports('dataOd')}>
+              <th onClick={() => sortReports('beginDate')}>
                 <div>
-                  Data od {renderSortIcons('dataOd')}
+                  Data od {renderSortIcons('beginDate')}
                 </div>
               </th>
-              <th onClick={() => sortReports('dataDo')}>
+              <th onClick={() => sortReports('endDate')}>
                 <div>
-                  Data do {renderSortIcons('dataDo')}
+                  Data do {renderSortIcons('endDate')}
                 </div>
               </th>
-              <th onClick={() => sortReports('autor')}>
+              <th onClick={() => sortReports('author')}>
                 <div>
-                  Autor {renderSortIcons('autor')}
+                  Autor {renderSortIcons('author')}
                 </div>
               </th>
               <th>
                 <div className="th-align-left">
                   <p>Opis</p>
                   <div className="th-align-right">
-                  <Link to="/generowanie-raportu">+ Wygeneruj nowy raport</Link>
+                    <Link to="/generowanie-raportu">+ Wygeneruj nowy raport</Link>
                   </div>
                 </div>
               </th>
@@ -230,3 +234,30 @@ function Reports() {
 }
 
 export default Reports;
+
+
+async function loadReports() {
+  const response = await fetch('');
+
+  if (!response.ok) {
+    // return { isError: true, message: 'Could not fetch events.' };
+    // throw new Response(JSON.stringify({ message: 'Could not fetch events.' }), {
+    //   status: 500,
+    // });
+    throw json(
+      { message: 'Could not fetch projects.' },
+      {
+        status: 500,
+      }
+    );
+  } else {
+    const resData = await response.json();
+    return resData;
+  }
+}
+
+export async function loader() {
+  return defer({
+    reports: loadReports(),
+  });
+}

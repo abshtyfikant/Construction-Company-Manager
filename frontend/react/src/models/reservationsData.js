@@ -1,4 +1,4 @@
-const reportsData = [];
+const reservationsData = [];
 
 const startDate = new Date('2023-05-01');
 
@@ -9,15 +9,16 @@ for (let i = 1; i <= 200; i++) {
 
   const report = {
     id: i,
-    typ: type,
-    dataOd: formatDate(startDate),
-    dataDo: formatDate(endDate),
-    miasto: `Miasto ${i}`,
-    statusUslugi: i % 2 === 0 ? 'Zakończona' : 'Trwa',
-    statusPlatnosci:  i % 2 === 0 ? 'Zakończona' : 'Trwa',
+    clientId: i,
+    serviceType: type,
+    beginDate: formatDate(startDate),
+    endDate: formatDate(endDate),
+    city: `Miasto ${i}`,
+    serviceStatus: i % 2 === 0 ? 'Zakończona' : 'Trwa',
+    paymentStatus:  i % 2 === 0 ? 'Zakończona' : 'Trwa',
   };
 
-  reportsData.push(report);
+  reservationsData.push(report);
 
   startDate.setDate(startDate.getDate() + 1);
 }
@@ -30,4 +31,4 @@ function formatDate(date) {
   return `${year}-${month}-${day}`;
 }
 
-export default reportsData;
+export default reservationsData;
