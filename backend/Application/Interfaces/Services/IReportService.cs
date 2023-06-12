@@ -13,7 +13,6 @@ namespace Application.Interfaces.Reports
         int AddReport(NewReportDto report);
         List<ReportForListDto> GetReportsForList();
         object GetReport(int reportId);
-        object GetReportForEdit(int reportId);
         object UpdateReport(NewReportDto newReport);
         void DeleteReport(int reportId);
     }

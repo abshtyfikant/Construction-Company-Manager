@@ -4,12 +4,6 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain.Interfaces.Repository;
 using Domain.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services
 {
@@ -41,11 +35,6 @@ namespace Application.Services
             var service = _serviceRepo.GetService(serviceId);
             var serviceDto = _mapper.Map<ServiceDetailsDto>(service);
             return serviceDto;
-        }
-
-        public object GetServiceForEdit(int id)
-        {
-            throw new NotImplementedException();
         }
 
         public List<ServiceForListDto> GetServicesForList()

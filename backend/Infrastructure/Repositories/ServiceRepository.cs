@@ -31,7 +31,7 @@ namespace Infrastructure.Repositories
         public void DeleteService(int serviceId)
         {
             var service = _dbContext.Services.Find(serviceId);
-            if (service != null)
+            if (service is not null)
             {
                 _dbContext.Services.Remove(service);
                 _dbContext.SaveChanges();
