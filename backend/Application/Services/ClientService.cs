@@ -45,11 +45,6 @@ namespace Application.Services
             return clientDto;
         }
 
-        public object GetClientForEdit(int clientId)
-        {
-            throw new NotImplementedException();
-        }
-
         public List<ClientDto> GetClientsForList()
         {
             var clients = _clientRepo.GetAllClients()

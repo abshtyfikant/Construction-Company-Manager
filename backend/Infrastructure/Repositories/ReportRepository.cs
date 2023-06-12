@@ -30,7 +30,7 @@ namespace Infrastructure.Repositories
         public void DeleteReport(int reportId)
         {
             var report = _dbContext.Reports.Find(reportId);
-            if (report != null)
+            if (report is not null)
             {
                 _dbContext.Reports.Remove(report);
                 _dbContext.SaveChanges();

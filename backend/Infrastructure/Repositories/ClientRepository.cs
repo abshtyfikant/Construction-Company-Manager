@@ -27,7 +27,7 @@ namespace Infrastructure.Repositories
         public void DeleteClient(int clientId)
         {
             var client = _dbContext.Clients.Find(clientId);
-            if (client != null)
+            if (client is not null)
             {
                 _dbContext.Clients.Remove(client);
                 _dbContext.SaveChanges();

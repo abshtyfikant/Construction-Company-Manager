@@ -12,7 +12,6 @@ namespace Application.Interfaces.Services
         int AddClient(NewClientDto client);
         List<ClientDto> GetClientsForList();
         object GetClient(int clientId);
-        object GetClientForEdit(int clientId);
         object UpdateClient(NewClientDto newClient);
         void DeleteClient(int clientId);
     }

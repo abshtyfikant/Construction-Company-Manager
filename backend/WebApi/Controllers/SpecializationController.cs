@@ -1,78 +1,70 @@
-﻿using Application.DTO.Client;
-using Application.DTO.Report;
-using Application.DTO.Service;
-using Application.Interfaces.Reports;
+﻿using Application.DTO.Specialization;
 using Application.Interfaces.Services;
-using Domain.Interfaces.Repository;
-using Domain.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+using Microsoft.Build.Framework;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class ReportController : ControllerBase
+    public class SpecializationController : ControllerBase
     {
-        private readonly IReportService _reportservice;
+        private readonly ISpecializationService _specializationService;
 
-        public ReportController(IReportService reportService)
+        public SpecializationController(ISpecializationService specializationService)
         {
-            _reportservice = reportService;
+            _specializationService = specializationService;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-
-        public ActionResult<IEnumerable<ServiceForListDto>> Get()
+        public ActionResult<IEnumerable<SpecializationDto>> Get()
         {
-            var list = _reportservice.GetReportsForList();
+            var list = _specializationService.GetSpecializationsForList();
             return Ok(list);
         }
 
-        [HttpGet("{id:int}", Name = "GetReport")]
+        [HttpGet("{id:int}", Name = "GetSpecialization")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<ServiceDetailsDto> Get(int id)
+        public ActionResult<SpecializationDto> Get(int id)
         {
             if (id == 0)
             {
                 return BadRequest();
             }
-            var report = _reportservice.GetReport(id);
-            if (report is not null)
+            var specialization = _specializationService.GetSpecialization(id);
+            if (specialization is not null)
             {
                 return NotFound();
             }
-            return Ok(report);
+            return Ok(specialization);
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult Create([FromBody] NewReportDto newReport)
+        public ActionResult Create([FromBody] NewSpecializationDto newSpecialization)
         {
             if (ModelState.IsValid)
             {
-                if (newReport.Id > 0)
+                if (newSpecialization.Id > 0)
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError);
                 }
-                newReport.UserId = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
-                var reportId = _reportservice.AddReport(newReport);
-                return CreatedAtRoute("GetReport", new { id = reportId }, newReport);
+                var specializationId = _specializationService.AddSpecialization(newSpecialization);
+                return CreatedAtRoute("GetSpecialization", new { id = specializationId }, null);
             }
             return BadRequest();
         }
 
-        [HttpDelete("{id:int}", Name = "DeleteReport")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int id)
         {
@@ -80,24 +72,24 @@ namespace WebApi.Controllers
             {
                 return BadRequest();
             }
-            _reportservice.DeleteReport(id);
+            _specializationService.DeleteSpecialization(id);
             return NoContent();
         }
 
         [HttpPut]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Update([FromBody] NewReportDto newReport)
+        public IActionResult Update([FromBody] NewSpecializationDto newSpecialization)
         {
             if (ModelState.IsValid)
             {
-                if (newReport.Id > 0)
+                if (newSpecialization.Id > 0)
                 {
-                    _reportservice.UpdateReport(newReport);
+                    _specializationService.UpdateSpecialization(newSpecialization);
                     return NoContent();
                 }
             }
             return BadRequest();
-        }
+        }   
     }
 }

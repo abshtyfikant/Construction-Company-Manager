@@ -20,6 +20,7 @@ namespace Infrastructure
             ConfigurationManager configuration)
         {
             services.AddAuth(configuration);
+            services.AddScoped<ISpecializationRepository, SpecializationRepository>();
             services.AddScoped<IServiceRepository, ServiceRepository>();
             services.AddScoped<IReportRepository, ReportRepository>();
             services.AddScoped<IClientRepository, ClientRepository>();

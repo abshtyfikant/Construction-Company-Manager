@@ -39,7 +39,7 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
             var service = _clientService.GetClient(id);
-            if (service == null)
+            if (service is not null)
             {
                 return NotFound();
             }

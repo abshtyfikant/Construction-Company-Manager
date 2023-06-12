@@ -45,11 +45,6 @@ namespace Application.Services
             return reportDto;
         }
 
-        public object GetReportForEdit(int reportId)
-        {
-            throw new NotImplementedException();
-        }
-
         public List<ReportForListDto> GetReportsForList()
         {
             var reports = _reporteRepo.GetAllReports()
