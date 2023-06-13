@@ -28,8 +28,8 @@ namespace Application.Services
 
         public int AddReport(NewReportDto report)
         {
-            var rep = _mapper.Map<Report>(report);
-            var id = _reporteRepo.AddReport(rep);
+            var reportEnity = _mapper.Map<Report>(report);
+            var id = _reporteRepo.AddReport(reportEnity);
             return id;
         }
 
