@@ -9,6 +9,9 @@ import ReservationsForm from './pages/reservationsForm.jsx';
 import Workers, { loader as workersLoader } from './pages/workers.jsx';
 import EditReservation from './pages/editReservation.jsx';
 import Resources, {loader as resourcesLoader} from './pages/resources.jsx';
+import AddWorker from './pages/addWorker.jsx';
+import RemoveWorker from './pages/removeWorker.jsx';
+import AddResource from './pages/addResource.jsx';
 
 const router = createBrowserRouter([
   {
@@ -58,6 +61,18 @@ const router = createBrowserRouter([
         path: "stan-zasobow",
         element: <Resources />,
         loader: resourcesLoader,
+      },
+      {
+        path: "dodaj-pracownika",
+        element: <AddWorker />,
+      },
+      {
+        path: "usun-pracownika",
+        element: <RemoveWorker />,
+      },
+      {
+        path: "dodaj-zasob",
+        element: <AddResource />,
       },
     ],
   },

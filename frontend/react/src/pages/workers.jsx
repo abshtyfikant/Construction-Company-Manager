@@ -227,7 +227,7 @@ function Workers() {
 
   return (
     <section className={classes.workers}>
-      <GridMenuHeader headerTitle="Rezerwacje" />
+      <GridMenuHeader headerTitle="Pracownicy" />
       <div className={classes.tableContainer}>
         <table className={classes.table}>
           <thead>
@@ -261,7 +261,7 @@ function Workers() {
                 <div className={classes.thAlignLeft}>
                   <p>Stawka godzinowa</p>
                   <div className={classes.thAlignRight}>
-                    <Link to="/formularz-rezerwacji">+ Dodaj pracownika</Link>
+                    <Link to="/dodaj-pracownika">+ Dodaj pracownika</Link>
                   </div>
                 </div>
               </th>

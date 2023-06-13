@@ -225,7 +225,7 @@ function Resources() {
 
   return (
     <section className={classes.resources}>
-      <GridMenuHeader headerTitle="Rezerwacje" />
+      <GridMenuHeader headerTitle="Stan zasobów" />
       <div className={classes.tableContainer}>
         <table className={classes.table}>
           <thead>
@@ -244,7 +244,7 @@ function Resources() {
                 <div className={classes.thAlignLeft}>
                   <p>Ilość</p>
                   <div className={classes.thAlignRight}>
-                    <Link to="/formularz-rezerwacji">+ Dodaj zasób</Link>
+                    <Link to="/dodaj-zasob">+ Dodaj zasób</Link>
                   </div>
                 </div>
               </th>
