@@ -45,7 +45,7 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
             var report = _reportservice.GetReport(id);
-            if (report is not null)
+            if (report is null)
             {
                 return NotFound();
             }
