@@ -88,7 +88,7 @@ namespace Infrastructure
             builder.Entity<Service>()
                 .HasMany(e => e.Comments)
                 .WithOne(e => e.Service)
-                .HasForeignKey(e => e.ServiceID)
+                .HasForeignKey(e => e.ServiceId)
                 .IsRequired();
 
             builder.Entity<Service>()
