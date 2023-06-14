@@ -66,6 +66,7 @@ namespace WebApi.Controllers
                 }
                 newReport.UserId = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 var reportId = _reportservice.AddReport(newReport);
+                newReport.Id = reportId;
                 return CreatedAtRoute("GetReport", new { id = reportId }, newReport);
             }
             return BadRequest();

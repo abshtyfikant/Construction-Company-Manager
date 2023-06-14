@@ -59,6 +59,7 @@ namespace WebApi.Controllers
                     return StatusCode(StatusCodes.Status500InternalServerError);
                 }
                 var clientId = _clientService.AddClient(newClient);
+                newClient.Id = clientId;
                 return CreatedAtRoute("GetClient", new { id = clientId }, newClient);
             }
             return BadRequest();

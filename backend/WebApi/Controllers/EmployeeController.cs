@@ -63,6 +63,7 @@ namespace WebApi.Controllers
                     return StatusCode(StatusCodes.Status500InternalServerError);
                 }
                 var employeeId = _employeeservice.AddEmployee(newEmployee);
+                newEmployee.Id = employeeId;
                 return CreatedAtRoute("GetEmployee", new { id = employeeId }, newEmployee);
             }
             return BadRequest();

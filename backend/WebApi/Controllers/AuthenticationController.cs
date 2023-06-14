@@ -18,7 +18,7 @@ namespace WebApi.Controllers
             _authenticationService = authenticationService;
         }
 
-        [HttpPost("register")]
+        [HttpPost("Register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult Register (RegisterRequest request)
         {
@@ -38,7 +38,7 @@ namespace WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpPost("login")]
+        [HttpPost("Login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult Login(LoginRequest request)
         {
