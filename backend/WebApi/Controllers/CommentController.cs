@@ -3,6 +3,7 @@ using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace WebApi.Controllers
 {
@@ -56,6 +57,7 @@ namespace WebApi.Controllers
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError);
                 }
+                newComment.UserId = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 var id = _commentservice.AddComment(newComment);
                 newComment.Id = id;
                 return CreatedAtRoute("GetComment", new { id }, newComment);
