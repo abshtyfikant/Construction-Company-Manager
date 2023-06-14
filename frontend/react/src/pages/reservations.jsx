@@ -114,10 +114,25 @@ function Reservations() {
             <td colSpan={3}>
               <p>Klient:</p>
               <p>Zespół wykonawczy:</p>
+              {reservation.workers && reservation.workers.map((worker) => {
+                return (
+                  <p>{worker}</p>
+                );
+              })}
             </td>
             <td colSpan={3}>
               <p>Przydział zasobów:</p>
+              {reservation.resources && reservation.resources.map((resource) => {
+                return (
+                  <p>{resource}</p>
+                );
+              })}
               <p>Materiały:</p>
+              {reservation.materials && reservation.materials.map((material) => {
+                return (
+                  <p>{material}</p>
+                );
+              })}
             </td>
             <td colSpan={3}>
               <p>Koszt materiałów:</p>

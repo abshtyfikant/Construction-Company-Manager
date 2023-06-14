@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Form } from 'react-router-dom';
 import GraySquareWithPlus from '../components/square';
 
 function Menu() {
@@ -11,7 +11,9 @@ function Menu() {
           <h1>Menu główne</h1>
         </div>
         <div className='item'>
-          <Link to="/">Wyloguj się</Link>
+          <Form action="/logout" method="post">
+            <button>Wyloguj się</button>
+          </Form>
         </div>
       </div>
       <section className='center-container'>

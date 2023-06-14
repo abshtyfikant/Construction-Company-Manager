@@ -8,7 +8,7 @@ const cities = [
 ];
 
 const types = [
-  'typ1', 'typ2', 'typ3'
+  'raport o zarobkach firmy', 'raport o zarobkach pracownika', 'faport o kosztach', 'raport z usługi'
 ];
 
 const workers = [
