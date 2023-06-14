@@ -58,7 +58,8 @@ namespace WebApi.Controllers
                     return StatusCode(StatusCodes.Status500InternalServerError);
                 }
                 var specializationId = _specializationService.AddSpecialization(newSpecialization);
-                return CreatedAtRoute("GetSpecialization", new { id = specializationId }, null);
+                newSpecialization.Id = specializationId;
+                return CreatedAtRoute("GetSpecialization", new { id = specializationId }, newSpecialization);
             }
             return BadRequest();
         }
