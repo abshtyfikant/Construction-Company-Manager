@@ -26,7 +26,7 @@ const specializationsData = [
 
 export default function ReservationForm({ defaultValue, method }) {
     const token = localStorage.getItem('token');
-    const [client, setClient] = React.useState(defaultValue ? defaultValue.client : '');
+    const [client, setClient] = React.useState(defaultValue ? defaultValue.client : undefined);
     const clientFirstNameRef = React.useRef();
     const clientLastNameRef = React.useRef();
     const clientCityRef = React.useRef();
@@ -35,9 +35,9 @@ export default function ReservationForm({ defaultValue, method }) {
     const [startDate, setStartDate] = React.useState(defaultValue ? defaultValue.beginDate : '');
     const [endDate, setEndDate] = React.useState(defaultValue ? defaultValue.endDate : '');
     const [serviceType, setServiceType] = React.useState(defaultValue ? defaultValue.serviceType : '');
-    const [workers, setWorkers] = React.useState(defaultValue ? defaultValue.workes : {});
-    const [materials, setMaterials] = React.useState(defaultValue ? defaultValue.materials : {});
-    const [resources, setResources] = React.useState(defaultValue ? defaultValue.resources : {});
+    const [workers, setWorkers] = React.useState(defaultValue ? defaultValue.workes : []);
+    const [materials, setMaterials] = React.useState(defaultValue ? defaultValue.materials : []);
+    const [resources, setResources] = React.useState(defaultValue ? defaultValue.resources : []);
     const [fetchedWorkers, setFetchedWorkers] = React.useState();
     const [fetchedResources, setFetchedResources] = React.useState();
     const [fetchedClients, setFetchedClients] = React.useState();
@@ -49,7 +49,6 @@ export default function ReservationForm({ defaultValue, method }) {
     const resourceAmountRef = React.useRef();
     const resourceUnitRef = React.useRef();
 
-    //odkomentowac jak bedzie polaczone z backendem
     const fetchData = React.useCallback(async () => {
         try {
             const response = await fetch('https://localhost:7098/api/Employee', {
@@ -135,21 +134,20 @@ export default function ReservationForm({ defaultValue, method }) {
     }, [fetchData]);
 
     const submitClient = async () => {
-        if (!client && clientFirstNameRef && clientLastNameRef && clientCityRef) {
-            setClient({
+        if (!client) {
+            const tmpClient = {
                 id: 0,
                 firstName: clientFirstNameRef.current.value,
                 lastName: clientLastNameRef.current.value,
                 city: clientCityRef.current.value,
-            });
-
-            const response = await fetch('', {
+            };
+            const response = await fetch('https://localhost:7098/api/Client', {
                 method: method,
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + token,
                 },
-                body: JSON.stringify(client),
+                body: JSON.stringify(tmpClient),
             });
 
             if (response.status === 422) {
@@ -160,7 +158,10 @@ export default function ReservationForm({ defaultValue, method }) {
                 throw json({ message: 'Could not save client.' }, { status: 500 });
             }
             const data = await response.json();
+            console.log("client submitted");
             return data;
+        } else {
+            return client;
         }
     };
 
@@ -176,7 +177,7 @@ export default function ReservationForm({ defaultValue, method }) {
             paymentStatus: "",
         };
 
-        const response = await fetch('', {
+        const response = await fetch('https://localhost:7098/api/Service', {
             method: method,
             headers: {
                 'Content-Type': 'application/json',
@@ -193,16 +194,15 @@ export default function ReservationForm({ defaultValue, method }) {
             throw json({ message: 'Could not save reservation.' }, { status: 500 });
         }
         const data = await response.json();
+        console.log("reservation submitted");
         return data;
     };
 
     const submitMaterials = async (serviceId) => {
         let data = [];
         materials.forEach(async material => {
-            material.push({
-                id: 0,
-                serviceId: serviceId,
-            });
+            material.id = 0;
+            material.serviceId = serviceId;
 
             const response = await fetch('', {
                 method: method,
@@ -221,8 +221,10 @@ export default function ReservationForm({ defaultValue, method }) {
                 throw json({ message: 'Could not save material.' }, { status: 500 });
             }
             data = [...data, await response.json()];
-            return data;
+            console.log("material submitted");
+
         });
+        return data;
     };
 
     const submitResourcesAllocation = async (reservationId) => {
@@ -255,6 +257,7 @@ export default function ReservationForm({ defaultValue, method }) {
             }
             data = [...data, await response.json()];
         });
+        console.log("resource submitted");
         return data;
     };
 
@@ -267,7 +270,6 @@ export default function ReservationForm({ defaultValue, method }) {
                 serviceId: reservationId,
                 function: worker.function,
             };
-
 
             const response = await fetch('', {
                 method: method,
@@ -287,26 +289,26 @@ export default function ReservationForm({ defaultValue, method }) {
             }
             data = [...data, await response.json()];
         });
+        console.log("worker submitted");
         return data;
     };
 
     //Handle form submit - request
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const clientId = await submitClient().id;
-        if (clientId != undefined) {
-            var reservationId = await submitReservation(clientId);
-            if (reservationId != undefined) {
-                const response = await Promise.allSettled([submitMaterials(reservationId), submitResourcesAllocation(reservationId),
-                submitWorkersAllocation(reservationId)]);
+        const submittedClient = await submitClient();
+        if (submittedClient.id != undefined) {
+            var submittedReservation = await submitReservation(submittedClient.id);
+            if (submittedReservation.id != undefined) {
+                const response = await Promise.allSettled([submitMaterials(submittedReservation.id), submitResourcesAllocation(submittedReservation.id),
+                submitWorkersAllocation(submittedReservation.id)]);
             } else {
                 throw json({ message: 'Something went wrong.' }, { status: 500 });
             }
         } else {
             throw json({ message: 'Something went wrong.' }, { status: 500 });
         }
-
+        console.log("all submitted");
         return navigate('/rezerwacje');
     };
 
@@ -329,49 +331,61 @@ export default function ReservationForm({ defaultValue, method }) {
         setPopupOpen(false);
     };
 
+    const handleAddWorker = () => {
+        let tmpWorker = {};
+        return (
+            <div>
+                <h1>Dodaj pracownika</h1>
+                <select
+                    onChange={(e) => {
+                        tmpWorker = (fetchedWorkers.find(a =>
+                            a.id == e.target.value
+                        ));
+                    }}
+                    className={classes.formInput}
+                >
+                    <option value=''>Wybierz z listy</option>
+                    {fetchedWorkers && fetchedWorkers.map((worker) => {
+                        return (
+                            <option key={worker.id} value={worker.id}>
+                                {worker.firstName} {worker.lastName}
+                            </option>
+                        )
+                    })}
+                </select>
+
+                <select
+                    onChange={(e) => { tmpWorker.function = e.target.value }}
+                    className={classes.formInput}
+                >
+                    <option value=''>Wybierz z listy</option>
+                    {fetchedSpecializations && fetchedSpecializations.map((specialization) => {
+                        return (
+                            <option key={specialization.id} value={specialization.id}>
+                                {specialization.name}
+                            </option>
+                        )
+                    })}
+                </select>
+                <button
+                    onClick={(e) => {
+                        e.preventDefault();
+                        setWorkers([tmpWorker, ...workers]);
+                        setPopupOpen(false);
+                    }}>
+                    Dodaj pracownika
+                </button>
+            </div>
+        );
+    };
+
     const handlePopup = () => {
         if (popupOpen) {
             switch (currPopupType) {
                 case 'workers':
                     return (
                         <div className={classes.popupContainer}>
-                            <div>
-                                <h1>Dodaj pracownika</h1>
-                                <select
-                                    onChange={(e) => { }}
-                                    className={classes.formInput}
-                                >
-                                    <option value=''>Wybierz z listy</option>
-                                    {fetchedWorkers && fetchedWorkers.map((worker) => {
-                                        return (
-                                            <option key={worker.id} value={worker}>
-                                                {worker.firstName} {worker.lastName}
-                                            </option>
-                                        )
-                                    })}
-                                </select>
-
-                                <select
-                                    onChange={(e) => { }}
-                                    className={classes.formInput}
-                                >
-                                    <option value=''>Wybierz z listy</option>
-                                    {fetchedSpecializations && fetchedSpecializations.map((specialization) => {
-                                        return (
-                                            <option key={specialization.id} value={specialization.id}>
-                                                {specialization.name}
-                                            </option>
-                                        )
-                                    })}
-                                </select>
-                                <button
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        setPopupOpen(false);
-                                    }}>
-                                    Dodaj pracownika
-                                </button>
-                            </div>
+                            {handleAddWorker()}
                         </div>
                     );
                 case 'resources':
@@ -491,13 +505,16 @@ export default function ReservationForm({ defaultValue, method }) {
                     <h2>Klient</h2>
                     <p>Wybierz klienta z listy:</p>
                     <select
-                        onChange={(e) => { setClient(e.target.value) }}
+                        onChange={(e) => {
+                            setClient(fetchedClients.find(a =>
+                                a.id == e.target.value))
+                        }}
                         className={classes.formInput}
                     >
                         <option value=''>Wybierz z listy</option>
                         {fetchedClients && fetchedClients.map((client) => {
                             return (
-                                <option key={client.id} value={client}>
+                                <option key={client.id} value={client.id}>
                                     {client.firstName} {client.lastName}
                                 </option>
                             )
@@ -547,11 +564,11 @@ export default function ReservationForm({ defaultValue, method }) {
                             + Dodaj pracownika
                         </button>
                         <p>Zespół wykonawczy:</p>
-                        {Object.keys(workers).length !== 0 &&
+                        {workers &&
                             <ul className={classes.list}>
                                 {workers.map((worker) => (
-                                    <li>
-                                        {worker.firstName}
+                                    <li key={worker.id}>
+                                        {worker.firstName} {worker.lastName}
                                         <FontAwesomeIcon
                                             icon={faX}
                                             onClick={() => {
@@ -564,7 +581,7 @@ export default function ReservationForm({ defaultValue, method }) {
                                     </li>
                                 ))}
                             </ul>}
-                        {!workers &&
+                        {workers.length === 0 &&
                             <p>Brak danych</p>
                         }
                     </div>
@@ -578,8 +595,8 @@ export default function ReservationForm({ defaultValue, method }) {
                         {Object.keys(resources).length !== 0 &&
                             <ul className={classes.list}>
                                 {resources.map((resource) => (
-                                    <li>
-                                        {resource}
+                                    <li key={resource.id}>
+                                        {resource.name}
                                         <FontAwesomeIcon
                                             icon={faX}
                                             onClick={() => {
@@ -592,7 +609,7 @@ export default function ReservationForm({ defaultValue, method }) {
                                     </li>
                                 ))}
                             </ul>}
-                        {!resources &&
+                        {resources.length === 0 &&
                             <p>Brak danych</p>
                         }
                     </div>
@@ -606,8 +623,8 @@ export default function ReservationForm({ defaultValue, method }) {
                         {Object.keys(materials).length !== 0 &&
                             <ul className={classes.list}>
                                 {materials.map((material) => (
-                                    <li>
-                                        {material}
+                                    <li key={material.id}>
+                                        {material.name}
                                         <FontAwesomeIcon
                                             icon={faX}
                                             onClick={() => {
@@ -620,7 +637,7 @@ export default function ReservationForm({ defaultValue, method }) {
                                     </li>
                                 ))}
                             </ul>}
-                        {!materials &&
+                        {materials.length === 0 &&
                             <p>Brak danych</p>
                         }
                     </div>
