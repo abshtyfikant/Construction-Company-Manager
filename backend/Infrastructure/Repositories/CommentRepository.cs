@@ -22,6 +22,10 @@ namespace Infrastructure.Repositories
             {
                 throw new Exception("Service not found");
             }
+            if (!_dbContext.Users.Any(s => s.Id == comment.UserId))
+            {
+                throw new Exception("User not found");
+            }
             _dbContext.Comments.Add(comment);
             _dbContext.SaveChanges();
             return comment.Id;

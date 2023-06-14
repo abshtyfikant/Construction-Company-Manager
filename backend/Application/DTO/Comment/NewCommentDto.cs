@@ -1,4 +1,5 @@
 ﻿using Application.DTO.Material;
+using Application.Mapping;
 using AutoMapper;
 using FluentValidation;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.DTO.Comment
 {
-    public class NewCommentDto
+    public class NewCommentDto : IMapFrom<Domain.Model.Comment>
     {
         public int Id { get; set; }
         public int ServiceId { get; set; }

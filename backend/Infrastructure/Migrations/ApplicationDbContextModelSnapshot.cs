@@ -78,17 +78,20 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("EmployeeId")
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ServiceId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ServiceID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("ServiceId");
 
-                    b.HasIndex("ServiceID");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -366,21 +369,21 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Model.Comment", b =>
                 {
-                    b.HasOne("Domain.Model.Employee", "Employee")
-                        .WithMany("Comments")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Model.Service", "Service")
                         .WithMany("Comments")
-                        .HasForeignKey("ServiceID")
+                        .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Employee");
+                    b.HasOne("Domain.Model.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Service");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Model.Employee", b =>
@@ -482,8 +485,6 @@ namespace Infrastructure.Migrations
                 {
                     b.Navigation("Assigments");
 
-                    b.Navigation("Comments");
-
                     b.Navigation("EmployeeSpecializations");
                 });
 
@@ -514,6 +515,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Model.User", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Reports");
                 });
 #pragma warning restore 612, 618

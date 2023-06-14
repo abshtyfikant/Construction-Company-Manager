@@ -1,4 +1,6 @@
 ﻿using Application.Interfaces.Authentication;
+using Application.Interfaces.Services;
+using Application.Services;
 using Domain.Interfaces.Repository;
 using Domain.Interfaces.Services;
 using Infrastructure.Authentication;
@@ -20,6 +22,8 @@ namespace Infrastructure
             ConfigurationManager configuration)
         {
             services.AddAuth(configuration);
+            services.AddScoped<ICommentRepository, CommentRepository>();
+            services.AddScoped<IMaterialRepository, MaterialRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<ISpecializationRepository, SpecializationRepository>();
             services.AddScoped<IServiceRepository, ServiceRepository>();
