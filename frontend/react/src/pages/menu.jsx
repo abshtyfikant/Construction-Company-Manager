@@ -11,8 +11,8 @@ function Menu() {
           <h1>Menu główne</h1>
         </div>
         <div className='item'>
-          <Form action="/logout" method="post">
-            <button>Wyloguj się</button>
+          <Form className='logout-form' action="/logout" method="post">
+            <button className='logout'>Wyloguj się</button>
           </Form>
         </div>
       </div>

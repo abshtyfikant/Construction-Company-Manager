@@ -100,7 +100,7 @@ function Resources() {
         <tr key={index} onClick={() => setOpenDetails((prev) => !prev)}>
           <td>{resource.id}</td>
           <td>{resource.resourceName}</td>
-          <td className={classes.alignLeft}>{resource.quantinity}</td>
+          <td className={classes.alignLeft}>{resource.quantity}</td>
           <td className={classes.alignRight}>
             <FontAwesomeIcon icon={faCaretDown} className={classes.sortIcon} />
           </td>

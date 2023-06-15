@@ -234,7 +234,7 @@ export default function ReservationForm({ defaultValue, method }) {
             resourcesAllocationData = {
                 resourceId: resource.id,
                 serviceId: reservationId,
-                allocatedQuantinity: resource.quantinty,
+                allocatedQuantity: resource.quantity,
                 beginDate: startDate,
                 endDate: endDate,
             };
