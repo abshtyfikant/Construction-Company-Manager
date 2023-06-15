@@ -1,55 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security.Cryptography;
 
-namespace Application.Services.Authentication
+namespace Application.Services.Authentication;
+
+public static class PasswordHasher
 {
-    public static class PasswordHasher
+    private const int _saltSize = 16; // 128 bits
+    private const int _keySize = 32; // 256 bits
+    private const int _iterations = 50000;
+
+    private const char segmentDelimiter = ':';
+    private static readonly HashAlgorithmName _algorithm = HashAlgorithmName.SHA256;
+
+    public static string Hash(string input)
     {
-        private const int _saltSize = 16; // 128 bits
-        private const int _keySize = 32; // 256 bits
-        private const int _iterations = 50000;
-        private static readonly HashAlgorithmName _algorithm = HashAlgorithmName.SHA256;
+        var salt = RandomNumberGenerator.GetBytes(_saltSize);
+        var hash = Rfc2898DeriveBytes.Pbkdf2(
+            input,
+            salt,
+            _iterations,
+            _algorithm,
+            _keySize
+        );
+        return string.Join(
+            segmentDelimiter,
+            Convert.ToHexString(hash),
+            Convert.ToHexString(salt),
+            _iterations,
+            _algorithm
+        );
+    }
 
-        private const char segmentDelimiter = ':';
-
-        public static string Hash(string input)
-        {
-            byte[] salt = RandomNumberGenerator.GetBytes(_saltSize);
-            byte[] hash = Rfc2898DeriveBytes.Pbkdf2(
-                input,
-                salt,
-                _iterations,
-                _algorithm,
-                _keySize
-            );
-            return string.Join(
-                segmentDelimiter,
-                Convert.ToHexString(hash),
-                Convert.ToHexString(salt),
-                _iterations,
-                _algorithm
-            );
-        }
-
-        public static bool Verify(string input, string hashString)
-        {
-            string[] segments = hashString.Split(segmentDelimiter);
-            byte[] hash = Convert.FromHexString(segments[0]);
-            byte[] salt = Convert.FromHexString(segments[1]);
-            int iterations = int.Parse(segments[2]);
-            HashAlgorithmName algorithm = new(segments[3]);
-            byte[] inputHash = Rfc2898DeriveBytes.Pbkdf2(
-                input,
-                salt,
-                iterations,
-                algorithm,
-                hash.Length
-            );
-            return CryptographicOperations.FixedTimeEquals(inputHash, hash);
-        }
+    public static bool Verify(string input, string hashString)
+    {
+        var segments = hashString.Split(segmentDelimiter);
+        var hash = Convert.FromHexString(segments[0]);
+        var salt = Convert.FromHexString(segments[1]);
+        var iterations = int.Parse(segments[2]);
+        HashAlgorithmName algorithm = new(segments[3]);
+        var inputHash = Rfc2898DeriveBytes.Pbkdf2(
+            input,
+            salt,
+            iterations,
+            algorithm,
+            hash.Length
+        );
+        return CryptographicOperations.FixedTimeEquals(inputHash, hash);
     }
 }

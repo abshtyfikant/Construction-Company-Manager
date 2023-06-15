@@ -1,41 +1,32 @@
-﻿using Application.DTO.Report;
-using Application.Mapping;
+﻿using Application.Mapping;
 using AutoMapper;
-using Domain.Model;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Application.DTO.Employee
+namespace Application.DTO.Employee;
+
+public class NewEmployeeDto : IMapFrom<Domain.Model.Employee>
 {
-    public class NewEmployeeDto : IMapFrom<Domain.Model.Employee>
-    {
-        public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string City { get; set; }
-        public double RatePerHour { get; set; }
-        public int MainSpecializationId { get; set; }
+    public int Id { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string City { get; set; }
+    public double RatePerHour { get; set; }
+    public int MainSpecializationId { get; set; }
 
-        public static void Mapping(Profile profile)
-        {
-            profile.CreateMap<NewEmployeeDto, Domain.Model.Employee>().ReverseMap();
-        }
+    public static void Mapping(Profile profile)
+    {
+        profile.CreateMap<NewEmployeeDto, Domain.Model.Employee>().ReverseMap();
     }
+}
 
-    public class NewEmployeeValidation : AbstractValidator<NewEmployeeDto>
+public class NewEmployeeValidation : AbstractValidator<NewEmployeeDto>
+{
+    public NewEmployeeValidation()
     {
-        public NewEmployeeValidation()
-        {
-            RuleFor(x => x.FirstName).NotEmpty().MaximumLength(50);
-            RuleFor(x => x.LastName).NotEmpty().MaximumLength(255);
-            RuleFor(x => x.City).NotEmpty().MaximumLength(255);
-            RuleFor(x => x.RatePerHour).NotEmpty();
-            RuleFor(x => x.MainSpecializationId).NotEmpty();
-
-        }
+        RuleFor(x => x.FirstName).NotEmpty().MaximumLength(50);
+        RuleFor(x => x.LastName).NotEmpty().MaximumLength(255);
+        RuleFor(x => x.City).NotEmpty().MaximumLength(255);
+        RuleFor(x => x.RatePerHour).NotEmpty();
+        RuleFor(x => x.MainSpecializationId).NotEmpty();
     }
 }

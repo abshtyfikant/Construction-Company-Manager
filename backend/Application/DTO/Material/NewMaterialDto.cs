@@ -1,39 +1,32 @@
-﻿using Application.DTO.Report;
-using Application.Mapping;
+﻿using Application.Mapping;
 using AutoMapper;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Application.DTO.Material
+namespace Application.DTO.Material;
+
+public class NewMaterialDto : IMapFrom<Domain.Model.Material>
 {
-    public class NewMaterialDto : IMapFrom<Domain.Model.Material>
-    {
-        public int Id { get; set; }
-        public int ServiceId { get; set; }
-        public string Name { get; set; }
-        public string unit { get; set; }
-        public decimal Price { get; set; }
-        public double Quantity { get; set; }
+    public int Id { get; set; }
+    public int ServiceId { get; set; }
+    public string Name { get; set; }
+    public string unit { get; set; }
+    public decimal Price { get; set; }
+    public double Quantity { get; set; }
 
-        public static void Mapping(Profile profile)
-        {
-            profile.CreateMap<NewMaterialDto, Domain.Model.Material>().ReverseMap();
-        }
+    public static void Mapping(Profile profile)
+    {
+        profile.CreateMap<NewMaterialDto, Domain.Model.Material>().ReverseMap();
     }
+}
 
-    public class NewMaterialValidation : AbstractValidator<NewMaterialDto>
+public class NewMaterialValidation : AbstractValidator<NewMaterialDto>
+{
+    public NewMaterialValidation()
     {
-        public NewMaterialValidation()
-        {
-            RuleFor(x => x.ServiceId).NotEmpty();
-            RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
-            RuleFor(x => x.unit).NotEmpty().MaximumLength(50);
-            RuleFor(x => x.Price).NotEmpty();
-            RuleFor(x => x.Quantity).NotEmpty();
-        }
+        RuleFor(x => x.ServiceId).NotEmpty();
+        RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
+        RuleFor(x => x.unit).NotEmpty().MaximumLength(50);
+        RuleFor(x => x.Price).NotEmpty();
+        RuleFor(x => x.Quantity).NotEmpty();
     }
 }
