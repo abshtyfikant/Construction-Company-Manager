@@ -6,7 +6,7 @@ using WebApi.Authentication;
 
 namespace WebApi.Controllers
 {
-    [Route("auth")]
+    [Route("Auth")]
     [ApiController]
     [AllowAnonymous]
     public class AuthenticationController : ControllerBase
