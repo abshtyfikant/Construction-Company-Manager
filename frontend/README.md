@@ -4,7 +4,7 @@ Follow these steps to set up a React.js project:
 
 ### Prerequisites
 
-Make sure you have Node.js and npm (Node Package Manager) installed on your machine. You can download them from the official Node.js website: [https://nodejs.org](https://nodejs.org)
+Make sure you have Node.js and npm (Node Package Manager) installed on your machine. You can download them from the official Node.js website: [https://nodejs.org](https://nodejs.org) or through nvm (prefferred) : [https://github.com/nvm-sh/nvm](https://github.com/nvm-sh/nvm).
 
 ### Installing React.js dependencies
 
