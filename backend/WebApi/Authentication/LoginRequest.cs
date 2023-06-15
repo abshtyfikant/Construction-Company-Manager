@@ -1,7 +1,6 @@
-﻿namespace WebApi.Authentication
-{
-    public record LoginRequest(
-       string Email,
-       string Password
-    );
-}
+﻿namespace WebApi.Authentication;
+
+public record LoginRequest(
+    string Email,
+    string Password
+);

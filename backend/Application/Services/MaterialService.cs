@@ -3,67 +3,61 @@ using Application.Interfaces.Services;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain.Interfaces.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Domain.Model;
 
-namespace Application.Services
+namespace Application.Services;
+
+public class MaterialService : IMaterialService
 {
-    public class MaterialService : IMaterialService
+    private readonly IMapper _mapper;
+    private readonly IMaterialRepository _materialRepository;
+
+    public MaterialService(IMaterialRepository materialRepository, IMapper mapper)
     {
-        private readonly IMaterialRepository _materialRepository;
-        private readonly IMapper _mapper;
-
-        public MaterialService(IMaterialRepository materialRepository, IMapper mapper)
-        {
-            _materialRepository = materialRepository;
-            _mapper = mapper;
-        }
+        _materialRepository = materialRepository;
+        _mapper = mapper;
+    }
 
 
-        public int AddMaterial(NewMaterialDto material)
-        {
-            var materialEntity = _mapper.Map<Domain.Model.Material>(material);
-            var id = _materialRepository.AddMaterial(materialEntity);
-            return id;
-        }
+    public int AddMaterial(NewMaterialDto material)
+    {
+        var materialEntity = _mapper.Map<Material>(material);
+        var id = _materialRepository.AddMaterial(materialEntity);
+        return id;
+    }
 
-        public void DeleteMaterial(int materialId)
-        {
-            _materialRepository.DeleteMaterial(materialId);
-        }
+    public void DeleteMaterial(int materialId)
+    {
+        _materialRepository.DeleteMaterial(materialId);
+    }
 
-        public object GetMaterial(int materialId)
-        {
-            var material = _materialRepository.GetMaterial(materialId);
-            var materialDto = _mapper.Map<MaterialDto>(material);
-            return materialDto;
-        }
+    public object GetMaterial(int materialId)
+    {
+        var material = _materialRepository.GetMaterial(materialId);
+        var materialDto = _mapper.Map<MaterialDto>(material);
+        return materialDto;
+    }
 
-        public List<MaterialDto> GetMaterialsByServiceForList(int serviceId)
-        {
-            var materials = _materialRepository.GetMaterialsByService(serviceId)
-                .ProjectTo<MaterialDto>(_mapper.ConfigurationProvider)
-                .ToList();
-            return materials;
+    public List<MaterialDto> GetMaterialsByServiceForList(int serviceId)
+    {
+        var materials = _materialRepository.GetMaterialsByService(serviceId)
+            .ProjectTo<MaterialDto>(_mapper.ConfigurationProvider)
+            .ToList();
+        return materials;
+    }
 
-        }
+    public List<MaterialDto> GetMaterialsForList()
+    {
+        var materials = _materialRepository.GetAllMaterials()
+            .ProjectTo<MaterialDto>(_mapper.ConfigurationProvider)
+            .ToList();
+        return materials;
+    }
 
-        public List<MaterialDto> GetMaterialsForList()
-        {
-            var materials = _materialRepository.GetAllMaterials()
-                .ProjectTo<MaterialDto>(_mapper.ConfigurationProvider)
-                .ToList();
-            return materials;
-        }
-
-        public object UpdateMaterial(NewMaterialDto newMaterial)
-        {
-            var material = _mapper.Map<Domain.Model.Material>(newMaterial);
-            _materialRepository.UpdateMaterial(material);
-            return material;
-        }
+    public object UpdateMaterial(NewMaterialDto newMaterial)
+    {
+        var material = _mapper.Map<Material>(newMaterial);
+        _materialRepository.UpdateMaterial(material);
+        return material;
     }
 }

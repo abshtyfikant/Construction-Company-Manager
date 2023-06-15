@@ -1,63 +1,54 @@
-﻿using Application.DTO.Client;
-using Application.DTO.Report;
-using Application.DTO.Service;
+﻿using Application.DTO.Report;
 using Application.Interfaces.Reports;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain.Interfaces.Repository;
 using Domain.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Application.Services
+namespace Application.Services;
+
+internal class ReportService : IReportService
 {
-    internal class ReportService : IReportService
+    private readonly IMapper _mapper;
+    private readonly IReportRepository _reporteRepo;
+
+    public ReportService(IReportRepository reporteRepo, IMapper mapper)
     {
-        private readonly IReportRepository _reporteRepo;
-        private readonly IMapper _mapper;
+        _reporteRepo = reporteRepo;
+        _mapper = mapper;
+    }
 
-        public ReportService(IReportRepository reporteRepo, IMapper mapper)
-        {
-            _reporteRepo = reporteRepo;
-            _mapper = mapper;
-        }
+    public int AddReport(NewReportDto report)
+    {
+        var reportEnity = _mapper.Map<Report>(report);
+        var id = _reporteRepo.AddReport(reportEnity);
+        return id;
+    }
 
-        public int AddReport(NewReportDto report)
-        {
-            var reportEnity = _mapper.Map<Report>(report);
-            var id = _reporteRepo.AddReport(reportEnity);
-            return id;
-        }
+    public void DeleteReport(int reportId)
+    {
+        _reporteRepo.DeleteReport(reportId);
+    }
 
-        public void DeleteReport(int reportId)
-        {
-            _reporteRepo.DeleteReport(reportId);
-        }
+    public object GetReport(int reportId)
+    {
+        var report = _reporteRepo.GetReport(reportId);
+        var reportDto = _mapper.Map<ReportDetailsDto>(report);
+        return reportDto;
+    }
 
-        public object GetReport(int reportId)
-        {
-            var report = _reporteRepo.GetReport(reportId);
-            var reportDto = _mapper.Map<ReportDetailsDto>(report);
-            return reportDto;
-        }
-
-        public List<ReportForListDto> GetReportsForList()
-        {
-            var reports = _reporteRepo.GetAllReports()
+    public List<ReportForListDto> GetReportsForList()
+    {
+        var reports = _reporteRepo.GetAllReports()
             .ProjectTo<ReportForListDto>(_mapper.ConfigurationProvider)
             .ToList();
-            return reports;
-        }
+        return reports;
+    }
 
-        public object UpdateReport(NewReportDto newReport)
-        {
-            var report = _mapper.Map<Report>(newReport);
-            _reporteRepo.UpdateReport(report);
-            return report;
-        }
+    public object UpdateReport(NewReportDto newReport)
+    {
+        var report = _mapper.Map<Report>(newReport);
+        _reporteRepo.UpdateReport(report);
+        return report;
     }
 }

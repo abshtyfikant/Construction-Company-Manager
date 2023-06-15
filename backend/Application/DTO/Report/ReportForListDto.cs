@@ -1,32 +1,25 @@
-﻿using Application.DTO.Service;
-using Application.Mapping;
+﻿using Application.Mapping;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Application.DTO.Report
+namespace Application.DTO.Report;
+
+public class ReportForListDto : IMapFrom<Domain.Model.Report>
 {
-    public class ReportForListDto : IMapFrom<Domain.Model.Report>
-    {
-        public int Id { get; set; }
-        public string ReportType { get; set; }
-        public DateTime BeginDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public string Description { get; set; }
-        public string Author { get; set; }
+    public int Id { get; set; }
+    public string ReportType { get; set; }
+    public DateTime BeginDate { get; set; }
+    public DateTime EndDate { get; set; }
+    public string Description { get; set; }
+    public string Author { get; set; }
 
-        public static void Mapping(Profile profile)
-        {
-            profile.CreateMap<Domain.Model.Report, ReportForListDto>()
-                .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Id))
-                .ForMember(d => d.ReportType, opt => opt.MapFrom(s => s.ReportType))
-                .ForMember(d => d.BeginDate, opt => opt.MapFrom(s => s.BeginDate))
-                .ForMember(d => d.EndDate, opt => opt.MapFrom(s => s.EndDate))
-                .ForMember(d => d.Description, opt => opt.MapFrom(s => s.Description))
-                .ForMember(d => d.Author, opt => opt.MapFrom(s => s.User.FirstName + " " + s.User.LastName));
-        }
+    public static void Mapping(Profile profile)
+    {
+        profile.CreateMap<Domain.Model.Report, ReportForListDto>()
+            .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Id))
+            .ForMember(d => d.ReportType, opt => opt.MapFrom(s => s.ReportType))
+            .ForMember(d => d.BeginDate, opt => opt.MapFrom(s => s.BeginDate))
+            .ForMember(d => d.EndDate, opt => opt.MapFrom(s => s.EndDate))
+            .ForMember(d => d.Description, opt => opt.MapFrom(s => s.Description))
+            .ForMember(d => d.Author, opt => opt.MapFrom(s => s.User.FirstName + " " + s.User.LastName));
     }
 }
