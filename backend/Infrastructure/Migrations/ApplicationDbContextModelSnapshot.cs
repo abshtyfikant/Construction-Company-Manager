@@ -22,7 +22,7 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Model.Assigment", b =>
+            modelBuilder.Entity("Domain.Model.Assignment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -46,7 +46,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ServiceId");
 
-                    b.ToTable("Assigments");
+                    b.ToTable("Assignments");
                 });
 
             modelBuilder.Entity("Domain.Model.Client", b =>
@@ -149,7 +149,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("SpecializationId");
 
-                    b.ToTable("SpecializationAssigments");
+                    b.ToTable("SpecializationAssignments");
                 });
 
             modelBuilder.Entity("Domain.Model.Material", b =>
@@ -379,16 +379,16 @@ namespace Infrastructure.Migrations
                     b.ToTable("ResourceService");
                 });
 
-            modelBuilder.Entity("Domain.Model.Assigment", b =>
+            modelBuilder.Entity("Domain.Model.Assignment", b =>
                 {
                     b.HasOne("Domain.Model.Employee", "Employee")
-                        .WithMany("Assigments")
+                        .WithMany("Assignments")
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Model.Service", "Service")
-                        .WithMany("Assigments")
+                        .WithMany("Assignments")
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -529,7 +529,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Model.Employee", b =>
                 {
-                    b.Navigation("Assigments");
+                    b.Navigation("Assignments");
 
                     b.Navigation("EmployeeSpecializations");
                 });
@@ -541,7 +541,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Model.Service", b =>
                 {
-                    b.Navigation("Assigments");
+                    b.Navigation("Assignments");
 
                     b.Navigation("Comments");
 

@@ -3,8 +3,9 @@ using AutoMapper;
 
 namespace Application.DTO.Assigment;
 
-public class AssigmentDto : IMapFrom<Domain.Model.Assigment>
+public class AssigmentDto : IMapFrom<Domain.Model.Assignment>
 {
+    public int Id { get; set; }
     public int EmployeeId { get; set; }
     public string Employee { get; set; }
     public int ServiceId { get; set; }
@@ -13,7 +14,8 @@ public class AssigmentDto : IMapFrom<Domain.Model.Assigment>
 
     public static void Mapping(Profile profile)
     {
-        profile.CreateMap<Domain.Model.Assigment, AssigmentDto>()
+        profile.CreateMap<Domain.Model.Assignment, AssigmentDto>()
+            .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Id) )
             .ForMember(d => d.EmployeeId, opt => opt.MapFrom(s => s.EmployeeId))
             .ForMember(d => d.Employee, opt => opt.MapFrom(s => s.Employee.FirstName + " " + s.Employee.LastName))
             .ForMember(d => d.ServiceId, opt => opt.MapFrom(s => s.ServiceId))

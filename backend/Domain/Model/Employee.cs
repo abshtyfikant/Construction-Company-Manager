@@ -11,6 +11,6 @@ public class Employee
     public Specialization MainSpecialization { get; set; }
     public List<EmployeeSpecialization> EmployeeSpecializations { get; set; }
     public List<Specialization> Specializations { get; set; }
-    public List<Assigment> Assigments { get; set; }
+    public List<Assignment> Assigments { get; set; }
     public ICollection<Service> Services { get; set; }
 }

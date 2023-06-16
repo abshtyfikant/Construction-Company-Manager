@@ -20,6 +20,7 @@ public static class DependencyInjection
         ConfigurationManager configuration)
     {
         services.AddAuth(configuration);
+        services.AddScoped<IAssignmentRepository, AssignmentRepository>();
         services.AddScoped<IResourceAllocationRepository, ResourceAllocationRepository>();
         services.AddScoped<IResourceRepository, ResourceRepository>();
         services.AddScoped<ICommentRepository, CommentRepository>();

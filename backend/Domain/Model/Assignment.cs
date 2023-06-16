@@ -1,6 +1,6 @@
 ﻿namespace Domain.Model;
 
-public class Assigment
+public class Assignment
 {
     public int Id { get; set; }
     public int EmployeeId { get; set; }

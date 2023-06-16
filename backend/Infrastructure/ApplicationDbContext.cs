@@ -11,11 +11,11 @@ public class ApplicationDbContext : DbContext
     }
 
     public DbSet<User> Users { get; set; }
-    public DbSet<Assigment> Assigments { get; set; }
+    public DbSet<Assignment> Assignments { get; set; }
     public DbSet<Client> Clients { get; set; }
     public DbSet<Comment> Comments { get; set; }
     public DbSet<Employee> Employees { get; set; }
-    public DbSet<EmployeeSpecialization> SpecializationAssigments { get; set; }
+    public DbSet<EmployeeSpecialization> SpecializationAssignments { get; set; }
     public DbSet<Material> Materials { get; set; }
     public DbSet<Report> Reports { get; set; }
     public DbSet<Resource> Resources { get; set; }
@@ -47,7 +47,7 @@ public class ApplicationDbContext : DbContext
         builder.Entity<Employee>()
             .HasMany(e => e.Services)
             .WithMany(e => e.Employees)
-            .UsingEntity<Assigment>();
+            .UsingEntity<Assignment>();
 
 
         builder.Entity<Employee>()  
