@@ -282,11 +282,11 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Model.ServiceResource", b =>
                 {
-                    b.Property<int>("ResourceId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("ServiceId")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<double>("AllocatedQuantity")
                         .HasColumnType("float");
@@ -297,7 +297,15 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ResourceId", "ServiceId");
+                    b.Property<int>("ResourceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ResourceId");
 
                     b.HasIndex("ServiceId");
 
@@ -346,6 +354,21 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("ResourceService", b =>
+                {
+                    b.Property<int>("ResourcesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ServicesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ResourcesId", "ServicesId");
+
+                    b.HasIndex("ServicesId");
+
+                    b.ToTable("ResourceService");
                 });
 
             modelBuilder.Entity("Domain.Model.Assigment", b =>
@@ -474,6 +497,21 @@ namespace Infrastructure.Migrations
                     b.Navigation("Resource");
 
                     b.Navigation("Service");
+                });
+
+            modelBuilder.Entity("ResourceService", b =>
+                {
+                    b.HasOne("Domain.Model.Resource", null)
+                        .WithMany()
+                        .HasForeignKey("ResourcesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Model.Service", null)
+                        .WithMany()
+                        .HasForeignKey("ServicesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Model.Client", b =>

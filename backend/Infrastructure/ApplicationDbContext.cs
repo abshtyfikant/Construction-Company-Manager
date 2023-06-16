@@ -95,17 +95,15 @@ public class ApplicationDbContext : DbContext
             .IsRequired();
 
         builder.Entity<Service>()
-            .HasMany(p => p.Resources)
-            .WithMany(p => p.Services)
-            .UsingEntity<ServiceResource>(
-                j => j
-                    .HasOne(pt => pt.Resource)
-                    .WithMany(t => t.ServiceResources)
-                    .HasForeignKey(pt => pt.ResourceId),
-                j => j
-                    .HasOne(pt => pt.Service)
-                    .WithMany(p => p.ServiceResources)
-                    .HasForeignKey(pt => pt.ServiceId),
-                j => { j.HasKey(t => new { t.ResourceId, t.ServiceId }); });
+            .HasMany(e => e.ServiceResources)
+            .WithOne(e => e.Service)
+            .HasForeignKey(e => e.ServiceId)
+            .IsRequired();
+
+        builder.Entity<Resource>()
+            .HasMany(e => e.ServiceResources)
+            .WithOne(e => e.Resource)
+            .HasForeignKey(e => e.ResourceId)
+            .IsRequired();
     }
 }
