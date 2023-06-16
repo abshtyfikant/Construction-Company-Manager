@@ -92,6 +92,16 @@ public class EmployeeController : ControllerBase
         return Ok(list);
     }
 
+    [HttpGet($"{nameof(GetBySpecializationAnyKind)}/{{specializationId:int}}", Name = "GetBySpecializationAnyKind")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public ActionResult<IEnumerable<EmployeeDto>> GetBySpecializationAnyKind(int specializationId)
+    {
+        if (specializationId == 0) return BadRequest();
+        var list = _employeeService.GetAllEmployeesWithSpecializationAnyKind(specializationId);
+        return Ok(list);
+    }
+
     [HttpPost($"{nameof(AddSpecialization)}/{{employeeId:int}}/{{specializationId:int}}", Name = "AddSpecialization")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -111,17 +121,6 @@ public class EmployeeController : ControllerBase
         _employeeService.UpdateEmployeeSpecialization(employeeId, specializationId);
         return NoContent();
     }
-
-    [HttpGet($"{nameof(GetAssignments)}/{{id:int}}", Name = "GetAssignments")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public ActionResult<IEnumerable<AssigmentDto>> GetAssignments(int id)
-    {
-        if (id == 0) return BadRequest();
-        var list = _employeeService.GetEmployeeAssigments(id);
-        return Ok(list);
-    }
-
 
     [HttpGet($"{nameof(GetSpecializations)}/{{id:int}}", Name = "GetSpecializations")]
     [ProducesResponseType(StatusCodes.Status200OK)]

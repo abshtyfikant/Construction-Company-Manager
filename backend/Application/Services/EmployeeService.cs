@@ -53,6 +53,14 @@ public class EmployeeService : IEmployeeService
         return employees;
     }
 
+    public List<EmployeeDto> GetAllEmployeesWithSpecializationAnyKind(int specializationId)
+    {
+        var employeesMainSpec = GetAllEmployeesWithMainSpecialization(specializationId);
+        var employeesOtherSpec = GetAllEmployeesWithSpecialization(specializationId);
+        var employees = employeesMainSpec.Union(employeesOtherSpec).ToList();
+        return employees;
+    }
+
     public List<EmployeeDto> GetAllEmployeesWithSpecialization(int specializationId)
     {
         var employees = _employeeRepository.GetAllEmployeesWithSpecialization(specializationId)
@@ -68,7 +76,7 @@ public class EmployeeService : IEmployeeService
         return employeeDto;
     }
 
-    public List<AssigmentDto> GetEmployeeAssigments(int employeeId)
+    public List<AssigmentDto> GetEmployeeAssignments(int employeeId)
     {
         var assigments = _employeeRepository.GetEmployeeAssigments(employeeId)
             .ProjectTo<AssigmentDto>(_mapper.ConfigurationProvider)
