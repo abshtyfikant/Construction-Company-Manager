@@ -50,19 +50,17 @@ public class ApplicationDbContext : DbContext
             .UsingEntity<Assigment>();
 
 
-        builder.Entity<Employee>()
-            .HasMany(p => p.Services)
-            .WithMany(p => p.Employees)
-            .UsingEntity<Assigment>(
-                j => j
-                    .HasOne(pt => pt.Service)
-                    .WithMany(t => t.Assigments)
-                    .HasForeignKey(pt => pt.ServiceId),
-                j => j
-                    .HasOne(pt => pt.Employee)
-                    .WithMany(p => p.Assigments)
-                    .HasForeignKey(pt => pt.EmployeeId),
-                j => { j.HasKey(t => new { t.EmployeeId, t.ServiceId }); });
+        builder.Entity<Employee>()  
+            .HasMany(e => e.Assigments)
+            .WithOne(e => e.Employee)
+            .HasForeignKey(e => e.EmployeeId)
+            .IsRequired();
+
+        builder.Entity<Service>()
+            .HasMany(p => p.Assigments)
+            .WithOne(p => p.Service)
+            .HasForeignKey(e => e.ServiceId)
+            .IsRequired();
 
         builder.Entity<User>()
             .HasMany(e => e.Comments)
