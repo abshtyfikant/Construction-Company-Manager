@@ -11,4 +11,5 @@ public interface IResourceAllocationRepository
     void UpdateAllocation(ServiceResource allocation);
     IQueryable<ServiceResource> GetResourceAllocations(int resourceId);
     IQueryable<ServiceResource> GetServiceAllocations(int serviceId);
+    public double GetAllocatedQuantity(int resourceId, DateTime startDate, DateTime endDate);
 }

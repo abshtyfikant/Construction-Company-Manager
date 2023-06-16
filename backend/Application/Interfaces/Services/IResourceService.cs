@@ -10,4 +10,5 @@ public interface IResourceService
     object UpdateResource(NewResourceDto newResource);
     void DeleteResource(int resourceId);
     void ChangeQuantity(int resourceId, int quantity);
+    double GetAvailableQuantityForTime(int id, DateTime startTime, DateTime endTime);
 }

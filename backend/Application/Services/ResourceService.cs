@@ -56,4 +56,10 @@ public class ResourceService : IResourceService
     {
         _resourceRepository.ChangeQuantity(resourceId, quantity);
     }
+
+    public double GetAvailableQuantityForTime(int id, DateTime startTime, DateTime endTime)
+    {
+        var quantity = _resourceRepository.GetAvailableQuantityForTime(id, startTime, endTime);
+        return quantity;
+    }
 }

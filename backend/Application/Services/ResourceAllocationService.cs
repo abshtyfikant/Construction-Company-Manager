@@ -26,6 +26,11 @@ public class ResourceAllocationService : IResourceAllocationService
     public int AddResourceAllocation(NewResourceAllocationDto resourceAllocation)
     {
         var resourceAllocationEntity = _mapper.Map<ServiceResource>(resourceAllocation);
+        var allocated = _resourceAllocationRepository.GetAllocatedQuantity(resourceAllocationEntity.ResourceId,
+            resourceAllocationEntity.BeginDate, resourceAllocationEntity.EndDate);
+        var max = _resourceAllocationRepository.GetAllocation(resourceAllocationEntity.Id).Resource.Quantity;
+        if (allocated + resourceAllocationEntity.AllocatedQuantity > max)
+            throw new Exception("Not enough resources");
         var id = _resourceAllocationRepository.AddAllocation(resourceAllocationEntity);
         return id;
     }

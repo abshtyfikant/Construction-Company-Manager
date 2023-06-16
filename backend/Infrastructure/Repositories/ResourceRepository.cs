@@ -63,4 +63,18 @@ public class ResourceRepository : IResourceRepository
             _dbContext.SaveChanges();
         }
     }
+
+    public double GetAvailableQuantityForTime(int id, DateTime startTime, DateTime endTime)
+    {
+        if (!_dbContext.Resources.Any(s => s.Id == id)) throw new Exception("Resource not Found");
+        var resource = _dbContext.Resources.Find(id);
+        var availableQuantity = resource.Quantity;
+        var allocations = _dbContext.ResourceAllocations.Where(x => x.ResourceId == id);
+        foreach (var allocation in allocations)
+        {
+            if (allocation.BeginDate <= startTime && allocation.EndDate >= endTime)
+                availableQuantity -= allocation.AllocatedQuantity;
+        }
+        return availableQuantity;
+    }
 }
