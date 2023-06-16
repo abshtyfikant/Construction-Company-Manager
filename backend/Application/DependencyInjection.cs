@@ -12,6 +12,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
+        services.AddScoped<IResourceService, ResourceService>();
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<IMaterialService, MaterialService>();
         services.AddScoped<IEmployeeService, EmployeeService>();

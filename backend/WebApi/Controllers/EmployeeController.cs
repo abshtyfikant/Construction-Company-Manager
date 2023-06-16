@@ -57,7 +57,7 @@ public class EmployeeController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult Delete(int id)
     {
-        if (id == 0) return BadRequest();
+        if (id <= 0) return BadRequest();
         _employeeService.DeleteEmployee(id);
         return NoContent();
     }
@@ -67,8 +67,7 @@ public class EmployeeController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult Update([FromBody] NewEmployeeDto newEmployee)
     {
-        if (!ModelState.IsValid) return BadRequest();
-        if (newEmployee.Id <= 0) return BadRequest();
+        if (!ModelState.IsValid || (newEmployee.Id <= 0)) return BadRequest();
         _employeeService.UpdateEmployee(newEmployee);
         return NoContent();
     }
