@@ -2,6 +2,7 @@
 
 public class ServiceResource
 {
+    public int Id { get; set; }
     public int ServiceId { get; set; }
     public Service Service { get; set; }
     public int ResourceId { get; set; }

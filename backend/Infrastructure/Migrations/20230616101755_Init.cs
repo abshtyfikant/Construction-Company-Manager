@@ -203,6 +203,8 @@ namespace Infrastructure.Migrations
                 name: "ResourceAllocations",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ServiceId = table.Column<int>(type: "int", nullable: false),
                     ResourceId = table.Column<int>(type: "int", nullable: false),
                     AllocatedQuantity = table.Column<double>(type: "float", nullable: false),
@@ -211,7 +213,7 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ResourceAllocations", x => new { x.ResourceId, x.ServiceId });
+                    table.PrimaryKey("PK_ResourceAllocations", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ResourceAllocations_Resources_ResourceId",
                         column: x => x.ResourceId,
@@ -221,6 +223,30 @@ namespace Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_ResourceAllocations_Services_ServiceId",
                         column: x => x.ServiceId,
+                        principalTable: "Services",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ResourceService",
+                columns: table => new
+                {
+                    ResourcesId = table.Column<int>(type: "int", nullable: false),
+                    ServicesId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ResourceService", x => new { x.ResourcesId, x.ServicesId });
+                    table.ForeignKey(
+                        name: "FK_ResourceService_Resources_ResourcesId",
+                        column: x => x.ResourcesId,
+                        principalTable: "Resources",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ResourceService_Services_ServicesId",
+                        column: x => x.ServicesId,
                         principalTable: "Services",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -311,9 +337,19 @@ namespace Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ResourceAllocations_ResourceId",
+                table: "ResourceAllocations",
+                column: "ResourceId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ResourceAllocations_ServiceId",
                 table: "ResourceAllocations",
                 column: "ServiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ResourceService_ServicesId",
+                table: "ResourceService",
+                column: "ServicesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Services_ClientId",
@@ -343,6 +379,9 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "ResourceAllocations");
+
+            migrationBuilder.DropTable(
+                name: "ResourceService");
 
             migrationBuilder.DropTable(
                 name: "SpecializationAssigments");
