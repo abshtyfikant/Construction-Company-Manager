@@ -253,7 +253,7 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Assigments",
+                name: "Assignments",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -280,7 +280,7 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SpecializationAssigments",
+                name: "SpecializationAssignments",
                 columns: table => new
                 {
                     EmployeeId = table.Column<int>(type: "int", nullable: false),
@@ -305,12 +305,12 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Assigments_EmployeeId",
-                table: "Assigments",
+                table: "Assignments",
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Assigments_ServiceId",
-                table: "Assigments",
+                table: "Assignments",
                 column: "ServiceId");
 
             migrationBuilder.CreateIndex(
@@ -365,7 +365,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_SpecializationAssigments_SpecializationId",
-                table: "SpecializationAssigments",
+                table: "SpecializationAssignments",
                 column: "SpecializationId");
         }
 
@@ -373,7 +373,7 @@ namespace Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Assigments");
+                name: "Assignments");
 
             migrationBuilder.DropTable(
                 name: "Comments");
@@ -391,7 +391,7 @@ namespace Infrastructure.Migrations
                 name: "ResourceService");
 
             migrationBuilder.DropTable(
-                name: "SpecializationAssigments");
+                name: "SpecializationAssignments");
 
             migrationBuilder.DropTable(
                 name: "Users");

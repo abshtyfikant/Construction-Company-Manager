@@ -17,5 +17,5 @@ public class Service
     public List<Material> Materials { get; set; }
     public List<Report> Reports { get; set; }
     public ICollection<Employee> Employees { get; set; }
-    public List<Assigment> Assigments { get; set; }
+    public List<Assignment> Assigments { get; set; }
 }

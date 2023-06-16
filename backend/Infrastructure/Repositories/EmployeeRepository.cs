@@ -34,7 +34,7 @@ public class EmployeeRepository : IEmployeeRepository
             EmployeeId = employeeId,
             SpecializationId = specializationId
         };
-        _dbContext.SpecializationAssigments.Add(employeeSpecialization);
+        _dbContext.SpecializationAssignments.Add(employeeSpecialization);
         _dbContext.SaveChanges();
     }
 
@@ -84,11 +84,11 @@ public class EmployeeRepository : IEmployeeRepository
         return employee;
     }
 
-    public IQueryable<Assigment> GetEmployeeAssigments(int employeeId)
+    public IQueryable<Assignment> GetEmployeeAssigments(int employeeId)
     {
         if (!_dbContext.Employees.Any(s => s.Id == employeeId)) throw new Exception("Employee not found");
 
-        var assigments = _dbContext.Assigments.Where(i => i.EmployeeId == employeeId);
+        var assigments = _dbContext.Assignments.Where(i => i.EmployeeId == employeeId);
         return assigments;
     }
 
@@ -121,7 +121,8 @@ public class EmployeeRepository : IEmployeeRepository
         if (!_dbContext.Specializations.Any(s => s.Id == specializationId))
             throw new Exception("Specialization not found");
 
-        if (!_dbContext.Employees.Any(s => s.Id == employeeId)) throw new Exception("Employee not found");
+        if (!_dbContext.Employees.Any(s => s.Id == employeeId))
+            throw new Exception("Employee not found");
 
         var employee = _dbContext.Employees.Find(employeeId);
         if (employee is not null)

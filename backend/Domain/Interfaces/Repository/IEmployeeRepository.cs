@@ -13,6 +13,6 @@ public interface IEmployeeRepository
     void AddSpecializationToEmployee(int employeeId, int specializationId);
     void UpdateEmployee(Employee employee);
     void UpdateEmployeeSpecialization(int employeeId, int specializationId);
-    IQueryable<Assigment> GetEmployeeAssigments(int employeeId);
+    IQueryable<Assignment> GetEmployeeAssigments(int employeeId);
     IQueryable<Specialization> GetEmployeeSpecializations(int employeeId);
 }
