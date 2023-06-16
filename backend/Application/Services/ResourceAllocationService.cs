@@ -30,7 +30,7 @@ public class ResourceAllocationService : IResourceAllocationService
             resourceAllocationEntity.BeginDate, resourceAllocationEntity.EndDate);
         var max = _resourceAllocationRepository.GetAllocation(resourceAllocationEntity.Id).Resource.Quantity;
         if (allocated + resourceAllocationEntity.AllocatedQuantity > max)
-            throw new Exception("Not enough resources");
+            throw new Exception("Not enough resources, " + (max-allocated).ToString() + "available at the moment");
         var id = _resourceAllocationRepository.AddAllocation(resourceAllocationEntity);
         return id;
     }

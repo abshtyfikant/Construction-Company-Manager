@@ -40,6 +40,11 @@ public class EmployeeRepository : IEmployeeRepository
 
     public void DeleteEmployee(int employeeId)
     {
+        var assignments = _dbContext.Assignments.Where(i => i.EmployeeId == employeeId);
+        if (assignments is not null)
+        {
+            throw new Exception("Employee is assigned to service");
+        }
         var employee = _dbContext.Employees.Find(employeeId);
         if (employee is not null)
         {

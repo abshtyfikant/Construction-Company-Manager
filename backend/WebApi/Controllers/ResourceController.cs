@@ -60,7 +60,7 @@ public class ResourceController : ControllerBase
         return NoContent();
     }
 
-    [HttpPut("{id:int}", Name = "UpdateResource")]
+    [HttpPut(Name = "UpdateResource")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult Update(NewResourceDto resource)
@@ -80,7 +80,7 @@ public class ResourceController : ControllerBase
         return NoContent();
     }
 
-    [HttpGet("available/{id:int}/{startTime:datetime}/{endTime:datetime}", Name = "GetAvailableQuantityForTime")]
+    [HttpGet("Available/{id:int}/{startTime:datetime}/{endTime:datetime}", Name = "GetAvailableQuantityForTime")]
     public IActionResult GetAvailableQuantityForTime(int id, DateTime startTime, DateTime endTime)
     {
         if (id <= 0 || startTime >= endTime) return BadRequest();

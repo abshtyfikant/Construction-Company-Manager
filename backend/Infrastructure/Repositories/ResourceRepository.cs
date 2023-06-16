@@ -15,6 +15,11 @@ public class ResourceRepository : IResourceRepository
     public void DeleteResource(int id)
     {
         var resource = _dbContext.Resources.Find(id);
+        var allocations = _dbContext.ResourceAllocations.Where(x => x.ResourceId == id);
+        if (allocations is not null)
+        {
+            throw new Exception("Resource is allocated");
+        }   
         if (resource is not null)
         {
             _dbContext.Resources.Remove(resource);
