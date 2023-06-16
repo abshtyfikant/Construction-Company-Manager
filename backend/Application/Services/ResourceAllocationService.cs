@@ -12,6 +12,12 @@ public class ResourceAllocationService : IResourceAllocationService
     private readonly IResourceAllocationRepository _resourceAllocationRepository;
     private readonly IMapper _mapper;
 
+    public ResourceAllocationService(IMapper mapper, IResourceAllocationRepository resourceAllocationRepository)
+    {
+        _mapper = mapper;
+        _resourceAllocationRepository = resourceAllocationRepository;
+    }
+
     public void DeleteResourceAllocation(int id)
     {
         _resourceAllocationRepository.DeleteAllocation(id);
