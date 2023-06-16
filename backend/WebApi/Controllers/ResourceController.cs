@@ -79,4 +79,12 @@ public class ResourceController : ControllerBase
         _resourceService.ChangeQuantity(id, quantity);
         return NoContent();
     }
-}
+
+    [HttpGet("available/{id:int}/{startTime:datetime}/{endTime:datetime}", Name = "GetAvailableQuantityForTime")]
+    public IActionResult GetAvailableQuantityForTime(int id, DateTime startTime, DateTime endTime)
+    {
+        if (id <= 0 || startTime >= endTime) return BadRequest();
+        double quantity = _resourceService.GetAvailableQuantityForTime(id, startTime, endTime);
+        return Ok(quantity);
+    }
+}   

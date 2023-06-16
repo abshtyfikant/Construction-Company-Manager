@@ -71,4 +71,19 @@ public class ResourceAllocationRepository : IResourceAllocationRepository
         var allocations = _dbContext.ResourceAllocations.Where(i => i.ServiceId == serviceId);
         return allocations;
     }
+
+    public double GetAllocatedQuantity(int resourceId, DateTime startDate, DateTime endDate)
+    {
+        if (!_dbContext.Resources.Any(s => s.Id == resourceId))
+            throw new Exception("Resource not found");
+        var allocations = _dbContext.ResourceAllocations.Where(i => i.ResourceId == resourceId);
+        var allocatedQuantity = 0.0;
+        foreach (var allocation in allocations)
+        {
+            if (allocation.BeginDate <= startDate && allocation.EndDate >= endDate)
+                allocatedQuantity += allocation.AllocatedQuantity;
+        }
+
+        return allocatedQuantity;
+    }
 }
