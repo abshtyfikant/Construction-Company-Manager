@@ -33,14 +33,14 @@ public class AssignmentService : IAssignmentService
         return assignments;
     }
 
-    public object GetAssignment(int assignmentId)
+    public AssigmentDto GetAssignment(int assignmentId)
     {
         var assignment = _assignmentRepository.GetAssignment(assignmentId);
         var assignmentDto = _mapper.Map<AssigmentDto>(assignment);
         return assignmentDto;
     }
 
-    public object UpdateAssignment(NewAssignmentDto newAssignment)
+    public NewAssignmentDto UpdateAssignment(NewAssignmentDto newAssignment)
     {
         var assignmentEntity = _mapper.Map<Assignment>(newAssignment);
         _assignmentRepository.UpdateAssignment(assignmentEntity);
