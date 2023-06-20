@@ -23,7 +23,7 @@ public class AssignmentServiceTests
     [Fact]
     public void AddAssignment_ShouldReturnId()
     {
-        // Arrange
+        // Arrane
         var assignmentService = new AssignmentService(_mapper, _assignmentRepositoryMock.Object);
         var assignment = new NewAssignmentDto
         {
@@ -121,11 +121,10 @@ public class AssignmentServiceTests
     }
 
     [Fact]
-    public void DeleteAssignment_ShouldReturnVoid()
+    public void DeleteAssignment_ShouldCallDeleteAssignmentOnce()
     {
         // Arrange
         var assignmentService = new AssignmentService(_mapper, _assignmentRepositoryMock.Object);
-        _assignmentRepositoryMock.Setup(x => x.DeleteAssignment(It.IsAny<int>()));
 
         // Act
         assignmentService.DeleteAssignment(1);

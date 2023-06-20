@@ -30,7 +30,7 @@ public class CommentService : ICommentService
         _commentRepository.DeleteComment(commentId);
     }
 
-    public object GetComment(int commentId)
+    public CommentDto GetComment(int commentId)
     {
         var comment = _commentRepository.GetComment(commentId);
         var commentDto = _mapper.Map<CommentDto>(comment);
@@ -61,10 +61,10 @@ public class CommentService : ICommentService
         return comments;
     }
 
-    public object UpdateComment(NewCommentDto newComment)
+    public NewCommentDto UpdateComment(NewCommentDto newComment)
     {
         var commentEntity = _mapper.Map<Comment>(newComment);
         _commentRepository.UpdateComment(commentEntity);
-        return commentEntity;
+        return newComment;
     }
 }

@@ -6,7 +6,7 @@ public interface IClientService
 {
     int AddClient(NewClientDto client);
     List<ClientDto> GetClientsForList();
-    object GetClient(int clientId);
-    object UpdateClient(NewClientDto newClient);
+    ClientDto GetClient(int clientId);
+    NewClientDto UpdateClient(NewClientDto newClient);
     void DeleteClient(int clientId);
 }
