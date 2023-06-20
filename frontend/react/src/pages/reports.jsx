@@ -3,14 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp, faCaretDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import GridMenuHeader from '../components/gridMenuHeader';
 import reportsData from '../models/reportsData';
-import { Link, useLoaderData, defer, json } from 'react-router-dom';
+import { Link, useLoaderData, defer, json, useNavigate } from 'react-router-dom';
 
 function Reports() {
-  //odkomentować po połączeniu z backendem
-  //const { reports } = useLoaderData();
-
-  //usunac po połączeniu z backendem
-  const [reports, setReports] = useState(reportsData);
+  const navigate = useNavigate();
+  const { reports } = useLoaderData();
   const [sortBy, setSortBy] = useState(''); // Kolumna, według której sortujemy
   const [sortOrder, setSortOrder] = useState(null); // Kierunek sortowania (asc/desc/null)
   const [isDefaultSort, setIsDefaultSort] = useState(true); // Informacja o domyślnym sortowaniu
@@ -98,6 +95,7 @@ function Reports() {
         <td>{report.beginDate}</td>
         <td>{report.endDate}</td>
         <td>{report.author}</td>
+        <Link to={(`${report.id}`)}>Podgląd</Link>
         <td className='align-left'>{report.description}</td>
       </tr>
     ));
@@ -225,7 +223,7 @@ function Reports() {
               </th>
             </tr>
           </thead>
-          <tbody>{renderReports()}</tbody>
+          <tbody>{Object.keys(reports).length !== 0 && renderReports()}</tbody>
         </table>
         <ul className="pagination">{pagination}</ul>
       </div>
@@ -237,7 +235,14 @@ export default Reports;
 
 
 async function loadReports() {
-  const response = await fetch('');
+  const token = localStorage.getItem('token');
+  const response = await fetch('https://localhost:7098/api/Report', {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token,
+    }
+  });
 
   if (!response.ok) {
     // return { isError: true, message: 'Could not fetch events.' };
@@ -245,7 +250,7 @@ async function loadReports() {
     //   status: 500,
     // });
     throw json(
-      { message: 'Could not fetch projects.' },
+      { message: 'Could not fetch reports.' },
       {
         status: 500,
       }

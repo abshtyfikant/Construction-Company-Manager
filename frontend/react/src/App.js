@@ -8,7 +8,7 @@ import Reservations, { loader as reservationsLoader } from './pages/reservations
 import ReservationsForm from './pages/reservationsForm.jsx';
 import Workers, { loader as workersLoader } from './pages/workers.jsx';
 import EditReservation from './pages/editReservation.jsx';
-import Resources, {loader as resourcesLoader} from './pages/resources.jsx';
+import Resources, { loader as resourcesLoader } from './pages/resources.jsx';
 import AddWorker from './pages/addWorker.jsx';
 import RemoveWorker from './pages/removeWorker.jsx';
 import AddResource from './pages/addResource.jsx';
@@ -16,7 +16,8 @@ import { checkAuthLoader, tokenLoader } from './util/auth';
 import Root from './pages/root.jsx';
 import HomePage from './pages/home.jsx';
 import Register, { action as registerAuthAction } from './pages/register.jsx';
-import {action as logoutAction} from './pages/logout.jsx'
+import { action as logoutAction } from './pages/logout.jsx'
+import ReportDetails, {loader as reportDetailsLoader} from './pages/reportDetails.jsx';
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,19 @@ const router = createBrowserRouter([
         path: "raporty",
         element: <Reports />,
         loader: reportsLoader,
+        children: [
+          {
+            path: ':reportId',
+            id: 'report-details',
+            loader: reportDetailsLoader,
+            children: [
+              {
+                index: true,
+                element: <ReportDetails />,
+              },
+            ]
+          },
+        ],
       },
       {
         path: "generowanie-raportu",

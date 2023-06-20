@@ -33,14 +33,15 @@ h1{
   justify-content: center;
   text-align: center;
 }
-.grid-3 .item a{
+.grid-3 .item .back{
   text-decoration: none;
   font-size: 1.8rem;
   font-weight: 400;
   color: black;
 }
-.grid-3 .item a:hover{
+.grid-3 .item .back:hover{
   color: rgb(132, 132, 132);
+  cursor: pointer;
 }
 
 .square {

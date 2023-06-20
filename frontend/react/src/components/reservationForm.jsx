@@ -1,6 +1,6 @@
 import classes from './reservationForm.module.css';
 import * as React from 'react';
-import { useNavigate, json } from 'react-router-dom';
+import { useNavigate, json, defer, useLoaderData } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 //dodac wybierz albo dodaj nowego klienta
@@ -26,22 +26,24 @@ const specializationsData = [
 
 export default function ReservationForm({ defaultValue, method }) {
     const token = localStorage.getItem('token');
-    const [client, setClient] = React.useState(defaultValue ? defaultValue.client : undefined);
+    const [client, setClient] = React.useState(defaultValue.client ? defaultValue.client : undefined);
     const clientFirstNameRef = React.useRef();
     const clientLastNameRef = React.useRef();
     const clientCityRef = React.useRef();
     const navigate = useNavigate();
-    const [city, setCity] = React.useState(defaultValue ? defaultValue.city : '');
-    const [startDate, setStartDate] = React.useState(defaultValue ? defaultValue.beginDate : '');
-    const [endDate, setEndDate] = React.useState(defaultValue ? defaultValue.endDate : '');
-    const [serviceType, setServiceType] = React.useState(defaultValue ? defaultValue.serviceType : '');
-    const [workers, setWorkers] = React.useState(defaultValue ? defaultValue.workes : []);
-    const [materials, setMaterials] = React.useState(defaultValue ? defaultValue.materials : []);
-    const [resources, setResources] = React.useState(defaultValue ? defaultValue.resources : []);
+    const [city, setCity] = React.useState(defaultValue.city ? defaultValue.city : '');
+    const [startDate, setStartDate] = React.useState(defaultValue.beginDate ? defaultValue.beginDate : '');
+    const [endDate, setEndDate] = React.useState(defaultValue.endDate ? defaultValue.endDate : '');
+    const [serviceType, setServiceType] = React.useState(defaultValue.serviceType ? defaultValue.serviceType : '');
+    const [workers, setWorkers] = React.useState(defaultValue.workers ? defaultValue.workers : []);
+    const [materials, setMaterials] = React.useState(defaultValue.materials ? defaultValue.materials : []);
+    const [resources, setResources] = React.useState(defaultValue.resources ? defaultValue.resources : []);
     const [fetchedWorkers, setFetchedWorkers] = React.useState();
     const [fetchedResources, setFetchedResources] = React.useState();
     const [fetchedClients, setFetchedClients] = React.useState();
     const [fetchedSpecializations, setFetchedSpecializations] = React.useState();
+    const [fetchedAssignments, setFetchedAssignments] = React.useState();
+    const [fetchedResAlloc, setFetchedResAlloc] = React.useState();
     const [currPopupType, setPopupType] = React.useState(null);
     const [popupOpen, setPopupOpen] = React.useState('');
     const resourceNameRef = React.useRef();
@@ -60,7 +62,12 @@ export default function ReservationForm({ defaultValue, method }) {
             });
 
             if (!response.ok) {
-                throw new Error('Something went wrong!');
+                throw json(
+                    { message: 'Could not fetch reports.' },
+                    {
+                        status: 500,
+                    }
+                );
             }
 
             const data = await response.json();
@@ -71,27 +78,31 @@ export default function ReservationForm({ defaultValue, method }) {
         }
 
         try {
-            const response = await fetch('', { //https://localhost:7098/api/Resource
+            const response = await fetch('https://localhost:7098/api/Assignment', {
                 method: 'get',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + token,
                 },
             });
-
             if (!response.ok) {
-                throw new Error('Something went wrong!');
+                throw json(
+                    { message: 'Could not fetch reports.' },
+                    {
+                        status: 500,
+                    }
+                );
             }
 
             const data = await response.json();
-            setFetchedResources(data);
+            setFetchedAssignments(data);
 
         } catch (error) {
             //setError("Something went wrong, try again.");
         }
 
         try {
-            const response = await fetch('https://localhost:7098/api/Client', {
+            const response = await fetch('https://localhost:7098/api/ResourceAllocation', {
                 method: 'get',
                 headers: {
                     'Content-Type': 'application/json',
@@ -99,11 +110,16 @@ export default function ReservationForm({ defaultValue, method }) {
                 },
             });
             if (!response.ok) {
-                throw new Error('Something went wrong!');
+                throw json(
+                    { message: 'Could not fetch reports.' },
+                    {
+                        status: 500,
+                    }
+                );
             }
 
             const data = await response.json();
-            setFetchedClients(data);
+            setFetchedResAlloc(data);
 
         } catch (error) {
             //setError("Something went wrong, try again.");
@@ -127,7 +143,56 @@ export default function ReservationForm({ defaultValue, method }) {
         } catch (error) {
             //setError("Something went wrong, try again.");
         }
-    }, []);
+
+        try {
+            const response = await fetch('https://localhost:7098/api/Resource', {
+                method: 'get',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token,
+                },
+            });
+
+            if (!response.ok) {
+                throw json(
+                    { message: 'Could not fetch reports.' },
+                    {
+                        status: 500,
+                    }
+                );
+            }
+
+            const data = await response.json();
+            setFetchedResources(data);
+
+        } catch (error) {
+            //setError("Something went wrong, try again.");
+        }
+
+        try {
+            const response = await fetch('https://localhost:7098/api/Client', {
+                method: 'get',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token,
+                },
+            });
+            if (!response.ok) {
+                throw json(
+                    { message: 'Could not fetch reports.' },
+                    {
+                        status: 500,
+                    }
+                );
+            }
+
+            const data = await response.json();
+            setFetchedClients(data);
+
+        } catch (error) {
+            //setError("Something went wrong, try again.");
+        }
+    });
 
     React.useEffect(() => {
         fetchData();
@@ -204,7 +269,7 @@ export default function ReservationForm({ defaultValue, method }) {
             material.id = 0;
             material.serviceId = serviceId;
 
-            const response = await fetch('', {
+            const response = await fetch('https://localhost:7098/api/Material', {
                 method: method,
                 headers: {
                     'Content-Type': 'application/json',
@@ -232,6 +297,7 @@ export default function ReservationForm({ defaultValue, method }) {
         let resourcesAllocationData = {};
         resources.forEach(async (resource) => {
             resourcesAllocationData = {
+                id: 0,
                 resourceId: resource.id,
                 serviceId: reservationId,
                 allocatedQuantity: resource.quantity,
@@ -239,7 +305,7 @@ export default function ReservationForm({ defaultValue, method }) {
                 endDate: endDate,
             };
 
-            const response = await fetch('', {
+            const response = await fetch('https://localhost:7098/api/ResourceAllocation', {
                 method: method,
                 headers: {
                     'Content-Type': 'application/json',
@@ -266,12 +332,13 @@ export default function ReservationForm({ defaultValue, method }) {
         let workersAllocationData = {};
         workers.forEach(async (worker) => {
             workersAllocationData = {
+                id: 0,
                 employeeId: worker.id,
                 serviceId: reservationId,
                 function: worker.function,
             };
 
-            const response = await fetch('', {
+            const response = await fetch('https://localhost:7098/api/Assignment', {
                 method: method,
                 headers: {
                     'Content-Type': 'application/json',
@@ -318,6 +385,31 @@ export default function ReservationForm({ defaultValue, method }) {
         setPopupType(type);
     };
 
+    const checkResAllocation = (resource) => {
+        let availableQuant = resource.quantity;
+        fetchedResAlloc.map((resAlloc) => {
+            if (resource.id === resAlloc.resourceId) {
+                if (endDate >= resAlloc.beginDate && startDate <= resAlloc.endDate) {
+                    availableQuant -= resAlloc.allocatedQuantity;
+                    return availableQuant;
+                }
+            }
+        })
+        return availableQuant;
+    };
+
+    const checkAssignments = (worker) => {
+        fetchedAssignments.map((assign) => {
+            if (worker.id === assign.employeeIdId) {
+                if (endDate >= assign.beginDate && startDate <= assign.endDate) {
+                    return false;
+                }
+            }
+        })
+        return true;
+    };
+
+
     const handleAddMaterial = (e) => {
         e.preventDefault();
         const material = {
@@ -332,7 +424,7 @@ export default function ReservationForm({ defaultValue, method }) {
     };
 
     const handleAddWorker = () => {
-        let tmpWorker = {};
+        let tmpWorker;
         return (
             <div>
                 <h1>Dodaj pracownika</h1>
@@ -346,17 +438,26 @@ export default function ReservationForm({ defaultValue, method }) {
                 >
                     <option value=''>Wybierz z listy</option>
                     {fetchedWorkers && fetchedWorkers.map((worker) => {
-                        return (
-                            <option key={worker.id} value={worker.id}>
-                                {worker.firstName} {worker.lastName}
-                            </option>
-                        )
+                        if (checkAssignments(worker)) {
+                            return (
+                                <option key={worker.id} value={worker.id}>
+                                    {worker.firstName} {worker.lastName}
+                                </option>
+                            )
+                        } else {
+                            return (
+                                <option disabled key={worker.id} value={worker.id}>
+                                    {worker.firstName} {worker.lastName}
+                                </option>
+                            )
+                        }
                     })}
                 </select>
 
                 <select
                     onChange={(e) => { tmpWorker.function = e.target.value }}
                     className={classes.formInput}
+                    disabled={tmpWorker ? false : true}
                 >
                     <option value=''>Wybierz z listy</option>
                     {fetchedSpecializations && fetchedSpecializations.map((specialization) => {
@@ -379,34 +480,80 @@ export default function ReservationForm({ defaultValue, method }) {
         );
     };
 
+    const handleAddResource = () => {
+        let tmpResource;
+        let availableQuant = 0;
+        return (
+            <div>
+                <h1>Dodaj zasoby</h1>
+                <select
+                    onChange={(e) => {
+                        tmpResource = (fetchedResources.find(a =>
+                            a.id == e.target.value
+                        ));
+                    }}
+                    className={classes.formInput}
+                >
+                    <option value=''>Wybierz z listy</option>
+                    {fetchedResources && fetchedResources.map((resource) => {
+                        availableQuant = checkResAllocation(resource);
+                        if (availableQuant > 0) {
+                            return (
+                                <option key={resource.id} value={resource.id}>
+                                    {resource.name}
+                                </option>
+                            )
+                        } else {
+                            return (
+                                <option disabled key={resource.id} value={resource.id}>
+                                    {resource.name}
+                                </option>
+                            )
+                        }
+                    })}
+                </select>
+                <input type="number"
+                    onChange={(e) => { tmpResource.quantity = e.target.value; console.log(e.target.value) }}
+                    className={classes.formInput}
+                    disabled={tmpResource ? false : true}
+                    min="1"
+                    max={availableQuant}>
+                </input>
+            </div>
+        );
+    };
+
     const handlePopup = () => {
         if (popupOpen) {
             switch (currPopupType) {
                 case 'workers':
-                    return (
-                        <div className={classes.popupContainer}>
-                            {handleAddWorker()}
-                        </div>
-                    );
+                    if (startDate && endDate) {
+                        return (
+                            <div className={classes.popupContainer}>
+                                {handleAddWorker()}
+                            </div>
+                        );
+                    } else {
+                        return (
+                            <div className={classes.popupContainer}>
+                                <h2>Najpierw dodaj daty rozpoczęcia i zakończenia usługi!</h2>
+                            </div>
+                        );
+                    }
                 case 'resources':
-                    return (
-                        <div className={classes.popupContainer}>
-                            <h1>Dodaj zasoby</h1>
-                            <select
-                                onChange={(e) => { setResources([...resources, e.target.value]); setPopupOpen(false) }}
-                                className={classes.formInput}
-                            >
-                                <option value=''>Wybierz z listy</option>
-                                {fetchedResources && fetchedResources.map((resource) => {
-                                    return (
-                                        <option key={resource.id} value={resource}>
-                                            {resource.name}
-                                        </option>
-                                    )
-                                })}
-                            </select>
-                        </div>
-                    );
+                    if (startDate && endDate) {
+                        return (
+                            <div className={classes.popupContainer}>
+                                {handleAddResource()}
+                            </div>
+                        )
+                    } else {
+                        return (
+                            <div className={classes.popupContainer}>
+                                <h2>Najpierw dodaj daty rozpoczęcia i zakończenia usługi!</h2>
+                            </div>
+                        );
+                    }
                 case 'materials':
                     return (
                         <div className={classes.popupContainer}>
