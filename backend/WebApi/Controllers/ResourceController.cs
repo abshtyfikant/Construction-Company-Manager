@@ -38,6 +38,7 @@ public class ResourceController : ControllerBase
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -61,6 +62,7 @@ public class ResourceController : ControllerBase
     }
 
     [HttpPut(Name = "UpdateResource")]
+    [ValidateAntiForgeryToken]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult Update(NewResourceDto resource)
