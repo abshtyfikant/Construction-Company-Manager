@@ -7,7 +7,7 @@ using Domain.Model;
 
 namespace Application.Services;
 
-internal class ClientService : IClientService
+public class ClientService : IClientService
 {
     private readonly IClientRepository _clientRepo;
     private readonly IMapper _mapper;
@@ -31,7 +31,7 @@ internal class ClientService : IClientService
         _clientRepo.DeleteClient(clientId);
     }
 
-    public object GetClient(int clientId)
+    public ClientDto GetClient(int clientId)
     {
         var client = _clientRepo.GetClient(clientId);
         var clientDto = _mapper.Map<ClientDto>(client);
@@ -46,10 +46,10 @@ internal class ClientService : IClientService
         return clients;
     }
 
-    public object UpdateClient(NewClientDto newClient)
+    public NewClientDto UpdateClient(NewClientDto newClient)
     {
         var client = _mapper.Map<Client>(newClient);
         _clientRepo.UpdateClient(client);
-        return client;
+        return newClient;
     }
 }

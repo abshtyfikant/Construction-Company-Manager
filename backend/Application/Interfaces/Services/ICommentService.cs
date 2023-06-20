@@ -8,7 +8,7 @@ public interface ICommentService
     List<CommentDto> GetCommentsForList();
     List<CommentDto> GetCommentsByServiceForList(int serviceId);
     List<CommentDto> GetCommentsByUserForList(Guid userId);
-    object GetComment(int commentId);
-    object UpdateComment(NewCommentDto newComment);
+    CommentDto GetComment(int commentId);
+    NewCommentDto UpdateComment(NewCommentDto newComment);
     void DeleteComment(int commentId);
 }
