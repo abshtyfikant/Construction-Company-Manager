@@ -11,6 +11,8 @@ public class AssigmentDto : IMapFrom<Domain.Model.Assignment>
     public int ServiceId { get; set; }
     public string Service { get; set; }
     public string Function { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
 
     public static void Mapping(Profile profile)
     {
@@ -20,6 +22,8 @@ public class AssigmentDto : IMapFrom<Domain.Model.Assignment>
             .ForMember(d => d.Employee, opt => opt.MapFrom(s => s.Employee.FirstName + " " + s.Employee.LastName))
             .ForMember(d => d.ServiceId, opt => opt.MapFrom(s => s.ServiceId))
             .ForMember(d => d.Service, opt => opt.MapFrom(s => s.Service.ServiceType))
-            .ForMember(d => d.Function, opt => opt.MapFrom(s => s.Function));
+            .ForMember(d => d.Function, opt => opt.MapFrom(s => s.Function))
+            .ForMember(d => d.StartDate, opt => opt.MapFrom(s => s.StartDate))
+            .ForMember(d => d.EndDate, opt => opt.MapFrom(s => s.EndDate));
     }
 }

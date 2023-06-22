@@ -10,6 +10,8 @@ public class NewAssignmentDto : IMapFrom<Domain.Model.Assignment>
     public int EmployeeId { get; set; }
     public int ServiceId { get; set; }
     public string Function { get; set; }
+    public DateTime BeginDate { get; set; }
+    public DateTime EndDate { get; set; }
 
     public static void Mapping(Profile profile)
     {
@@ -24,5 +26,7 @@ public class NewAssignmentValidation : AbstractValidator<NewAssignmentDto>
         RuleFor(x => x.EmployeeId).NotEmpty();
         RuleFor(x => x.ServiceId).NotEmpty();
         RuleFor(x => x.Function).NotEmpty().MaximumLength(50);
+        RuleFor(x => x.BeginDate).NotEmpty();
+        RuleFor(x => x.EndDate).NotEmpty();
     }
 }
