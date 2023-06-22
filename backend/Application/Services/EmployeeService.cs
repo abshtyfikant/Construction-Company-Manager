@@ -78,7 +78,7 @@ public class EmployeeService : IEmployeeService
 
     public List<AssigmentDto> GetEmployeeAssignments(int employeeId)
     {
-        var assigments = _employeeRepository.GetEmployeeAssigments(employeeId)
+        var assigments = _employeeRepository.GetEmployeeAssignments(employeeId)
             .ProjectTo<AssigmentDto>(_mapper.ConfigurationProvider)
             .ToList();
         return assigments;
@@ -102,5 +102,13 @@ public class EmployeeService : IEmployeeService
     public void UpdateEmployeeSpecialization(int employeeId, int specializationId)
     {
         _employeeRepository.UpdateEmployeeSpecialization(employeeId, specializationId);
+    }
+
+    public List<EmployeeDto> GetAvailableEmployeesForTime(DateTime startTime, DateTime endTime)
+    {
+        var employees = _employeeRepository.GetAvailableEmployeesForTime(startTime, endTime)
+            .ProjectTo<EmployeeDto>(_mapper.ConfigurationProvider)
+            .ToList();
+        return employees;
     }
 }

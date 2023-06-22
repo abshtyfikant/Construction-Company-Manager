@@ -45,6 +45,7 @@ public class EmployeeRepository : IEmployeeRepository
         {
             throw new Exception("Employee is assigned to service");
         }
+
         var employee = _dbContext.Employees.Find(employeeId);
         if (employee is not null)
         {
@@ -89,7 +90,7 @@ public class EmployeeRepository : IEmployeeRepository
         return employee;
     }
 
-    public IQueryable<Assignment> GetEmployeeAssigments(int employeeId)
+    public IQueryable<Assignment> GetEmployeeAssignments(int employeeId)
     {
         if (!_dbContext.Employees.Any(s => s.Id == employeeId)) throw new Exception("Employee not found");
 
@@ -136,5 +137,12 @@ public class EmployeeRepository : IEmployeeRepository
             _dbContext.Entry(employee).Property("MainSpecializationId").IsModified = true;
             _dbContext.SaveChanges();
         }
+    }
+
+    public IQueryable<Employee> GetAvailableEmployeesForTime(DateTime start, DateTime end)
+    {
+        var employees = _dbContext.Employees.Where(i =>
+            i.Assigments.All(a => a.StartDate > end || a.EndDate < start));
+        return employees;
     }
 }

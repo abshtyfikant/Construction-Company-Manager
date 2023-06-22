@@ -4,6 +4,7 @@ using Application.DTO.Specialization;
 using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace WebApi.Controllers;
 
@@ -131,6 +132,14 @@ public class EmployeeController : ControllerBase
     {
         if (id == 0) return BadRequest();
         var list = _employeeService.GetEmployeeSpecializations(id);
+        return Ok(list);
+    }
+
+    [HttpGet($"{nameof(GetAvailableEmployeesForTime)}/{{startTime:DateTime}}/{{endTime:DateTime}}", Name = "GetAvailableEmployeesForTime")]
+    [ProducesResponseType(StatusCodes.Status200OK)] 
+    public ActionResult<IEnumerable<EmployeeDto>> GetAvailableEmployeesForTime(DateTime startTime, DateTime endTime)
+    {
+        var list = _employeeService.GetAvailableEmployeesForTime(startTime, endTime);
         return Ok(list);
     }
 }
