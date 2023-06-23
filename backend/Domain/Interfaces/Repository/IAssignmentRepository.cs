@@ -9,6 +9,6 @@ public interface IAssignmentRepository
     IQueryable<Assignment> GetAllAssignments();
     IQueryable<Assignment> GetAllAssignmentsWithEmployee(int employeeId);
     IQueryable<Assignment> GetAllAssignmentsWithService(int serviceId);
-    Assignment GetAssignment(int id);
+    Assignment? GetAssignment(int id);
     void UpdateAssignment(Assignment assignment);
 }
