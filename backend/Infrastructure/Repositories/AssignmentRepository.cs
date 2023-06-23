@@ -42,7 +42,7 @@ public class AssignmentRepository : IAssignmentRepository
 
     public IQueryable<Assignment> GetAllAssignmentsWithEmployee(int employeeId)
     {
-        if (_dbContext.Employees.Any(e => e.Id == employeeId))
+        if (!_dbContext.Employees.Any(e => e.Id == employeeId))
             throw new Exception("Employee not found");
         var assignments = _dbContext.Assignments.Where(a => a.EmployeeId == employeeId);
         return assignments;
@@ -56,7 +56,7 @@ public class AssignmentRepository : IAssignmentRepository
         return assignments;
     }
 
-    public Assignment GetAssignment(int id)
+    public Assignment? GetAssignment(int id)
     {
         var assignment = _dbContext.Assignments.FirstOrDefault(i => i.Id == id);
         return assignment;

@@ -87,7 +87,7 @@ public class AssignmentController : ControllerBase
     public ActionResult<IEnumerable<AssigmentDto>> GetServiceAssignments(int serviceId)
     {
         if (serviceId == 0) return BadRequest();
-        var list = _assignmentService.GetEmployeeAssignments(serviceId);
+        var list = _assignmentService.GetServiceAssignments(serviceId);
         return Ok(list);
     }
 }
