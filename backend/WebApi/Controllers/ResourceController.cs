@@ -38,7 +38,6 @@ public class ResourceController : ControllerBase
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -62,7 +61,6 @@ public class ResourceController : ControllerBase
     }
 
     [HttpPut(Name = "UpdateResource")]
-    [ValidateAntiForgeryToken]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult Update(NewResourceDto resource)
@@ -86,7 +84,7 @@ public class ResourceController : ControllerBase
     public IActionResult GetAvailableQuantityForTime(int id, DateTime startTime, DateTime endTime)
     {
         if (id <= 0 || startTime >= endTime) return BadRequest();
-        double quantity = _resourceService.GetAvailableQuantityForTime(id, startTime, endTime);
+        var quantity = _resourceService.GetAvailableQuantityForTime(id, startTime, endTime);
         return Ok(quantity);
     }
-}   
+}

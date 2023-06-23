@@ -39,7 +39,6 @@ public class CommentController : ControllerBase
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -54,7 +53,6 @@ public class CommentController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
-    [ValidateAntiForgeryToken]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public ActionResult Update([FromBody] NewCommentDto newComment)

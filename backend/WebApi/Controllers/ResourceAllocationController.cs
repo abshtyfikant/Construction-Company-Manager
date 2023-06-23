@@ -38,7 +38,6 @@ public class ResourceAllocationController : ControllerBase
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -62,7 +61,6 @@ public class ResourceAllocationController : ControllerBase
     }
 
     [HttpPatch("{id:int}", Name = "UpdateResourceAllocation")]
-    [ValidateAntiForgeryToken]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult Update(int id, [FromBody] UpdateResourceAllocationDto resourceAllocation)
