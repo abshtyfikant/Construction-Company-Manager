@@ -1,0 +1,128 @@
+.workers .tableContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+  }
+  .workers .table{
+    text-align: center;
+    border-collapse: collapse;
+    width: 50%;
+  }
+  .workers table th {
+    cursor: pointer;
+  }
+  .workers table th:nth-child(5) {
+    cursor: default;
+  }
+  .workers table thead tr{
+    height: 50px;
+  }
+  .workers table th > div{
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+  }
+  .workers table th > div > div{
+    display: grid;
+  }
+  .workers table th > div > div >svg:first-child{
+    margin-bottom: -7px;
+  }
+  .workers .table {
+    border-collapse: collapse;
+    width: auto;
+  }
+  
+  /* .table thead th, */
+  .workers .table tbody td {
+    background-color: #f2f2f2;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    padding: 10px 15px;
+    text-align: center;
+  }
+  .workers .table tbody td:nth-child(1) {
+    border-left: 1px solid black;
+  }
+  .workers .table tbody td:nth-child(8) {
+    border-right: 1px solid black;
+  }
+  
+  .workers .table thead th {
+    font-weight: bold;
+    text-align: left;
+    padding: 20px 15px;
+  }
+  
+  .workers .table tbody .alignLeft{
+    text-align: left;
+  }
+  
+  .workers .table .dropdownDetails {
+    background-color: #f2f2f2;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    width: 100%;
+  }
+
+  .workers .pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin-top: 2rem;
+  }
+  
+  .workers .pagination li {
+    margin: 0 0.3rem;
+  
+  }
+  
+  /* Dodatkowe style dla aktywnej strony */
+  .workers .pagination li.active button {
+    font-weight: 700;
+    border-bottom: 1px solid black;
+  }
+  .workers .pagination li button {
+    font-size: 1.1rem;
+  }
+  
+  .workers .pagination li button {
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  
+  .workers .sortIcon {
+    color: #ccc; /* Kolor domyślny dla ikon sortowania */
+    margin-left: 10px; /* Odstęp między ikonkami a tekstem */
+  }
+  
+  .workers .active {
+    color: #000;
+  }
+  
+  .workers .sortIconActive {
+    color: #000; /* Kolor dla aktywnego sortowania */
+  }
+  
+  .workers .thAlignLeft {
+    display: flex;
+    justify-content: flex-start;
+  }
+  
+  .workers .thAlignRight {
+    margin-left: auto;
+  }
+  .workers .thAlignRight a {
+    text-decoration: none;
+    color: black;
+    background-color: #f2f2f2;
+    padding: 0.5rem 1rem ;
+    transition: background-color 0.3s ease;
+  }
+  .workers .thAlignRight a:hover {
+    background-color: #e1e0e0;
+  }

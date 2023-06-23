@@ -1,0 +1,123 @@
+/* start reports */
+.reports .table-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+.reports .table{
+  text-align: center;
+  border-collapse: collapse;
+  width: 50%;
+}
+.reports table th {
+  cursor: pointer;
+}
+.reports table th:nth-child(5) {
+  cursor: default;
+}
+.reports table thead tr{
+  height: 50px;
+}
+.reports table th > div{
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+}
+.reports table th > div > div{
+  display: grid;
+}
+.reports table th > div > div >svg:first-child{
+  margin-bottom: -7px;
+}
+.reports .table {
+  border-collapse: collapse;
+  width: auto;
+}
+
+/* .table thead th, */
+.reports .table tbody td {
+  background-color: #f2f2f2;
+  border-bottom: 1px solid black;
+  border-top: 1px solid black;
+  padding: 10px 15px;
+  text-align: center;
+}
+.reports .table tbody td:nth-child(1) {
+  border-left: 1px solid black;
+}
+.reports .table tbody td:nth-child(5) {
+  border-right: 1px solid black;
+}
+
+.reports .table thead th {
+  font-weight: bold;
+  text-align: left;
+  padding: 20px 15px;
+}
+
+.reports .table tbody .align-left{
+  text-align: left;
+}
+
+.reports .pagination {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin-top: 2rem;
+}
+
+.reports .pagination li {
+  margin: 0 0.3rem;
+
+}
+
+/* Dodatkowe style dla aktywnej strony */
+.reports .pagination li.active button {
+  font-weight: 700;
+  border-bottom: 1px solid black;
+}
+.reports .pagination li button {
+  font-size: 1.1rem;
+}
+
+.reports .pagination li button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.reports .sort-icon {
+  color: #ccc; /* Kolor domyślny dla ikon sortowania */
+  margin-left: 10px; /* Odstęp między ikonkami a tekstem */
+}
+
+.reports .active {
+  color: #000;
+}
+
+.reports .active .sort-icon {
+  color: #000; /* Kolor dla aktywnego sortowania */
+}
+
+.reports .th-align-left {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.reports .th-align-right {
+  margin-left: auto;
+}
+.reports .th-align-right a {
+  text-decoration: none;
+  color: black;
+  background-color: #f2f2f2;
+  padding: 0.5rem 1rem ;
+  transition: background-color 0.3s ease;
+}
+.reports .th-align-right a:hover {
+  background-color: #e1e0e0;
+}
+/* koniec reports */
