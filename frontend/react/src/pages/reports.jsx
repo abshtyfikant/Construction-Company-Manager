@@ -121,6 +121,7 @@ function Reports() {
         <td>{report.beginDate}</td>
         <td>{report.endDate}</td>
         <td>{report.author}</td>
+        <Link to={(`${report.id}`)}>Podgląd</Link>
         <td className='align-left'>{report.description}</td>
       </tr>
     ));

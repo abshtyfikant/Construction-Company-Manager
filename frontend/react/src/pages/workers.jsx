@@ -132,7 +132,7 @@ function Workers() {
             <FontAwesomeIcon icon={faCaretDown} className={classes.sortIcon} />
           </td>
         </tr>
-        {openDetails ? (
+        {/*openDetails ? (
           <tr className={classes.dropdownDetails}>
             <td colSpan={3}>
               <p>Klient:</p>
@@ -156,7 +156,7 @@ function Workers() {
             </td>
           </tr>
         )
-          : null}
+          : null*/}
       </>
     ));
   };
