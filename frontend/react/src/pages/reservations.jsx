@@ -2,17 +2,76 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp, faCaretDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import GridMenuHeader from '../components/gridMenuHeader';
-import reservationsData from '../models/reservationsData';
 import { Link, useLoaderData, useNavigate, defer, json } from 'react-router-dom';
 import classes from './styles/reservations.module.css';
 
+function Accordion({ reservation, index }) {
+  const navigate = useNavigate();
+  const [openDetails, setOpenDetails] = useState(false);
+  return (
+    <>
+      <tr key={index} onClick={() => setOpenDetails((prev) => !prev)}>
+        <td>{reservation.id}</td>
+        <td>{reservation.serviceType}</td>
+        <td>{reservation.beginDate}</td>
+        <td>{reservation.endDate}</td>
+        <td>{reservation.city}</td>
+        <td>{reservation.serviceStatus}</td>
+        <td className={classes.alignLeft}>{reservation.paymentStatus}</td>
+        <td className={classes.alignRight}>
+          <FontAwesomeIcon icon={faCaretDown} className={classes.sortIcon} />
+        </td>
+      </tr>
+      {openDetails ? (
+        <tr className={classes.dropdownDetails}>
+          <td colSpan={3}>
+            <p>Klient:</p>
+            <p>Zespół wykonawczy:</p>
+            {reservation.workers && reservation.workers.map((worker) => {
+              return (
+                <p>{worker}</p>
+              );
+            })}
+          </td>
+          <td colSpan={3}>
+            <p>Przydział zasobów:</p>
+            {reservation.resources && reservation.resources.map((resource) => {
+              return (
+                <p>{resource}</p>
+              );
+            })}
+            <p>Materiały:</p>
+            {reservation.materials && reservation.materials.map((material) => {
+              return (
+                <p>{material}</p>
+              );
+            })}
+          </td>
+          <td colSpan={3}>
+            <p>Koszt materiałów:</p>
+            <p>Koszt pracowników:</p>
+            <p
+              className={classes.editReservation}
+              onClick={() => { navigate("/edytuj-rezerwacje", { state: { reservation: reservation } }) }}
+            >
+              modyfikuj rezerwację
+            </p>
+            <p>generuj raport</p>
+            <p>+ Dodaj komentarz</p>
+          </td>
+        </tr>
+      )
+        : null
+      }
+    </>
+  )
+}
+
+
 function Reservations() {
   const navigate = useNavigate();
-   //odkomentować po połączeniu z backendem
-  //const { reservations } = useLoaderData();
-
-  //usunac po połączeniu z backendem
-  const [reservations, setReservations] = useState(reservationsData);
+  const token = localStorage.getItem('token');
+  const [reservations, setReservations] = useState([]); // Dane raportów z API
   const [sortBy, setSortBy] = useState(''); // Kolumna, według której sortujemy
   const [sortOrder, setSortOrder] = useState(null); // Kierunek sortowania (asc/desc/null)
   const [isDefaultSort, setIsDefaultSort] = useState(true); // Informacja o domyślnym sortowaniu
@@ -20,7 +79,52 @@ function Reservations() {
   const reservationsPerPage = 10; // Liczba raportów na stronie
   const maxVisiblePages = 5; // Maksymalna liczba widocznych stron paginacji
   const ellipsis = '...'; // Symbol kropek
-  const [openDetails, setOpenDetails] = useState(false);
+
+  // Funkcja pobierająca dane raportów z API
+  async function fetchReservations() {
+    try {
+      const response = await fetch('https://localhost:7098/api/Service', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setReservations(data);
+      } else {
+        console.log('Błąd podczas pobierania danych z API:', response.status);
+      }
+    } catch (error) {
+      console.log('Błąd podczas komunikacji z API:', error);
+    }
+
+    reservations.map(async (reservation) => {
+    try {
+      const response = await fetch('https://localhost:7098/api/Client/' + reservation.clientId, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        reservation.client = data;
+      } else {
+        console.log('Błąd podczas pobierania danych z API:', response.status);
+      }
+    } catch (error) {
+      console.log('Błąd podczas komunikacji z API:', error);
+    }
+  })
+  }
+console.log(reservations)
+    // Efekt, który pobiera dane raportów z API przy ładowaniu komponentu
+    useEffect(() => {
+      fetchReservations();
+    }, []);
 
   // Funkcja sortująca rezerwacje po kliknięciu w nagłówek kolumny
   const sortReservations = (column) => {
@@ -97,65 +201,10 @@ function Reservations() {
     // Renderowanie wierszy rezerwacji
     return currentReservations.map((reservation, index) => (
       <>
-        <tr key={index} onClick={() => setOpenDetails((prev) => !prev)}>
-          <td>{reservation.id}</td>
-          <td>{reservation.serviceType}</td>
-          <td>{reservation.beginDate}</td>
-          <td>{reservation.endDate}</td>
-          <td>{reservation.city}</td>
-          <td>{reservation.serviceStatus}</td>
-          <td className={classes.alignLeft}>{reservation.paymentStatus}</td>
-          <td className={classes.alignRight}>
-            <FontAwesomeIcon icon={faCaretDown} className={classes.sortIcon} />
-          </td>
-        </tr>
-        {openDetails ? (
-          <tr className={classes.dropdownDetails}>
-            <td colSpan={3}>
-              <p>Klient:</p>
-              <p>Zespół wykonawczy:</p>
-              {reservation.workers && reservation.workers.map((worker) => {
-                return (
-                  <p>{worker}</p>
-                );
-              })}
-            </td>
-            <td colSpan={3}>
-              <p>Przydział zasobów:</p>
-              {reservation.resources && reservation.resources.map((resource) => {
-                return (
-                  <p>{resource}</p>
-                );
-              })}
-              <p>Materiały:</p>
-              {reservation.materials && reservation.materials.map((material) => {
-                return (
-                  <p>{material}</p>
-                );
-              })}
-            </td>
-            <td colSpan={3}>
-              <p>Koszt materiałów:</p>
-              <p>Koszt pracowników:</p>
-              <p
-                className={classes.editReservation}
-                onClick={() => { navigate("/edytuj-rezerwacje", { state: { reservation: reservation } }) }}
-              >
-                modyfikuj rezerwację
-              </p>
-              <p>generuj raport</p>
-              <p>+ Dodaj komentarz</p>
-            </td>
-          </tr>
-        )
-          : null}
+       {<Accordion reservation={reservation} index={index} />}
       </>
     ));
   };
-
-  const openReservationDetails = () => {
-
-  }
 
   // Funkcja zmieniająca aktualną stronę
   const handlePageChange = (pageNumber) => {

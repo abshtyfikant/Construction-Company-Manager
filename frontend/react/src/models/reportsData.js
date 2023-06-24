@@ -1,8 +1,8 @@
-const reservationsData = [];
+const reportsData = [];
 
 const startDate = new Date('2023-05-01');
 
-for (let i = 1; i <= 200; i++) {
+for (let i = 1; i <= 60; i++) {
   const endDate = new Date(startDate);
   endDate.setDate(endDate.getDate() + 4);
 
@@ -18,7 +18,7 @@ for (let i = 1; i <= 200; i++) {
     city: `Miasto ${i}`,
   };
 
-  reservationsData.push(reservation);
+  reportsData.push(reservation);
 
   startDate.setDate(startDate.getDate() + 1);
 }
@@ -31,4 +31,52 @@ function formatDate(date) {
   return `${year}-${month}-${day}`;
 }
 
-export default reservationsData;
+export default reportsData;
+
+
+/*
+
+[
+    {
+        "id": 6,
+        "reportType": "Typ raportu 1",
+        "beginDate": "2023-01-01T00:00:00",
+        "endDate": "2023-01-10T00:00:00",
+        "description": "Opis raportu 1",
+        "author": "op op"
+    },
+    {
+        "id": 7,
+        "reportType": "Typ raportu 2",
+        "beginDate": "2023-02-01T00:00:00",
+        "endDate": "2023-02-15T00:00:00",
+        "description": "Opis raportu 2",
+        "author": "op op"
+    },
+    {
+        "id": 8,
+        "reportType": "Typ raportu 3",
+        "beginDate": "2023-03-01T00:00:00",
+        "endDate": "2023-03-20T00:00:00",
+        "description": "Opis raportu 3",
+        "author": "op op"
+    },
+    {
+        "id": 9,
+        "reportType": "Typ raportu 4",
+        "beginDate": "2023-04-01T00:00:00",
+        "endDate": "2023-04-30T00:00:00",
+        "description": "Opis raportu 4",
+        "author": "op op"
+    },
+    {
+        "id": 10,
+        "reportType": "Typ raportu 5",
+        "beginDate": "2023-05-01T00:00:00",
+        "endDate": "2023-05-31T00:00:00",
+        "description": "Opis raportu 5",
+        "author": "op op"
+    }
+]
+
+*/
