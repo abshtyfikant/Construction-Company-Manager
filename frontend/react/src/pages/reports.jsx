@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp, faCaretDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import GridMenuHeader from '../components/gridMenuHeader';
-import reportsData from '../models/reportsData';
-import { Link, useLoaderData, defer, json, useNavigate } from 'react-router-dom';
+// import reportsData from '../models/reportsData';
+import { Link, useLoaderData, defer, json } from 'react-router-dom';
 
 function Reports() {
-  const navigate = useNavigate();
-  const { reports } = useLoaderData();
+  const token = localStorage.getItem('token');
+  const [reports, setReports] = useState([]); // Dane raportów z API
   const [sortBy, setSortBy] = useState(''); // Kolumna, według której sortujemy
   const [sortOrder, setSortOrder] = useState(null); // Kierunek sortowania (asc/desc/null)
   const [isDefaultSort, setIsDefaultSort] = useState(true); // Informacja o domyślnym sortowaniu
@@ -15,6 +15,32 @@ function Reports() {
   const reportsPerPage = 10; // Liczba raportów na stronie
   const maxVisiblePages = 5; // Maksymalna liczba widocznych stron paginacji
   const ellipsis = '...'; // Symbol kropek
+
+  // Funkcja pobierająca dane raportów z API
+  async function fetchReports() {
+    try {
+      const response = await fetch('https://localhost:7098/api/Report', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setReports(data);
+      } else {
+        console.log('Błąd podczas pobierania danych z API:', response.status);
+      }
+    } catch (error) {
+      console.log('Błąd podczas komunikacji z API:', error);
+    }
+  }
+    // Efekt, który pobiera dane raportów z API przy ładowaniu komponentu
+    useEffect(() => {
+      fetchReports();
+    }, []);
+  
 
   // Funkcja sortująca raporty po kliknięciu w nagłówek kolumny
   const sortReports = (column) => {
@@ -95,7 +121,6 @@ function Reports() {
         <td>{report.beginDate}</td>
         <td>{report.endDate}</td>
         <td>{report.author}</td>
-        <Link to={(`${report.id}`)}>Podgląd</Link>
         <td className='align-left'>{report.description}</td>
       </tr>
     ));

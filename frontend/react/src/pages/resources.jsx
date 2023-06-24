@@ -2,17 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp, faCaretDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import GridMenuHeader from '../components/gridMenuHeader';
-import resourcesData from '../models/resourcesData';
 import { Link, useLoaderData, useNavigate, defer, json } from 'react-router-dom';
 import classes from './styles/resources.module.css';
 
 function Resources() {
   const navigate = useNavigate();
-  //odkomentować po połączeniu z backendem
-  //const { resources } = useLoaderData();
-
-  //usunac po połączeniu z backendem
-  const [resources, setResources] = useState(resourcesData);
+  const token = localStorage.getItem('token');
+  const [resources, setResources] = useState([]);
   const [sortBy, setSortBy] = useState(''); // Kolumna, według której sortujemy
   const [sortOrder, setSortOrder] = useState(null); // Kierunek sortowania (asc/desc/null)
   const [isDefaultSort, setIsDefaultSort] = useState(true); // Informacja o domyślnym sortowaniu
@@ -21,6 +17,34 @@ function Resources() {
   const maxVisiblePages = 5; // Maksymalna liczba widocznych stron paginacji
   const ellipsis = '...'; // Symbol kropek
   const [openDetails, setOpenDetails] = useState(false);
+
+
+  // Funkcja pobierająca dane raportów z API
+  async function fetchResources() {
+    try {
+      const response = await fetch('https://localhost:7098/api/Resource', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setResources(data);
+      } else {
+        console.log('Błąd podczas pobierania danych z API:', response.status);
+      }
+    } catch (error) {
+      console.log('Błąd podczas komunikacji z API:', error);
+    }
+  }
+    // Efekt, który pobiera dane raportów z API przy ładowaniu komponentu
+    useEffect(() => {
+      fetchResources();
+    }, []);
+
+
 
   // Funkcja sortująca zasoby po kliknięciu w nagłówek kolumny
   const sortResources = (column) => {
@@ -99,7 +123,7 @@ function Resources() {
       <>
         <tr key={index} onClick={() => setOpenDetails((prev) => !prev)}>
           <td>{resource.id}</td>
-          <td>{resource.resourceName}</td>
+          <td>{resource.name}</td>
           <td className={classes.alignLeft}>{resource.quantity}</td>
           <td className={classes.alignRight}>
             <FontAwesomeIcon icon={faCaretDown} className={classes.sortIcon} />

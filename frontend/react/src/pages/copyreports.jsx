@@ -1,16 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretUp, faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { faCaretUp, faCaretDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import GridMenuHeader from '../components/gridMenuHeader';
 import reportsData from '../models/reportsData';
+import { Link, useLoaderData, defer, json } from 'react-router-dom';
 
 function Reports() {
+  //odkomentować po połączeniu z backendem
+  //const { reports } = useLoaderData();
+
+  //usunac po połączeniu z backendem
   const [reports, setReports] = useState(reportsData);
   const [sortBy, setSortBy] = useState(''); // Kolumna, według której sortujemy
   const [sortOrder, setSortOrder] = useState(null); // Kierunek sortowania (asc/desc/null)
   const [isDefaultSort, setIsDefaultSort] = useState(true); // Informacja o domyślnym sortowaniu
   const [currentPage, setCurrentPage] = useState(1); // Aktualna strona
   const reportsPerPage = 10; // Liczba raportów na stronie
+  const maxVisiblePages = 5; // Maksymalna liczba widocznych stron paginacji
+  const ellipsis = '...'; // Symbol kropek
 
   // Funkcja sortująca raporty po kliknięciu w nagłówek kolumny
   const sortReports = (column) => {
@@ -87,11 +94,11 @@ function Reports() {
     // Renderowanie wierszy raportów
     return currentReports.map((report, index) => (
       <tr key={index}>
-        <td>{report.rodzaj}</td>
-        <td>{report.dataOd}</td>
-        <td>{report.dataDo}</td>
-        <td>{report.autor}</td>
-        <td className='align-left'>{report.opis}</td>
+        <td>{report.reportType}</td>
+        <td>{report.beginDate}</td>
+        <td>{report.endDate}</td>
+        <td>{report.author}</td>
+        <td className='align-left'>{report.description}</td>
       </tr>
     ));
   };
@@ -104,13 +111,82 @@ function Reports() {
   // Generowanie numerów stron do paginacji
   const pageNumbers = Math.ceil(reports.length / reportsPerPage);
   const pagination = [];
-  for (let i = 1; i <= pageNumbers; i++) {
-    pagination.push(
-      <li key={i} className={currentPage === i ? 'active' : ''}>
-        <button onClick={() => handlePageChange(i)}>{i}</button>
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < pageNumbers) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const renderPaginationItem = (pageNumber, label) => {
+    return (
+      <li key={pageNumber} className={currentPage === pageNumber ? 'active' : ''}>
+        <button onClick={() => handlePageChange(pageNumber)}>{label}</button>
       </li>
     );
+  };
+
+  pagination.push(
+    <li key="prev" className={currentPage === 1 ? 'disabled' : ''}>
+      <button onClick={handlePrevPage}>
+        <FontAwesomeIcon icon={faChevronLeft} />
+      </button>
+    </li>
+  );
+
+  if (pageNumbers <= maxVisiblePages) {
+    for (let i = 1; i <= pageNumbers; i++) {
+      pagination.push(renderPaginationItem(i, i));
+    }
+  } else {
+    let leftEllipsis = false;
+    let rightEllipsis = false;
+
+    for (let i = 1; i <= pageNumbers; i++) {
+      if (
+        i === 1 ||
+        i === pageNumbers ||
+        (i >= currentPage - Math.floor(maxVisiblePages / 2) &&
+          i <= currentPage + Math.floor(maxVisiblePages / 2))
+      ) {
+        pagination.push(renderPaginationItem(i, i));
+      } else if (
+        i < currentPage - Math.floor(maxVisiblePages / 2) &&
+        !leftEllipsis
+      ) {
+        pagination.push(
+          <li key="left-ellipsis" className="disabled">
+            <button disabled>{ellipsis}</button>
+          </li>
+        );
+        leftEllipsis = true;
+      } else if (
+        i > currentPage + Math.floor(maxVisiblePages / 2) &&
+        !rightEllipsis
+      ) {
+        pagination.push(
+          <li key="right-ellipsis" className="disabled">
+            <button disabled>{ellipsis}</button>
+          </li>
+        );
+        rightEllipsis = true;
+      }
+    }
   }
+
+  pagination.push(
+    <li key="next" className={currentPage === pageNumbers ? 'disabled' : ''}>
+      <button onClick={handleNextPage}>
+        <FontAwesomeIcon icon={faChevronRight} />
+      </button>
+    </li>
+  );
 
   return (
     <section className="reports">
@@ -119,27 +195,34 @@ function Reports() {
         <table className="table">
           <thead>
             <tr>
-              <th onClick={() => sortReports('rodzaj')}>
+              <th onClick={() => sortReports('reportType')}>
                 <div>
-                  Rodzaj raportu {renderSortIcons('rodzaj')}
+                  Rodzaj raportu {renderSortIcons('reportType')}
                 </div>
               </th>
-              <th onClick={() => sortReports('dataOd')}>
+              <th onClick={() => sortReports('beginDate')}>
                 <div>
-                  Data od {renderSortIcons('dataOd')}
+                  Data od {renderSortIcons('beginDate')}
                 </div>
               </th>
-              <th onClick={() => sortReports('dataDo')}>
+              <th onClick={() => sortReports('endDate')}>
                 <div>
-                  Data do {renderSortIcons('dataDo')}
+                  Data do {renderSortIcons('endDate')}
                 </div>
               </th>
-              <th onClick={() => sortReports('autor')}>
+              <th onClick={() => sortReports('author')}>
                 <div>
-                  Autor {renderSortIcons('autor')}
+                  Autor {renderSortIcons('author')}
                 </div>
               </th>
-              <th className='align-left'>Opis</th>
+              <th>
+                <div className="th-align-left">
+                  <p>Opis</p>
+                  <div className="th-align-right">
+                    <Link to="/generowanie-raportu">+ Wygeneruj nowy raport</Link>
+                  </div>
+                </div>
+              </th>
             </tr>
           </thead>
           <tbody>{renderReports()}</tbody>
@@ -151,3 +234,30 @@ function Reports() {
 }
 
 export default Reports;
+
+
+async function loadReports() {
+  const response = await fetch('');
+
+  if (!response.ok) {
+    // return { isError: true, message: 'Could not fetch events.' };
+    // throw new Response(JSON.stringify({ message: 'Could not fetch events.' }), {
+    //   status: 500,
+    // });
+    throw json(
+      { message: 'Could not fetch projects.' },
+      {
+        status: 500,
+      }
+    );
+  } else {
+    const resData = await response.json();
+    return resData;
+  }
+}
+
+export async function loader() {
+  return defer({
+    reports: loadReports(),
+  });
+}

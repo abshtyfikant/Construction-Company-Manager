@@ -2,27 +2,51 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp, faCaretDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import GridMenuHeader from '../components/gridMenuHeader';
-import workersData from '../models/workersData';
 import { Link, useLoaderData, useNavigate, defer, json } from 'react-router-dom';
 import classes from './styles/workers.module.css';
 
 function Workers() {
   const navigate = useNavigate();
-    //odkomentować po połączeniu z backendem
-  //const { workers } = useLoaderData();
-
-  //usunac po połączeniu z backendem
-  const [workers, setWorkers] = useState(workersData);
-  const [sortBy, setSortBy] = useState(''); // Kolumna, według której sortujemy
-  const [sortOrder, setSortOrder] = useState(null); // Kierunek sortowania (asc/desc/null)
-  const [isDefaultSort, setIsDefaultSort] = useState(true); // Informacja o domyślnym sortowaniu
-  const [currentPage, setCurrentPage] = useState(1); // Aktualna strona
-  const workersPerPage = 10; // Liczba pracowników na stronie
-  const maxVisiblePages = 5; // Maksymalna liczba widocznych stron paginacji
-  const ellipsis = '...'; // Symbol kropek
+  const [workers, setWorkers] = useState([]);
+  const [sortBy, setSortBy] = useState('');
+  const [sortOrder, setSortOrder] = useState(null);
+  const [isDefaultSort, setIsDefaultSort] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const workersPerPage = 10;
+  const maxVisiblePages = 5;
+  const ellipsis = '...';
   const [openDetails, setOpenDetails] = useState(false);
 
-  // Funkcja sortująca pracowników po kliknięciu w nagłówek kolumny
+  const fetchWorkers = async (token) => {
+    try {
+      const response = await fetch('https://localhost:7098/api/Employee', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setWorkers(data);
+      } else {
+        console.log('Błąd podczas pobierania danych z API:', response.status);
+      }
+    } catch (error) {
+      console.log('Błąd podczas komunikacji z API:', error);
+    }
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    fetchWorkers(token)
+      .catch((error) => {
+        console.log('Błąd podczas pobierania danych pracowników:', error);
+      });
+  }, []);
+
+
   const sortWorkers = (column) => {
     if (sortBy === column) {
       if (sortOrder === 'asc') {
@@ -102,7 +126,7 @@ function Workers() {
           <td>{worker.firstName}</td>
           <td>{worker.lastName}</td>
           <td>{worker.city}</td>
-          <td>{worker.workerSpecializationId}</td>
+          <td>{worker.mainSpecialization}</td>
           <td className={classes.alignLeft}>{worker.ratePerHour}</td>
           <td className={classes.alignRight}>
             <FontAwesomeIcon icon={faCaretDown} className={classes.sortIcon} />
@@ -145,10 +169,6 @@ function Workers() {
     setCurrentPage(pageNumber);
   };
 
-  // Generowanie numerów stron do paginacji
-  const pageNumbers = Math.ceil(workers.length / workersPerPage);
-  const pagination = [];
-
   const handlePrevPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
@@ -168,6 +188,9 @@ function Workers() {
       </li>
     );
   };
+
+  const pageNumbers = Math.ceil(workers.length / workersPerPage);
+  const pagination = [];
 
   pagination.push(
     <li key="prev" className={currentPage === 1 ? `${classes.disabled}` : `${''}`}>
@@ -278,13 +301,9 @@ function Workers() {
 export default Workers;
 
 async function loadWorkers() {
-  const response = await fetch('');
+  const response = await fetch('<your_api_endpoint_here>');
 
   if (!response.ok) {
-    // return { isError: true, message: 'Could not fetch events.' };
-    // throw new Response(JSON.stringify({ message: 'Could not fetch events.' }), {
-    //   status: 500,
-    // });
     throw json(
       { message: 'Could not fetch workers.' },
       {
