@@ -1,5 +1,4 @@
-﻿using Application.DTO.Assigment;
-using Application.DTO.Employee;
+﻿using Application.DTO.Employee;
 using Application.DTO.Specialization;
 using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -40,7 +39,6 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -64,12 +62,11 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpPut]
-    [ValidateAntiForgeryToken]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult Update([FromBody] NewEmployeeDto newEmployee)
     {
-        if (!ModelState.IsValid || (newEmployee.Id <= 0)) return BadRequest();
+        if (!ModelState.IsValid || newEmployee.Id <= 0) return BadRequest();
         _employeeService.UpdateEmployee(newEmployee);
         return NoContent();
     }
@@ -114,7 +111,8 @@ public class EmployeeController : ControllerBase
         return NoContent();
     }
 
-    [HttpPut($"{nameof(UpdateMainSpecialization)}/{{employeeId:int}}/{{specializationId:int}}", Name = "UpdateMainSpecialization")]
+    [HttpPut($"{nameof(UpdateMainSpecialization)}/{{employeeId:int}}/{{specializationId:int}}",
+        Name = "UpdateMainSpecialization")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult UpdateMainSpecialization(int employeeId, int specializationId)
@@ -131,6 +129,15 @@ public class EmployeeController : ControllerBase
     {
         if (id == 0) return BadRequest();
         var list = _employeeService.GetEmployeeSpecializations(id);
+        return Ok(list);
+    }
+
+    [HttpGet($"{nameof(GetAvailableEmployeesForTime)}/{{startTime:DateTime}}/{{endTime:DateTime}}",
+        Name = "GetAvailableEmployeesForTime")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public ActionResult<IEnumerable<EmployeeDto>> GetAvailableEmployeesForTime(DateTime startTime, DateTime endTime)
+    {
+        var list = _employeeService.GetAvailableEmployeesForTime(startTime, endTime);
         return Ok(list);
     }
 }

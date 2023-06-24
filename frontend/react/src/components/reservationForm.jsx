@@ -26,18 +26,18 @@ const specializationsData = [
 
 export default function ReservationForm({ defaultValue, method }) {
     const token = localStorage.getItem('token');
-    const [client, setClient] = React.useState(defaultValue.client ? defaultValue.client : undefined);
+    const [client, setClient] = React.useState( defaultValue ? (defaultValue.client ? defaultValue.client : undefined) : undefined);
     const clientFirstNameRef = React.useRef();
     const clientLastNameRef = React.useRef();
     const clientCityRef = React.useRef();
     const navigate = useNavigate();
-    const [city, setCity] = React.useState(defaultValue.city ? defaultValue.city : '');
-    const [startDate, setStartDate] = React.useState(defaultValue.beginDate ? defaultValue.beginDate : '');
-    const [endDate, setEndDate] = React.useState(defaultValue.endDate ? defaultValue.endDate : '');
-    const [serviceType, setServiceType] = React.useState(defaultValue.serviceType ? defaultValue.serviceType : '');
-    const [workers, setWorkers] = React.useState(defaultValue.workers ? defaultValue.workers : []);
-    const [materials, setMaterials] = React.useState(defaultValue.materials ? defaultValue.materials : []);
-    const [resources, setResources] = React.useState(defaultValue.resources ? defaultValue.resources : []);
+    const [city, setCity] = React.useState(defaultValue ? (defaultValue.city ? defaultValue.city : '') : '');
+    const [startDate, setStartDate] = React.useState(defaultValue ? (defaultValue.beginDate ? defaultValue.beginDate : '') : '');
+    const [endDate, setEndDate] = React.useState(defaultValue ? (defaultValue.endDate ? defaultValue.endDate : '') : '');
+    const [serviceType, setServiceType] = React.useState(defaultValue ? (defaultValue.serviceType ? defaultValue.serviceType : '') : '');
+    const [workers, setWorkers] = React.useState(defaultValue ? (defaultValue.workers ? defaultValue.workers : []) : []);
+    const [materials, setMaterials] = React.useState(defaultValue ? (defaultValue.materials ? defaultValue.materials : []) : []);
+    const [resources, setResources] = React.useState(defaultValue ? (defaultValue.resources ? defaultValue.resources : []) : []);
     const [fetchedWorkers, setFetchedWorkers] = React.useState();
     const [fetchedResources, setFetchedResources] = React.useState();
     const [fetchedClients, setFetchedClients] = React.useState();

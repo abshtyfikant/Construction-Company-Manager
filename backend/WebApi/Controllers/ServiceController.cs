@@ -38,7 +38,6 @@ public class ServiceController : ControllerBase
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -49,7 +48,6 @@ public class ServiceController : ControllerBase
         var serviceId = _serviceService.AddService(newService);
         newService.Id = serviceId;
         return CreatedAtRoute("GetService", new { id = serviceId }, newService);
-
     }
 
     [HttpDelete("{id:int}", Name = "DeleteService")]
@@ -63,7 +61,6 @@ public class ServiceController : ControllerBase
     }
 
     [HttpPut]
-    [ValidateAntiForgeryToken]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult Update([FromBody] NewServiceDto newService)
@@ -72,6 +69,5 @@ public class ServiceController : ControllerBase
         if (newService.Id <= 0) return BadRequest();
         _serviceService.UpdateService(newService);
         return NoContent();
-
     }
 }

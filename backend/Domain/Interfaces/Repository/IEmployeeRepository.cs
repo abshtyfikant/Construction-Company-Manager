@@ -13,6 +13,7 @@ public interface IEmployeeRepository
     void AddSpecializationToEmployee(int employeeId, int specializationId);
     void UpdateEmployee(Employee employee);
     void UpdateEmployeeSpecialization(int employeeId, int specializationId);
-    IQueryable<Assignment> GetEmployeeAssigments(int employeeId);
+    IQueryable<Assignment> GetEmployeeAssignments(int employeeId);
     IQueryable<Specialization> GetEmployeeSpecializations(int employeeId);
+    IQueryable<Employee> GetAvailableEmployeesForTime(DateTime start, DateTime end);
 }

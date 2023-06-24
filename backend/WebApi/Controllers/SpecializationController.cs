@@ -38,7 +38,6 @@ public class SpecializationController : ControllerBase
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -66,7 +65,6 @@ public class SpecializationController : ControllerBase
     }
 
     [HttpPut]
-    [ValidateAntiForgeryToken]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult Update([FromBody] NewSpecializationDto newSpecialization)
