@@ -260,19 +260,21 @@ namespace Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EmployeeId = table.Column<int>(type: "int", nullable: false),
                     ServiceId = table.Column<int>(type: "int", nullable: false),
-                    Function = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Function = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Assigments", x => x.Id);
+                    table.PrimaryKey("PK_Assignments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Assigments_Employees_EmployeeId",
+                        name: "FK_Assignments_Employees_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Assigments_Services_ServiceId",
+                        name: "FK_Assignments_Services_ServiceId",
                         column: x => x.ServiceId,
                         principalTable: "Services",
                         principalColumn: "Id",
@@ -288,15 +290,15 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SpecializationAssigments", x => new { x.EmployeeId, x.SpecializationId });
+                    table.PrimaryKey("PK_SpecializationAssignments", x => new { x.EmployeeId, x.SpecializationId });
                     table.ForeignKey(
-                        name: "FK_SpecializationAssigments_Employees_EmployeeId",
+                        name: "FK_SpecializationAssignments_Employees_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SpecializationAssigments_Specializations_SpecializationId",
+                        name: "FK_SpecializationAssignments_Specializations_SpecializationId",
                         column: x => x.SpecializationId,
                         principalTable: "Specializations",
                         principalColumn: "Id",
@@ -304,12 +306,12 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Assigments_EmployeeId",
+                name: "IX_Assignments_EmployeeId",
                 table: "Assignments",
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Assigments_ServiceId",
+                name: "IX_Assignments_ServiceId",
                 table: "Assignments",
                 column: "ServiceId");
 
@@ -364,7 +366,7 @@ namespace Infrastructure.Migrations
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SpecializationAssigments_SpecializationId",
+                name: "IX_SpecializationAssignments_SpecializationId",
                 table: "SpecializationAssignments",
                 column: "SpecializationId");
         }
