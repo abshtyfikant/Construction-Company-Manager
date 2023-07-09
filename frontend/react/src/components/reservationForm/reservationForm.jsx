@@ -3,30 +3,10 @@ import * as React from 'react';
 import { useNavigate, json, defer, useLoaderData } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faX } from '@fortawesome/free-solid-svg-icons';
-//dodac wybierz albo dodaj nowego klienta
-const materialsData = [
-    'Warszawa', 'Katowice', 'Kraków'
-];
-
-const resourcesData = [
-    'typ1', 'typ2', 'typ3'
-];
-
-const workersData = [
-    'Kowalski', 'Nowak', 'Marek', 'Kowalski', 'Nowak', 'Marek', 'Kowalski', 'Nowak', 'Marek',
-];
-
-const clientsData = [
-    'Kowalski', 'Nowak', 'Marek', 'Kowalski', 'Nowak', 'Marek', 'Kowalski', 'Nowak', 'Marek',
-];
-
-const specializationsData = [
-    'murarz', 'tynkarz', 'akrobata',
-];
 
 export default function ReservationForm({ defaultValue, method }) {
     const token = localStorage.getItem('token');
-    const [client, setClient] = React.useState( defaultValue ? (defaultValue.client ? defaultValue.client : undefined) : undefined);
+    const [client, setClient] = React.useState(defaultValue ? (defaultValue.client ? defaultValue.client : undefined) : undefined);
     const clientFirstNameRef = React.useRef();
     const clientLastNameRef = React.useRef();
     const clientCityRef = React.useRef();
@@ -50,6 +30,10 @@ export default function ReservationForm({ defaultValue, method }) {
     const resourcePriceRef = React.useRef();
     const resourceAmountRef = React.useRef();
     const resourceUnitRef = React.useRef();
+    const [tmpWorker, setTmpWorker] = React.useState({});
+    const [tmpSpec, setTmpSpec] = React.useState();
+    const [tmpResource, setTmpResource] = React.useState({});
+
 
     const fetchData = React.useCallback(async () => {
         try {
@@ -424,21 +408,34 @@ export default function ReservationForm({ defaultValue, method }) {
     };
 
     const handleAddWorker = () => {
-        let tmpWorker;
         return (
             <div>
                 <h1>Dodaj pracownika</h1>
                 <select
+                    onChange={(e) => { setTmpSpec(e.target.value) }}
+                    className={classes.formInput}
+                >
+                    <option value=''>Wybierz z listy</option>
+                    {fetchedSpecializations && fetchedSpecializations.map((specialization) => {
+                        return (
+                            <option key={specialization.id} value={specialization.id}>
+                                {specialization.name}
+                            </option>
+                        )
+                    })}
+                </select>
+                <select
                     onChange={(e) => {
-                        tmpWorker = (fetchedWorkers.find(a =>
+                        setTmpWorker(fetchedWorkers.find(a =>
                             a.id == e.target.value
                         ));
                     }}
                     className={classes.formInput}
+                    disabled={tmpSpec ? false : true}
                 >
-                    <option value=''>Wybierz z listy</option>
+                    <option value=''>Dostępni pracownicy</option>
                     {fetchedWorkers && fetchedWorkers.map((worker) => {
-                        if (checkAssignments(worker)) {
+                        if (checkAssignments(worker) && tmpSpec == worker.mainSpecializationId) {
                             return (
                                 <option key={worker.id} value={worker.id}>
                                     {worker.firstName} {worker.lastName}
@@ -453,25 +450,13 @@ export default function ReservationForm({ defaultValue, method }) {
                         }
                     })}
                 </select>
-
-                <select
-                    onChange={(e) => { tmpWorker.function = e.target.value }}
-                    className={classes.formInput}
-                    disabled={tmpWorker ? false : true}
-                >
-                    <option value=''>Wybierz z listy</option>
-                    {fetchedSpecializations && fetchedSpecializations.map((specialization) => {
-                        return (
-                            <option key={specialization.id} value={specialization.id}>
-                                {specialization.name}
-                            </option>
-                        )
-                    })}
-                </select>
                 <button
                     onClick={(e) => {
                         e.preventDefault();
-                        setWorkers([tmpWorker, ...workers]);
+                        setWorkers([{
+                            id: 0,
+                            function: tmpSpec,
+                        }, ...workers]);
                         setPopupOpen(false);
                     }}>
                     Dodaj pracownika
@@ -481,14 +466,13 @@ export default function ReservationForm({ defaultValue, method }) {
     };
 
     const handleAddResource = () => {
-        let tmpResource;
         let availableQuant = 0;
         return (
             <div>
                 <h1>Dodaj zasoby</h1>
                 <select
                     onChange={(e) => {
-                        tmpResource = (fetchedResources.find(a =>
+                        setTmpResource(fetchedResources.find(a =>
                             a.id == e.target.value
                         ));
                     }}
@@ -513,7 +497,7 @@ export default function ReservationForm({ defaultValue, method }) {
                     })}
                 </select>
                 <input type="number"
-                    onChange={(e) => { tmpResource.quantity = e.target.value; console.log(e.target.value) }}
+                    onChange={(e) => { setTmpResource({ ...tmpResource, quantity: e.target.value }) }}
                     className={classes.formInput}
                     disabled={tmpResource ? false : true}
                     min="1"
@@ -522,7 +506,7 @@ export default function ReservationForm({ defaultValue, method }) {
                 <button
                     onClick={(e) => {
                         e.preventDefault();
-                        setWorkers([tmpResource, ...resources]);
+                        setResources([tmpResource, ...resources]);
                         setPopupOpen(false);
                     }}>
                     Dodaj zasób

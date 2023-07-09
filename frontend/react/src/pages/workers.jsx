@@ -129,34 +129,9 @@ function Workers() {
           <td>{worker.mainSpecialization}</td>
           <td className={classes.alignLeft}>{worker.ratePerHour}</td>
           <td className={classes.alignRight}>
-            <FontAwesomeIcon icon={faCaretDown} className={classes.sortIcon} />
+           <button onClick={() => { navigate("/edytuj-pracownika", { state: { worker: worker } }) }}>Edytuj</button>
           </td>
         </tr>
-        {/*openDetails ? (
-          <tr className={classes.dropdownDetails}>
-            <td colSpan={3}>
-              <p>Klient:</p>
-              <p>Zespół wykonawczy:</p>
-            </td>
-            <td colSpan={3}>
-              <p>Przydział zasobów:</p>
-              <p>Materiały:</p>
-            </td>
-            <td colSpan={3}>
-              <p>Koszt materiałów:</p>
-              <p>Koszt pracowników:</p>
-              <p
-                className={classes.editWorker}
-                onClick={() => { navigate("/edytuj-rezerwacje", { state: { worker: worker } }) }}
-              >
-                modyfikuj rezerwację
-              </p>
-              <p>generuj raport</p>
-              <p>+ Dodaj komentarz</p>
-            </td>
-          </tr>
-        )
-          : null*/}
       </>
     ));
   };

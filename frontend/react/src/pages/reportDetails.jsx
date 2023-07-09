@@ -3,12 +3,25 @@ import { useRouteLoaderData, defer, json, useNavigate } from 'react-router-dom';
 
 //dodac na backendzie id pracownika
 
+
 export default function ReportDetails() {
     const navigate = useNavigate();
     const { report } = useRouteLoaderData('report-details');
 
+    const generatePDF = () => {
+        const element = document.getElementById('pdf-content');
+      
+        if (element) {
+          const pdf = new Blob([element.innerHTML], { type: 'application/pdf' });
+          const url = URL.createObjectURL(pdf);
+          window.open(url);
+        }
+      };
+      
+
     return (
-        <div className={classes.container}>
+        <>
+        <div className={classes.container} id='pdf-content'>
             <h1>Raport</h1>
             <p>Typ raportu: {report.reportType}</p>
             <div className={classes.dates}>
@@ -23,6 +36,8 @@ export default function ReportDetails() {
             <p>Suma: {report.amount}</p>
             <p>Wygenerowano przez: { }</p>
         </div>
+        <button onClick={generatePDF}>Wygeneruj PDF</button>
+        </>
     );
 }
 
