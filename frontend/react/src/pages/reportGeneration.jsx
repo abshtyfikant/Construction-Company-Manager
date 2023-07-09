@@ -3,16 +3,8 @@ import classes from './styles/reportGeneration.module.css';
 import * as React from 'react';
 import { useNavigate, json } from 'react-router-dom';
 
-const cities = [
-  'Warszawa', 'Katowice', 'Kraków'
-];
-
 const types = [
   'raport o zarobkach firmy', 'raport o zarobkach pracownika', 'raport o kosztach', 'raport z usługi'
-];
-
-const workers = [
-  'Kowalski', 'Nowak', 'Marek'
 ];
 
 function ReportGeneration() {
@@ -24,7 +16,7 @@ function ReportGeneration() {
   const [startDate, setStartDate] = React.useState('');
   const [endDate, setEndDate] = React.useState('');
   const [reportType, setReportType] = React.useState('');
-  const [worker, setWorker] = React.useState('');
+  const [slectedVal, setSelectedVal] = React.useState('');
   const [fetchedWorkers, setFetchedWorkers] = React.useState('');
   const [fetchedServices, setFetchedServices] = React.useState('');
 
@@ -81,7 +73,7 @@ function ReportGeneration() {
           <select
             className={classes.formInput}
             id='worker'
-            onChange={(e) => setWorker(e.target.value)}
+            onChange={(e) => setSelectedVal(e.target.value)}
             disabled
           >
             <option value=''>Wybierz z listy</option>
@@ -93,7 +85,7 @@ function ReportGeneration() {
           <select
             className={classes.formInput}
             id='worker'
-            onChange={(e) => setWorker(e.target.value)}
+            onChange={(e) => setSelectedVal(e.target.value)}
             required
           >
             <option value=''>Wybierz z listy</option>
@@ -108,7 +100,7 @@ function ReportGeneration() {
           <select
             className={classes.formInput}
             id='worker'
-            onChange={(e) => setWorker(e.target.value)}
+            onChange={(e) => setSelectedVal(e.target.value)}
             disabled
           >
             <option value=''>Wybierz z listy</option>
@@ -119,8 +111,8 @@ function ReportGeneration() {
         return (
           <select
             className={classes.formInput}
-            id='worker'
-            onChange={(e) => setWorker(e.target.value)}
+            id='reservation'
+            onChange={(e) => setSelectedVal(e.target.value)}
             required
           >
             <option value=''>Wybierz z listy</option>
@@ -174,7 +166,11 @@ function ReportGeneration() {
         <div className={classes.formContent}>
           <div className={classes.splitSection}>
             <label htmlFor='report-type' className={classes.label}>Rodzaj raportu:</label>
-            <label htmlFor='worker' className={classes.label}>Wybierz pracownika:</label>
+            {reportType === 'raport o zarobkach pracownika' ||
+              reportType === 'raport z usługi' ?
+              <label htmlFor='worker' className={classes.label}>
+                Wybierz {reportType === 'raport o zarobkach pracownika' ? 'pracownika' : 'usługę'}
+              </label> : <br></br>}
             <select
               className={classes.formInput}
               id='report-type'
@@ -197,7 +193,8 @@ function ReportGeneration() {
             type='date'
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            required
+            required={reportType === 'raport z usługi' ? false : true}
+            disabled={reportType === 'raport z usługi' ? true : false}
           />
           <label htmlFor='end-date' className={classes.label}>Data do:</label>
           <input
@@ -206,19 +203,18 @@ function ReportGeneration() {
             type='date'
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            required
+            required={reportType === 'raport z usługi' ? false : true}
+            disabled={reportType === 'raport z usługi' ? true : false}
           />
           <label htmlFor='city' className={classes.label}>Miasto (opcj.):</label>
-          <select
+          <input
             className={classes.formInput}
             id='city'
+            type='text'
+            value={city}
+            placeholder='Dodaj miasto...'
             onChange={(e) => setCity(e.target.value)}
-          >
-            <option value=''>Wybierz z listy</option>
-            {cities.map((city) => (
-              <option key={city} value={city}>{city}</option>
-            ))}
-          </select>
+          />
           <label htmlFor='description' className={classes.label}>Opis (opcj.):</label>
           <input
             className={classes.formInput}

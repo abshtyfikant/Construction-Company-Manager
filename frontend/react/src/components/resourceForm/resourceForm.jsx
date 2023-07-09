@@ -10,6 +10,7 @@ export default function ResourceForm({ defaultValue, method }) {
   const quantityRef = React.useRef();
   const nameRef = React.useRef();
   const [unit, setUnit] = React.useState(defaultValue ? (defaultValue.unit ? defaultValue.unit : undefined) : undefined);
+  const [allocation, setAllocation] = React.useState();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,27 +46,66 @@ export default function ResourceForm({ defaultValue, method }) {
     const response = await fetch('https://localhost:7098/api/Resource/' + defaultValue.id, {
       method: 'delete',
       headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
       },
-  });
+    });
 
-  if (!response.ok) {
+    if (!response.ok) {
       // return { isError: true, message: 'Could not fetch project.' };
       // throw new Response(JSON.stringify({ message: 'Could not fetch project.' }), {
       //   status: 500,
       // });
       throw json(
-          { message: 'Could not fetch resource.' },
-          {
-              status: 500,
-          }
+        { message: 'Could not fetch resource.' },
+        {
+          status: 500,
+        }
       );
-  } else {
+    } else {
       return navigate('/stan-zasobow');
-  }
+    }
   };
 
+  const getAlloc = async () => {
+    try {
+      const response = await fetch('https://localhost:7098/api/ResourceAllocation/Resource/' + defaultValue.id, {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+        },
+      });
+
+      if (!response.ok) {
+        throw json(
+          { message: 'Could not fetch reports.' },
+          {
+            status: 500,
+          }
+        );
+      }
+
+      const data = await response.json();
+      setAllocation(data);
+
+    } catch (error) {
+      //setError("Something went wrong, try again.");
+    }
+  };
+
+  React.useEffect(() => {
+    getAlloc();
+  }, [getAlloc]);
+
+  const checkAlloc = () => {
+    if (allocation.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+  console.log(unit);
   return (
     <div>
       <div className='container'>
@@ -106,10 +146,12 @@ export default function ResourceForm({ defaultValue, method }) {
           <div className="button-container">
             <button type="submit">Zatwierdź</button>
             {method === 'patch' &&
-              <button onClick={(e) => { handleDelete(e) }}>
+              <button
+                onClick={(e) => { handleDelete(e) }}
+                disabled={checkAlloc() ? true : false}
+              >
                 <FontAwesomeIcon icon={faTrash} />
               </button>}
-              {//zrobic sprawdzanie czy nie jest zarezerwowane}
           </div>
         </form>
       </div>

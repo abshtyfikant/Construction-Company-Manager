@@ -1,6 +1,8 @@
 import './workerForm.css';
 import * as React from 'react';
 import { useNavigate, json } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export default function WorkerForm({ defaultValue, method }) {
     const token = localStorage.getItem('token');
@@ -11,6 +13,7 @@ export default function WorkerForm({ defaultValue, method }) {
     const hourlyRateRef = React.useRef();
     const [specialization, setSpecialization] = React.useState(defaultValue ? (defaultValue.mainSpecializationId ? defaultValue.mainSpecializationId : undefined) : undefined);
     const [fetchedSpecializations, setFetchedSpecializations] = React.useState();
+    const [allocation, setAllocation] = React.useState([]);
 
     const fetchData = React.useCallback(async () => {
         try {
@@ -66,6 +69,70 @@ export default function WorkerForm({ defaultValue, method }) {
         }
         const data = await response.json();
         return navigate('/pracownicy'); // Przekierowanie po dodaniu pracownika
+    };
+
+    const handleDelete = async (e) => {
+        const response = await fetch('https://localhost:7098/api/Employee/' + defaultValue.id, {
+            method: 'delete',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token,
+            },
+        });
+
+        if (!response.ok) {
+            // return { isError: true, message: 'Could not fetch project.' };
+            // throw new Response(JSON.stringify({ message: 'Could not fetch project.' }), {
+            //   status: 500,
+            // });
+            throw json(
+                { message: 'Could not fetch resource.' },
+                {
+                    status: 500,
+                }
+            );
+        } else {
+            return navigate('/pracownicy');
+        }
+    };
+
+    const getAlloc = async () => {
+        try {
+            const response = await fetch('https://localhost:7098/api/Assignment/GetEmployeeAssignments/' + defaultValue.id, {
+                method: 'get',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token,
+                },
+            });
+
+            if (!response.ok) {
+                throw json(
+                    { message: 'Could not fetch reports.' },
+                    {
+                        status: 500,
+                    }
+                );
+            }
+
+            const data = await response.json();
+            setAllocation(data);
+
+        } catch (error) {
+            //setError("Something went wrong, try again.");
+        }
+    };
+
+    React.useEffect(() => {
+        getAlloc();
+    }, [getAlloc]);
+
+    const checkAlloc = () => {
+        if (allocation.length > 0) {
+            return true;
+        } else {
+            return false;
+        }
     };
 
     return (
@@ -132,6 +199,13 @@ export default function WorkerForm({ defaultValue, method }) {
                     </div>
                     <div className="button-container">
                         <button type="submit">Dodaj pracownika</button>
+                        {method === 'patch' &&
+                            <button
+                                onClick={(e) => { handleDelete(e) }}
+                                disabled={checkAlloc() ? true : false}
+                            >
+                                <FontAwesomeIcon icon={faTrash} />
+                            </button>}
                     </div>
                 </form>
             </div>
