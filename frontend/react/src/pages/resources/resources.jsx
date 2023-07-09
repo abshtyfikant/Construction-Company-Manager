@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp, faCaretDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import GridMenuHeader from '../components/gridMenuHeader';
-import { Link, useLoaderData, useNavigate, defer, json } from 'react-router-dom';
-import classes from './styles/resources.module.css';
+import GridMenuHeader from '../../components/gridMenuHeader';
+import { Link, useNavigate, defer, json } from 'react-router-dom';
+import classes from './resources.module.css';
 
 function Accordion({ resource, index, resourcesAllocation }) {
   const navigate = useNavigate();
@@ -12,9 +12,10 @@ function Accordion({ resource, index, resourcesAllocation }) {
     <>
       <tr key={index} onClick={() => setOpenDetails((prev) => !prev)}>
         <td>{resource.id}</td>
-        <td>{resource.serviceType}</td>
-        <td className={classes.alignLeft}>{resource.paymentStatus}</td>
+        <td>{resource.name}</td>
+        <td className={classes.alignLeft}>{resource.quantity}</td>
         <td className={classes.alignRight}>
+          <button onClick={() => { navigate("/edytuj-zasob", { state: { resource: resource } }) }}>Edytuj</button>
           <FontAwesomeIcon icon={faCaretDown} className={classes.sortIcon} />
         </td>
       </tr>
@@ -23,8 +24,8 @@ function Accordion({ resource, index, resourcesAllocation }) {
           <tr className={classes.dropdownDetails}>
             <td>
               <p>Ilość:</p>
-              {allocation.quantinity &&
-                <p>{allocation.quantinity}</p>
+              {allocation.quantity &&
+                <p>{allocation.quantity}</p>
               }
             </td>
             <td>

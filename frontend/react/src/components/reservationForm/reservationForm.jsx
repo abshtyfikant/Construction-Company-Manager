@@ -3,26 +3,6 @@ import * as React from 'react';
 import { useNavigate, json, defer, useLoaderData } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faX } from '@fortawesome/free-solid-svg-icons';
-//dodac wybierz albo dodaj nowego klienta
-const materialsData = [
-    'Warszawa', 'Katowice', 'Kraków'
-];
-
-const resourcesData = [
-    'typ1', 'typ2', 'typ3'
-];
-
-const workersData = [
-    'Kowalski', 'Nowak', 'Marek', 'Kowalski', 'Nowak', 'Marek', 'Kowalski', 'Nowak', 'Marek',
-];
-
-const clientsData = [
-    'Kowalski', 'Nowak', 'Marek', 'Kowalski', 'Nowak', 'Marek', 'Kowalski', 'Nowak', 'Marek',
-];
-
-const specializationsData = [
-    'murarz', 'tynkarz', 'akrobata',
-];
 
 export default function ReservationForm({ defaultValue, method }) {
     const token = localStorage.getItem('token');
