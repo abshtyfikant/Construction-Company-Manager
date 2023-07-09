@@ -6,6 +6,7 @@ export default function HomePage () {
         <div>
             <h1>Witaj</h1>
             <Link to='/login'>Zaloguj się</Link>
+            <Link to='/zarejestruj-sie'>Zarejestruj się</Link>
         </div>
     );
 }

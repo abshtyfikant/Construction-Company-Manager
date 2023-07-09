@@ -519,6 +519,14 @@ export default function ReservationForm({ defaultValue, method }) {
                     min="1"
                     max={availableQuant}>
                 </input>
+                <button
+                    onClick={(e) => {
+                        e.preventDefault();
+                        setWorkers([tmpResource, ...resources]);
+                        setPopupOpen(false);
+                    }}>
+                    Dodaj zasób
+                </button>
             </div>
         );
     };

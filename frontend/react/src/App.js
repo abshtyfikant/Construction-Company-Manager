@@ -18,6 +18,7 @@ import HomePage from './pages/home.jsx';
 import Register, { action as registerAuthAction } from './pages/register.jsx';
 import { action as logoutAction } from './pages/logout.jsx'
 import ReportDetails, {loader as reportDetailsLoader} from './pages/reportDetails.jsx';
+import AddSpecialization from './pages/addSpecialization.jsx'
 
 const router = createBrowserRouter([
   {
@@ -107,6 +108,10 @@ const router = createBrowserRouter([
       {
         path: "dodaj-zasob",
         element: <AddResource />,
+      },
+      {
+        path: "dodaj-specjalizacje",
+        element: <AddSpecialization />,
       },
     ],
   },
