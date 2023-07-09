@@ -10,7 +10,7 @@ public class EmployeeDto : IMapFrom<Domain.Model.Employee>
     public string LastName { get; set; }
     public string City { get; set; }
     public double RatePerHour { get; set; }
-    public string MainSpecialization { get; set; }
+    public string MainSpecializationId { get; set; }
 
     public static void Mapping(Profile profile)
     {
@@ -20,6 +20,6 @@ public class EmployeeDto : IMapFrom<Domain.Model.Employee>
             .ForMember(d => d.LastName, opt => opt.MapFrom(s => s.LastName))
             .ForMember(d => d.City, opt => opt.MapFrom(s => s.City))
             .ForMember(d => d.RatePerHour, opt => opt.MapFrom(s => s.RatePerHour))
-            .ForMember(d => d.MainSpecialization, opt => opt.MapFrom(s => s.MainSpecialization.Name));
+            .ForMember(d => d.MainSpecializationId, opt => opt.MapFrom(s => s.MainSpecialization.Id));
     }
 }
