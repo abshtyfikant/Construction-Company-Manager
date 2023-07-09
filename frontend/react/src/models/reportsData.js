@@ -6,15 +6,19 @@ for (let i = 1; i <= 60; i++) {
   const endDate = new Date(startDate);
   endDate.setDate(endDate.getDate() + 4);
 
-  const report = {
-    rodzaj: `Raport ${i}`,
-    dataOd: formatDate(startDate),
-    dataDo: formatDate(endDate),
-    autor: `Autor ${i}`,
-    opis: `Opis raportu losowy z liczba test raportu ${i}`
+  const reservation = {
+    id: i, 
+    serviceId: i,
+    reportType: `Raport ${i}`,
+    beginDate: formatDate(startDate),
+    endDate: formatDate(endDate),
+    author: `Autor ${i}`,
+    description: `Opis raportu losowy z liczba test raportu ${i}`,
+    amount: i,
+    city: `Miasto ${i}`,
   };
 
-  reportsData.push(report);
+  reportsData.push(reservation);
 
   startDate.setDate(startDate.getDate() + 1);
 }

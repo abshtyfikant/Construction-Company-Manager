@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp, faCaretDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import GridMenuHeader from '../components/gridMenuHeader';
-// import reportsData from '../models/reportsData';
-import { Link, useLoaderData, defer, json } from 'react-router-dom';
+import { Link, defer, json } from 'react-router-dom';
 
 function Reports() {
   const token = localStorage.getItem('token');
@@ -121,7 +120,14 @@ function Reports() {
         <td>{report.beginDate}</td>
         <td>{report.endDate}</td>
         <td>{report.author}</td>
-        <td className='align-left'>{report.description}</td>
+        <td className='align-left'>
+  {report.description.length > 30
+    ? `${report.description.substring(0, 30)}...`
+    : report.description}
+</td>
+
+        <td className='raport-btn'><Link to={`/raporty/${report.id}`}>Podgląd</Link>
+</td>
       </tr>
     ));
   };
@@ -248,7 +254,7 @@ function Reports() {
               </th>
             </tr>
           </thead>
-          <tbody>{renderReports()}</tbody>
+          <tbody>{Object.keys(reports).length !== 0 && renderReports()}</tbody>
         </table>
         <ul className="pagination">{pagination}</ul>
       </div>
@@ -260,7 +266,14 @@ export default Reports;
 
 
 async function loadReports() {
-  const response = await fetch('');
+  const token = localStorage.getItem('token');
+  const response = await fetch('https://localhost:7098/api/Report', {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token,
+    }
+  });
 
   if (!response.ok) {
     // return { isError: true, message: 'Could not fetch events.' };
@@ -268,7 +281,7 @@ async function loadReports() {
     //   status: 500,
     // });
     throw json(
-      { message: 'Could not fetch projects.' },
+      { message: 'Could not fetch reports.' },
       {
         status: 500,
       }

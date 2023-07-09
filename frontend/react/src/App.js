@@ -5,10 +5,10 @@ import Menu from './pages/menu.jsx';
 import ReportGeneration from './pages/reportGeneration.jsx';
 import Reports, { loader as reportsLoader } from './pages/reports.jsx';
 import Reservations, { loader as reservationsLoader } from './pages/reservations.jsx';
-import ReservationsForm from './pages/reservationsForm.jsx';
+import ReservationsForm from './pages/reservationsForm/reservationsForm.jsx';
 import Workers, { loader as workersLoader } from './pages/workers.jsx';
-import EditReservation from './pages/editReservation.jsx';
-import Resources, {loader as resourcesLoader} from './pages/resources.jsx';
+import EditReservation from './pages/editReservation/editReservation.jsx';
+import Resources, {loader as resourcesLoader} from './pages/resources/resources.jsx';
 import AddWorker from './pages/addWorker.jsx';
 import RemoveWorker from './pages/removeWorker.jsx';
 import AddResource from './pages/addResource.jsx';
@@ -16,7 +16,11 @@ import { checkAuthLoader, tokenLoader } from './util/auth';
 import Root from './pages/root.jsx';
 import HomePage from './pages/home.jsx';
 import Register, { action as registerAuthAction } from './pages/register.jsx';
-import {action as logoutAction} from './pages/logout.jsx'
+import { action as logoutAction } from './pages/logout.jsx'
+import ReportDetails, {loader as reportDetailsLoader} from './pages/reportDetails.jsx';
+import AddSpecialization from './pages/addSpecialization.jsx'
+import EditWorker from './pages/editWorker.jsx';
+import EditResource from './pages/editResource.jsx';
 
 const router = createBrowserRouter([
   {
@@ -54,6 +58,46 @@ const router = createBrowserRouter([
         loader: reportsLoader,
       },
       {
+        path: 'raporty/:reportId',
+        id: 'report-details',
+        loader: reportDetailsLoader,
+        element: <ReportDetails />,
+      },
+      
+      // {
+      //   id: 'reports',
+      //   path: "raporty",
+      //   element: <Reports />,
+      //   loader: reportsLoader,
+      //   children: [
+      //     {
+      //       path: ':reportId',
+      //       id: 'report-details',
+      //       loader: reportDetailsLoader,
+      //       element: <ReportDetails />,
+      //     },
+      //   ],
+      // },
+      // {
+      //   id: 'reports',
+      //   path: "raporty",
+      //   element: <Reports />,
+      //   loader: reportsLoader,
+      //   children: [
+      //     {
+      //       path: ':reportId',
+      //       id: 'report-details',
+      //       loader: reportDetailsLoader,
+      //       children: [
+      //         {
+      //           index: true,
+      //           element: <ReportDetails />,
+      //         },
+      //       ]
+      //     },
+      //   ],
+      // },
+      {
         path: "generowanie-raportu",
         element: <ReportGeneration />,
       },
@@ -65,7 +109,6 @@ const router = createBrowserRouter([
       {
         path: "formularz-rezerwacji",
         element: <ReservationsForm />,
-
       },
       {
         path: "pracownicy",
@@ -75,7 +118,6 @@ const router = createBrowserRouter([
       {
         path: "edytuj-rezerwacje",
         element: <EditReservation />,
-
       },
       {
         path: "stan-zasobow",
@@ -91,8 +133,20 @@ const router = createBrowserRouter([
         element: <RemoveWorker />,
       },
       {
+        path: "edytuj-pracownika",
+        element: <EditWorker />,
+      },
+      {
         path: "dodaj-zasob",
         element: <AddResource />,
+      },
+      {
+        path: "edytuj-zasob",
+        element: <EditResource />,
+      },
+      {
+        path: "dodaj-specjalizacje",
+        element: <AddSpecialization />,
       },
     ],
   },

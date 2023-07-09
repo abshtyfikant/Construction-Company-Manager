@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp, faCaretDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import GridMenuHeader from '../components/gridMenuHeader';
-import { Link, useNavigate, defer, json } from 'react-router-dom';
+import { Link, useLoaderData, useNavigate, defer, json } from 'react-router-dom';
 import classes from './styles/workers.module.css';
 
 function Workers() {
@@ -63,6 +63,7 @@ function Workers() {
     }
   };
 
+  // Funkcja renderująca ikonki sortowania
   const renderSortIcons = (column) => {
     if (sortBy === column) {
       if (sortOrder === 'asc') {
@@ -89,13 +90,16 @@ function Workers() {
     );
   };
 
+  // Efekt, który resetuje sortowanie po zmianie strony
   useEffect(() => {
     setSortBy('');
     setSortOrder(null);
     setIsDefaultSort(true);
   }, [currentPage]);
 
+  // Funkcja renderująca raporty na aktualnej stronie
   const renderWorkers = () => {
+    // Sortowanie raportów
     let sortedWorkers = [...workers];
     if (sortBy) {
       sortedWorkers.sort((a, b) => {
@@ -109,10 +113,12 @@ function Workers() {
       });
     }
 
+    // Paginacja pracowników
     const indexOfLastWorker = currentPage * workersPerPage;
     const indexOfFirstWorker = indexOfLastWorker - workersPerPage;
     const currentWorkers = sortedWorkers.slice(indexOfFirstWorker, indexOfLastWorker);
 
+    // Renderowanie wierszy pracowników
     return currentWorkers.map((worker, index) => (
       <>
         <tr key={index} onClick={() => setOpenDetails((prev) => !prev)}>
@@ -123,34 +129,9 @@ function Workers() {
           <td>{worker.mainSpecialization}</td>
           <td className={classes.alignLeft}>{worker.ratePerHour}</td>
           <td className={classes.alignRight}>
-            <FontAwesomeIcon icon={faCaretDown} className={classes.sortIcon} />
+           <button onClick={() => { navigate("/edytuj-pracownika", { state: { worker: worker } }) }}>Edytuj</button>
           </td>
         </tr>
-        {openDetails ? (
-          <tr className={classes.dropdownDetails}>
-            <td colSpan={3}>
-              <p>Klient:</p>
-              <p>Zespół wykonawczy:</p>
-            </td>
-            <td colSpan={3}>
-              <p>Przydział zasobów:</p>
-              <p>Materiały:</p>
-            </td>
-            <td colSpan={3}>
-              <p>Koszt materiałów:</p>
-              <p>Koszt pracowników:</p>
-              <p
-                className={classes.editWorker}
-                onClick={() => { navigate("/edytuj-rezerwacje", { state: { worker: worker } }) }}
-              >
-                modyfikuj rezerwację
-              </p>
-              <p>generuj raport</p>
-              <p>+ Dodaj komentarz</p>
-            </td>
-          </tr>
-        )
-          : null}
       </>
     ));
   };
@@ -158,6 +139,7 @@ function Workers() {
   const openWorkerDetails = () => {
   }
 
+  // Funkcja zmieniająca aktualną stronę
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };

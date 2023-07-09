@@ -112,6 +112,9 @@
     display: flex;
     justify-content: flex-start;
   }
+  .reservations .thAlignLeft p {
+    margin-right: 20px;
+  }
   
   .reservations .thAlignRight {
     margin-left: auto;

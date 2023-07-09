@@ -98,7 +98,7 @@ function ReportGeneration() {
           >
             <option value=''>Wybierz z listy</option>
             {fetchedWorkers && fetchedWorkers.map((worker) => (
-              <option key={worker} value={worker}>{worker}</option>
+              <option key={worker.id} value={worker.id}>{worker.firstName} {worker.lastName}</option>
             ))}
           </select>
         );
