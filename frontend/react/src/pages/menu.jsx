@@ -37,6 +37,9 @@ function Menu() {
           <div>
             <Link className='menu-element' to="/pracownicy">Pracownicy</Link>
           </div>
+          <div>
+            <Link className='menu-element' to="/dodaj-specjalizacje">Dodaj specjalizację</Link>
+          </div>
         </nav>
       </section>
     </section>

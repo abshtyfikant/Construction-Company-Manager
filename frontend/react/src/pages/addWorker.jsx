@@ -104,7 +104,7 @@ function AddWorker() {
                 })}
               </select>
               <label>
-                Stawka godzinowa:
+                Stawka godzinowa (zł/h):
                 <input type="text" name="hourlyRate" ref={hourlyRateRef} />
               </label>
             </div>

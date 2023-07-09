@@ -5,10 +5,51 @@ import GridMenuHeader from '../components/gridMenuHeader';
 import { Link, useLoaderData, useNavigate, defer, json } from 'react-router-dom';
 import classes from './styles/resources.module.css';
 
+function Accordion({ resource, index, resourcesAllocation }) {
+  const navigate = useNavigate();
+  const [openDetails, setOpenDetails] = useState(false);
+  return (
+    <>
+      <tr key={index} onClick={() => setOpenDetails((prev) => !prev)}>
+        <td>{resource.id}</td>
+        <td>{resource.serviceType}</td>
+        <td className={classes.alignLeft}>{resource.paymentStatus}</td>
+        <td className={classes.alignRight}>
+          <FontAwesomeIcon icon={faCaretDown} className={classes.sortIcon} />
+        </td>
+      </tr>
+      {openDetails ? (resourcesAllocation && resourcesAllocation.forEach(allocation => {
+        if (resource.id === allocation.serviceId) {
+          <tr className={classes.dropdownDetails}>
+            <td>
+              <p>Ilość:</p>
+              {allocation.quantinity &&
+                <p>{allocation.quantinity}</p>
+              }
+            </td>
+            <td>
+              <p>Data od:</p>
+              {allocation.beginDate}
+            </td>
+            <td>
+              <p>Data do:</p>
+              {allocation.endDate}
+            </td>
+          </tr>
+        }
+      }))
+        : null
+      }
+    </>
+  )
+}
+
+
 function Resources() {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const [resources, setResources] = useState([]);
+  const [resourcesAllocation, setResourcesAllocation] = useState([]);
   const [sortBy, setSortBy] = useState(''); // Kolumna, według której sortujemy
   const [sortOrder, setSortOrder] = useState(null); // Kierunek sortowania (asc/desc/null)
   const [isDefaultSort, setIsDefaultSort] = useState(true); // Informacja o domyślnym sortowaniu
@@ -38,11 +79,29 @@ function Resources() {
     } catch (error) {
       console.log('Błąd podczas komunikacji z API:', error);
     }
+
+    try {
+      const response = await fetch('https://localhost:7098/api/ResourceAllocation', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setResourcesAllocation(data);
+      } else {
+        console.log('Błąd podczas pobierania danych z API:', response.status);
+      }
+    } catch (error) {
+      console.log('Błąd podczas komunikacji z API:', error);
+    }
   }
-    // Efekt, który pobiera dane raportów z API przy ładowaniu komponentu
-    useEffect(() => {
-      fetchResources();
-    }, []);
+  // Efekt, który pobiera dane raportów z API przy ładowaniu komponentu
+  useEffect(() => {
+    fetchResources();
+  }, []);
 
 
 
@@ -121,39 +180,7 @@ function Resources() {
     // Renderowanie wierszy zasobów
     return currentResources.map((resource, index) => (
       <>
-        <tr key={index} onClick={() => setOpenDetails((prev) => !prev)}>
-          <td>{resource.id}</td>
-          <td>{resource.name}</td>
-          <td className={classes.alignLeft}>{resource.quantity}</td>
-          <td className={classes.alignRight}>
-            <FontAwesomeIcon icon={faCaretDown} className={classes.sortIcon} />
-          </td>
-        </tr>
-        {openDetails ? (
-          <tr className={classes.dropdownDetails}>
-            <td colSpan={3}>
-              <p>Klient:</p>
-              <p>Zespół wykonawczy:</p>
-            </td>
-            <td colSpan={3}>
-              <p>Przydział zasobów:</p>
-              <p>Materiały:</p>
-            </td>
-            <td colSpan={3}>
-              <p>Koszt materiałów:</p>
-              <p>Koszt pracowników:</p>
-              <p
-                className={classes.editResource}
-                onClick={() => { navigate("/edytuj-rezerwacje", { state: { resource: resource } }) }}
-              >
-                modyfikuj rezerwację
-              </p>
-              <p>generuj raport</p>
-              <p>+ Dodaj komentarz</p>
-            </td>
-          </tr>
-        )
-          : null}
+        <Accordion resource={resource} index={index} reresourcesAllocation={resourcesAllocation} />
       </>
     ));
   };
