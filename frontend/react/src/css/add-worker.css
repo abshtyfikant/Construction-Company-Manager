@@ -1,9 +1,9 @@
-.container {
+.add-worker.container {
     display: flex;
     justify-content: center;
     align-items: center;
   }
-.container form {
+.add-worker.container form {
     margin-top:50px;
     display: grid;
     grid-template-columns: repeat(1, 1fr);
@@ -14,18 +14,18 @@
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
-  .label-container{
+ .add-worker .label-container{
     display: grid;
     place-items: center;
   }
-  .column {
+ .add-worker .column {
     display: grid;
     gap: 5px;
     text-align: end;
   }
 
 
-input[type="text"] {
+.add-workerinput[type="text"] {
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 3px;
@@ -33,13 +33,13 @@ input[type="text"] {
     margin-bottom: 1rem;
 }
   
-  .button-container {
+ .add-worker .button-container {
     display: grid;
     place-items: center;
     grid-column: 1 / span 2;
   }
   
-  button[type="submit"] {
+ .add-worker button[type="submit"] {
     margin-top: 1rem;
     padding: 10px 20px;
     background-color: rgb(104, 102, 102);
@@ -49,6 +49,6 @@ input[type="text"] {
     cursor: pointer;
   }
   
-  button[type="submit"]:hover {
+.add-worker  button[type="submit"]:hover {
     background-color: rgb(134, 134, 134);
   }

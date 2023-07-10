@@ -136,7 +136,7 @@ export default function WorkerForm({ defaultValue, method }) {
     };
 
     return (
-        <div>
+        <div className='worker-form'>
             <div className='container'>
                 <form onSubmit={handleSubmit}>
                     <div className="label-container">

@@ -450,13 +450,25 @@ export default function ReservationForm({ defaultValue, method }) {
                         }
                     })}
                 </select>
+
+                <select
+                    onChange={(e) => { tmpWorker.function = e.target.value }}
+                    className={classes.formInput}
+                    disabled={tmpWorker ? false : true}
+                >
+                    <option value=''>Wybierz z listy</option>
+                    {fetchedSpecializations && fetchedSpecializations.map((specialization) => {
+                        return (
+                            <option key={specialization.id} value={specialization.id}>
+                                {specialization.name}
+                            </option>
+                        )
+                    })}
+                </select>
                 <button
                     onClick={(e) => {
                         e.preventDefault();
-                        setWorkers([{
-                            id: 0,
-                            function: tmpSpec,
-                        }, ...workers]);
+                        setWorkers([tmpWorker, ...workers]);
                         setPopupOpen(false);
                     }}>
                     Dodaj pracownika

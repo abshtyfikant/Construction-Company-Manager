@@ -57,3 +57,24 @@ h1{
   text-align: left;
 }
 
+.start-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100vh;
+}
+
+.start-page h1 {
+  margin-bottom: 20px;
+}
+
+.start-page a {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: gray;
+  color: white;
+  text-decoration: none;
+  margin: 5px;
+}

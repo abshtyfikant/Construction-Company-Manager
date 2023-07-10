@@ -56,7 +56,7 @@ function Accordion({ reservation, index }) {
             >
               modyfikuj rezerwację
             </p>
-            <p>+ generuj raport</p>
+            <p>generuj raport</p>
             <p>+ Dodaj komentarz</p>
           </td>
         </tr>

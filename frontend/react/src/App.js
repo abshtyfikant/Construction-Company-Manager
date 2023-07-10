@@ -71,6 +71,46 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: 'raporty/:reportId',
+        id: 'report-details',
+        loader: reportDetailsLoader,
+        element: <ReportDetails />,
+      },
+      
+      // {
+      //   id: 'reports',
+      //   path: "raporty",
+      //   element: <Reports />,
+      //   loader: reportsLoader,
+      //   children: [
+      //     {
+      //       path: ':reportId',
+      //       id: 'report-details',
+      //       loader: reportDetailsLoader,
+      //       element: <ReportDetails />,
+      //     },
+      //   ],
+      // },
+      // {
+      //   id: 'reports',
+      //   path: "raporty",
+      //   element: <Reports />,
+      //   loader: reportsLoader,
+      //   children: [
+      //     {
+      //       path: ':reportId',
+      //       id: 'report-details',
+      //       loader: reportDetailsLoader,
+      //       children: [
+      //         {
+      //           index: true,
+      //           element: <ReportDetails />,
+      //         },
+      //       ]
+      //     },
+      //   ],
+      // },
+      {
         path: "generowanie-raportu",
         element: <ReportGeneration />,
       },
