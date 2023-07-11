@@ -597,10 +597,8 @@ export default function ReservationForm({ defaultValue, method }) {
                             <button onClick={handleAddMaterial}>Dodaj materiał</button>
                         </div>
                     );
-
             }
         }
-
     };
 
     return (

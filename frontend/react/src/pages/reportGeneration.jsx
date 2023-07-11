@@ -16,7 +16,7 @@ function ReportGeneration() {
   const [startDate, setStartDate] = React.useState('');
   const [endDate, setEndDate] = React.useState('');
   const [reportType, setReportType] = React.useState('');
-  const [slectedVal, setSelectedVal] = React.useState('');
+  const [selectedVal, setSelectedVal] = React.useState('');
   const [fetchedWorkers, setFetchedWorkers] = React.useState('');
   const [fetchedServices, setFetchedServices] = React.useState('');
 
@@ -128,7 +128,7 @@ function ReportGeneration() {
     e.preventDefault();
     const reportData = {
       id: 0,
-      serviceId: 0,
+      serviceId: selectedVal,
       reportType: reportType,
       description: description,
       beginDate: startDate,
@@ -158,7 +158,7 @@ function ReportGeneration() {
 
     return navigate('/raporty');
   };
-
+console.log(selectedVal)
   return (
     <div className={classes.container}>
       <GridMenuHeader headerTitle="Generowanie raportu" />

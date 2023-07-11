@@ -4,17 +4,19 @@ import { faCaretUp, faCaretDown, faChevronLeft, faChevronRight } from '@fortawes
 import GridMenuHeader from '../components/gridMenuHeader';
 import { Link, useLoaderData, useNavigate, defer, json } from 'react-router-dom';
 import classes from './styles/reservations.module.css';
+import Comments from '../components/comments';
 
-function Accordion({ reservation, index }) {
+function Accordion({ reservation, index, handleOpenComments }) {
   const navigate = useNavigate();
   const [openDetails, setOpenDetails] = useState(false);
+
   return (
     <>
       <tr key={index} onClick={() => setOpenDetails((prev) => !prev)}>
         <td>{reservation.id}</td>
         <td>{reservation.serviceType}</td>
-        <td>{reservation.beginDate}</td>
-        <td>{reservation.endDate}</td>
+        <td>{reservation.beginDate.slice(0, 10)}</td>
+        <td>{reservation.endDate.slice(0, 10)}</td>
         <td>{reservation.city}</td>
         <td>{reservation.serviceStatus}</td>
         <td className={classes.alignLeft}>{reservation.paymentStatus}</td>
@@ -57,7 +59,7 @@ function Accordion({ reservation, index }) {
               modyfikuj rezerwację
             </p>
             <p>generuj raport</p>
-            <p>+ Dodaj komentarz</p>
+            <p onClick={() => handleOpenComments(true)}>+ Dodaj komentarz</p>
           </td>
         </tr>
       )
@@ -78,7 +80,9 @@ function Reservations() {
   const [currentPage, setCurrentPage] = useState(1); // Aktualna strona
   const reservationsPerPage = 10; // Liczba raportów na stronie
   const maxVisiblePages = 5; // Maksymalna liczba widocznych stron paginacji
-  const ellipsis = '...'; // Symbol kropek
+  const ellipsis = '...'; // Symbol kropek const [openComments, setOpenComments] = useState(false);
+  const [openComments, setOpenComments] = useState(false);
+  console.log(openComments)
 
   // Funkcja pobierająca dane raportów z API
   async function fetchReservations() {
@@ -101,30 +105,30 @@ function Reservations() {
     }
 
     reservations.map(async (reservation) => {
-    try {
-      const response = await fetch('https://localhost:7098/api/Client/' + reservation.clientId, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token,
-        },
-      });
+      try {
+        const response = await fetch('https://localhost:7098/api/Client/' + reservation.clientId, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          },
+        });
 
-      if (response.ok) {
-        const data = await response.json();
-        reservation.client = data;
-      } else {
-        console.log('Błąd podczas pobierania danych z API:', response.status);
+        if (response.ok) {
+          const data = await response.json();
+          reservation.client = data;
+        } else {
+          console.log('Błąd podczas pobierania danych z API:', response.status);
+        }
+      } catch (error) {
+        console.log('Błąd podczas komunikacji z API:', error);
       }
-    } catch (error) {
-      console.log('Błąd podczas komunikacji z API:', error);
-    }
-  })
+    })
   }
-console.log(reservations)
-    // Efekt, który pobiera dane raportów z API przy ładowaniu komponentu
-    useEffect(() => {
-      fetchReservations();
-    }, []);
+
+  // Efekt, który pobiera dane raportów z API przy ładowaniu komponentu
+  useEffect(() => {
+    fetchReservations();
+  }, []);
 
   // Funkcja sortująca rezerwacje po kliknięciu w nagłówek kolumny
   const sortReservations = (column) => {
@@ -177,6 +181,10 @@ console.log(reservations)
     setIsDefaultSort(true);
   }, [currentPage]);
 
+  const handleOpenComments = (open) => {
+    setOpenComments(open);
+  };
+
   // Funkcja renderująca rezerwacje na aktualnej stronie
   const renderReservations = () => {
     // Sortowanie raportów
@@ -201,7 +209,9 @@ console.log(reservations)
     // Renderowanie wierszy rezerwacji
     return currentReservations.map((reservation, index) => (
       <>
-       {<Accordion reservation={reservation} index={index} />}
+      {console.log(currentReservations)}
+        <Accordion reservation={reservation} index={index} handleOpenComments={handleOpenComments} />
+        <Comments isOpen={openComments} serviceId={reservation.id}/>
       </>
     ));
   };
@@ -293,6 +303,10 @@ console.log(reservations)
 
   return (
     <section className={classes.reservations}>
+      <span
+        className={classes.backdrop}
+        style={{ display: openComments ? 'block' : 'none' }}
+        onClick={() => setOpenComments(false)} />
       <GridMenuHeader headerTitle="Rezerwacje" />
       <div className={classes.tableContainer}>
         <table className={classes.table}>
