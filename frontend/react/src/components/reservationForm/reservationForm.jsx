@@ -303,11 +303,11 @@ export default function ReservationForm({ defaultValue, method }) {
             }
 
             if (!response.ok) {
-                throw json({ message: 'Could not save materials.' }, { status: 500 });
+                throw json({ message: 'Could not save resource allocation.' }, { status: 500 });
             }
             data = [...data, await response.json()];
         });
-        console.log("resource submitted");
+        console.log("resources submitted");
         return data;
     };
 
@@ -518,6 +518,7 @@ export default function ReservationForm({ defaultValue, method }) {
                 <button
                     onClick={(e) => {
                         e.preventDefault();
+                        console.log(tmpResource)
                         setResources([tmpResource, ...resources]);
                         setPopupOpen(false);
                     }}>

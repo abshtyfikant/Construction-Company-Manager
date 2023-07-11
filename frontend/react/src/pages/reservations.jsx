@@ -27,11 +27,11 @@ function Accordion({ reservation, index, handleOpenComments }) {
       {openDetails ? (
         <tr className={classes.dropdownDetails}>
           <td colSpan={3}>
-            <p>Klient:</p>
+            <p>Klient: {reservation.client?.firstName} {reservation.client?.lastName}</p>
             <p>Zespół wykonawczy:</p>
             {reservation.workers && reservation.workers.map((worker) => {
               return (
-                <p>{worker}</p>
+                <p>{worker.name} {worker.surname}</p>
               );
             })}
           </td>
@@ -39,13 +39,13 @@ function Accordion({ reservation, index, handleOpenComments }) {
             <p>Przydział zasobów:</p>
             {reservation.resources && reservation.resources.map((resource) => {
               return (
-                <p>{resource}</p>
+                <p>{resource.name} {resource.quantity} {resource.unit}</p>
               );
             })}
             <p>Materiały:</p>
             {reservation.materials && reservation.materials.map((material) => {
               return (
-                <p>{material}</p>
+                <p>{material.name} {material.quantity} {material.unit}</p>
               );
             })}
           </td>
@@ -53,13 +53,13 @@ function Accordion({ reservation, index, handleOpenComments }) {
             <p>Koszt materiałów:</p>
             <p>Koszt pracowników:</p>
             <p
-              className={classes.editReservation}
+              className={classes.actions}
               onClick={() => { navigate("/edytuj-rezerwacje", { state: { reservation: reservation } }) }}
             >
-              modyfikuj rezerwację
+              + Modyfikuj rezerwację
             </p>
-            <p>generuj raport</p>
-            <p onClick={() => handleOpenComments(true)}>+ Dodaj komentarz</p>
+            <p className={classes.actions}>+ Generuj raport</p>
+            <p onClick={() => handleOpenComments(true)} className={classes.actions}>+ Dodaj komentarz</p>
           </td>
         </tr>
       )
@@ -82,10 +82,10 @@ function Reservations() {
   const maxVisiblePages = 5; // Maksymalna liczba widocznych stron paginacji
   const ellipsis = '...'; // Symbol kropek const [openComments, setOpenComments] = useState(false);
   const [openComments, setOpenComments] = useState(false);
-  console.log(openComments)
 
   // Funkcja pobierająca dane raportów z API
   async function fetchReservations() {
+    let tmpReservations = {};
     try {
       const response = await fetch('https://localhost:7098/api/Service', {
         headers: {
@@ -96,7 +96,7 @@ function Reservations() {
 
       if (response.ok) {
         const data = await response.json();
-        setReservations(data);
+        tmpReservations = data;
       } else {
         console.log('Błąd podczas pobierania danych z API:', response.status);
       }
@@ -104,7 +104,7 @@ function Reservations() {
       console.log('Błąd podczas komunikacji z API:', error);
     }
 
-    reservations.map(async (reservation) => {
+    tmpReservations.map(async (reservation) => {
       try {
         const response = await fetch('https://localhost:7098/api/Client/' + reservation.clientId, {
           headers: {
@@ -122,7 +122,65 @@ function Reservations() {
       } catch (error) {
         console.log('Błąd podczas komunikacji z API:', error);
       }
+
+      try {
+        const response = await fetch('https://localhost:7098/api/ResourceAllocation/Service/' + reservation.id, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          },
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          reservation.resources = data;
+        } else {
+          console.log('Błąd podczas pobierania danych z API:', response.status);
+        }
+      } catch (error) {
+        console.log('Błąd podczas komunikacji z API:', error);
+      }
+
+      try {
+        const response = await fetch('https://localhost:7098/api/Assignment/GetServiceAssignments/' + reservation.id, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          },
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          reservation.workers = data;
+        } else {
+          console.log('Błąd podczas pobierania danych z API:', response.status);
+        }
+      } catch (error) {
+        console.log('Błąd podczas komunikacji z API:', error);
+      }
+
+      try {
+        const response = await fetch('https://localhost:7098/api/Material/GetByService/' + reservation.id, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          },
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          reservation.materials = data;
+        } else {
+          console.log('Błąd podczas pobierania danych z API:', response.status);
+        }
+      } catch (error) {
+        console.log('Błąd podczas komunikacji z API:', error);
+      }
     })
+
+    
+    console.log(tmpReservations);
+    setReservations(tmpReservations);
   }
 
   // Efekt, który pobiera dane raportów z API przy ładowaniu komponentu

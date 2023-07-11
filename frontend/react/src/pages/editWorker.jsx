@@ -11,7 +11,7 @@ function EditWorker() {
   return (
     <div>
       <GridMenuHeader headerTitle="Edytuj pracownika" />
-      <WorkerForm defaultValue={location.state.worker} method={'patch'} />
+      <WorkerForm defaultValue={location.state.worker} method={'put'} />
     </div>
   );
 }

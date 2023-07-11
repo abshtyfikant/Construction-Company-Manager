@@ -10,7 +10,7 @@ function EditResource() {
   return (
     <div>
       <GridMenuHeader headerTitle="Edytuj zasób" />
-      <ResourceForm defaultValue={location.state.resource} method={'patch'}/>
+      <ResourceForm defaultValue={location.state.resource} method={'put'}/>
     </div>
   );
 }
