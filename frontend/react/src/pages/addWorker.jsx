@@ -7,7 +7,7 @@ function AddWorker() {
   const token = localStorage.getItem('token');
 
   return (
-    <div>
+    <div className='add-worker'>
       <GridMenuHeader headerTitle="Dodaj pracownika" />
       <WorkerForm method={'post'} />
     </div>

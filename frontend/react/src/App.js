@@ -56,19 +56,12 @@ const router = createBrowserRouter([
         path: "raporty",
         element: <Reports />,
         loader: reportsLoader,
-        children: [
-          {
-            path: ':reportId',
-            id: 'report-details',
-            loader: reportDetailsLoader,
-            children: [
-              {
-                index: true,
-                element: <ReportDetails />,
-              },
-            ]
-          },
-        ],
+      },
+      {
+        path: 'raporty/:reportId',
+        id: 'report-details',
+        loader: reportDetailsLoader,
+        element: <ReportDetails />,
       },
       {
         path: "generowanie-raportu",

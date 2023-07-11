@@ -10,7 +10,7 @@ export default function ResourceForm({ defaultValue, method }) {
   const quantityRef = React.useRef();
   const nameRef = React.useRef();
   const [unit, setUnit] = React.useState(defaultValue ? (defaultValue.unit ? defaultValue.unit : undefined) : undefined);
-  const [allocation, setAllocation] = React.useState();
+  const [allocation, setAllocation] = React.useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

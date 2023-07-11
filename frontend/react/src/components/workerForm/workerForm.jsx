@@ -36,10 +36,6 @@ export default function WorkerForm({ defaultValue, method }) {
         }
     }, []);
 
-    React.useEffect(() => {
-        fetchData();
-    }, [fetchData]);
-
     const handleSubmit = async (event) => {
         event.preventDefault();
         const workerData = {
@@ -124,8 +120,9 @@ export default function WorkerForm({ defaultValue, method }) {
     };
 
     React.useEffect(() => {
+        fetchData();
         getAlloc();
-    }, [getAlloc]);
+    }, [fetchData, getAlloc]);
 
     const checkAlloc = () => {
         if (allocation.length > 0) {
@@ -136,7 +133,7 @@ export default function WorkerForm({ defaultValue, method }) {
     };
 
     return (
-        <div>
+        <div className='worker-form'>
             <div className='container'>
                 <form onSubmit={handleSubmit}>
                     <div className="label-container">

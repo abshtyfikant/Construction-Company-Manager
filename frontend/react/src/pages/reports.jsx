@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp, faCaretDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import GridMenuHeader from '../components/gridMenuHeader';
-// import reportsData from '../models/reportsData';
-import { Link, useLoaderData, defer, json } from 'react-router-dom';
+import { Link, defer, json } from 'react-router-dom';
 
 function Reports() {
   const token = localStorage.getItem('token');
@@ -121,8 +120,14 @@ function Reports() {
         <td>{report.beginDate}</td>
         <td>{report.endDate}</td>
         <td>{report.author}</td>
-        <Link to={(`${report.id}`)}>Podgląd</Link>
-        <td className='align-left'>{report.description}</td>
+        <td className='align-left'>
+  {report.description.length > 30
+    ? `${report.description.substring(0, 30)}...`
+    : report.description}
+</td>
+
+        <td className='raport-btn'><Link to={`/raporty/${report.id}`}>Podgląd</Link>
+</td>
       </tr>
     ));
   };

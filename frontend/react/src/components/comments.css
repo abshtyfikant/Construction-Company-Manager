@@ -1,0 +1,21 @@
+.comments-hidden {
+  display: none;
+}
+
+.comments-visible {
+    display: block;
+    position: absolute;
+    z-index: 999999;
+    background-color: lightgrey;
+    border: 1px solid black;
+    top: 30%;
+    padding: 2rem 3rem;
+    top: 10%;
+    left: calc(50% - 250px);
+    width: 500px;
+}
+
+.comments-visible .comments__content {
+  height: 60vh;
+  overflow-y: scroll;
+}
