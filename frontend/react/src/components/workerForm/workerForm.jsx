@@ -39,12 +39,12 @@ export default function WorkerForm({ defaultValue, method }) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const workerData = {
-            id: 0,
+            id: method === "put" ? defaultValue.id : 0,
             firstName: firstNameRef.current.value,
             lastName: lastNameRef.current.value,
             city: cityRef.current.value,
             ratePerHour: Number(hourlyRateRef.current.value),
-            mainSpecializationId: specialization,
+            mainSpecializationId: Number(specialization)
         };
 
         const response = await fetch('https://localhost:7098/api/Employee', {
@@ -53,7 +53,7 @@ export default function WorkerForm({ defaultValue, method }) {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + token,
             },
-            body: JSON.stringify(workerData),
+            body: JSON.stringify(workerData)
         });
 
         if (response.status === 422) {
@@ -63,7 +63,7 @@ export default function WorkerForm({ defaultValue, method }) {
         if (!response.ok) {
             throw json({ message: 'Could not save worker.' }, { status: 500 });
         }
-        const data = await response.json();
+
         return navigate('/pracownicy'); // Przekierowanie po dodaniu pracownika
     };
 
@@ -145,7 +145,7 @@ export default function WorkerForm({ defaultValue, method }) {
                                     name="firstName"
                                     ref={firstNameRef}
                                     defaultValue={defaultValue ? defaultValue.firstName : null}
-                                    disabled={method === 'patch' ? true : false}
+                                    disabled={method === 'put' ? true : false}
                                 />
                             </label>
                             <label>
@@ -155,7 +155,7 @@ export default function WorkerForm({ defaultValue, method }) {
                                     name="lastName"
                                     ref={lastNameRef}
                                     defaultValue={defaultValue ? defaultValue.lastName : null}
-                                    disabled={method === 'patch' ? true : false}
+                                    disabled={method === 'put' ? true : false}
                                 />
                             </label>
                             <label>
@@ -196,7 +196,7 @@ export default function WorkerForm({ defaultValue, method }) {
                     </div>
                     <div className="button-container">
                         <button type="submit">Dodaj pracownika</button>
-                        {method === 'patch' &&
+                        {method === 'put' &&
                             <button
                                 onClick={(e) => { handleDelete(e) }}
                                 disabled={checkAlloc() ? true : false}

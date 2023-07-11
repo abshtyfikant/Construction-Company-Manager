@@ -1,141 +1,149 @@
 .reservations .tableContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 50px;
-  }
-  .reservations .table{
-    text-align: center;
-    border-collapse: collapse;
-    width: 50%;
-  }
-  .reservations table th {
-    cursor: pointer;
-  }
-  .reservations table th:nth-child(5) {
-    cursor: default;
-  }
-  .reservations table thead tr{
-    height: 50px;
-  }
-  .reservations table th > div{
-    display: flex;
-    align-items: center;
-    align-content: center;
-    justify-content: center;
-  }
-  .reservations table th > div > div{
-    display: grid;
-  }
-  .reservations table th > div > div >svg:first-child{
-    margin-bottom: -7px;
-  }
-  .reservations .table {
-    border-collapse: collapse;
-    width: auto;
-  }
-  
-  /* .table thead th, */
-  .reservations .table tbody td {
-    background-color: #f2f2f2;
-    border-bottom: 1px solid black;
-    border-top: 1px solid black;
-    padding: 10px 15px;
-    text-align: center;
-  }
-  .reservations .table tbody td:nth-child(1) {
-    border-left: 1px solid black;
-  }
-  .reservations .table tbody td:nth-child(8) {
-    border-right: 1px solid black;
-  }
-  
-  .reservations .table thead th {
-    font-weight: bold;
-    text-align: left;
-    padding: 20px 15px;
-  }
-  
-  .reservations .table tbody .alignLeft{
-    text-align: left;
-  }
-  
-  .reservations .table .dropdownDetails {
-    background-color: #f2f2f2;
-    border-left: 1px solid black;
-    border-right: 1px solid black;
-    width: 100%;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+.reservations .table {
+  text-align: center;
+  border-collapse: collapse;
+  width: 50%;
+}
+.reservations table th {
+  cursor: pointer;
+}
+.reservations table th:nth-child(5) {
+  cursor: default;
+}
+.reservations table thead tr {
+  height: 50px;
+}
+.reservations table th > div {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+}
+.reservations table th > div > div {
+  display: grid;
+}
+.reservations table th > div > div > svg:first-child {
+  margin-bottom: -7px;
+}
+.reservations .table {
+  border-collapse: collapse;
+  width: auto;
+}
 
-  .reservations .pagination {
-    display: flex;
-    justify-content: center;
-    list-style: none;
-    padding: 0;
-    margin-top: 2rem;
-  }
-  
-  .reservations .pagination li {
-    margin: 0 0.3rem;
-  
-  }
-  
-  /* Dodatkowe style dla aktywnej strony */
-  .reservations .pagination li.active button {
-    font-weight: 700;
-    border-bottom: 1px solid black;
-  }
-  .reservations .pagination li button {
-    font-size: 1.1rem;
-  }
-  
-  .reservations .pagination li button {
-    border: none;
-    background: none;
-    cursor: pointer;
-  }
-  
-  .reservations .sortIcon {
-    color: #ccc; /* Kolor domyślny dla ikon sortowania */
-    margin-left: 10px; /* Odstęp między ikonkami a tekstem */
-  }
-  
-  .reservations .active {
-    color: #000;
-  }
-  
-  .reservations .sortIconActive {
-    color: #000; /* Kolor dla aktywnego sortowania */
-  }
-  
-  .reservations .thAlignLeft {
-    display: flex;
-    justify-content: flex-start;
-  }
-  .reservations .thAlignLeft p {
-    margin-right: 20px;
-  }
-  
-  .reservations .thAlignRight {
-    margin-left: auto;
-  }
-  .reservations .thAlignRight a {
-    text-decoration: none;
-    color: black;
-    background-color: #f2f2f2;
-    padding: 0.5rem 1rem ;
-    transition: background-color 0.3s ease;
-  }
-  .reservations .thAlignRight a:hover {
-    background-color: #e1e0e0;
-  }
+/* .table thead th, */
+.reservations .table tbody td {
+  background-color: #f2f2f2;
+  border-bottom: 1px solid black;
+  border-top: 1px solid black;
+  padding: 10px 15px;
+  text-align: center;
+}
+.reservations .table tbody td:nth-child(1) {
+  border-left: 1px solid black;
+}
+.reservations .table tbody td:nth-child(8) {
+  border-right: 1px solid black;
+}
 
-  .backdrop {
-    width: 100vw;
-    height: 100vw;
-    z-index: 1;
-    background-color: rgb(58, 58, 58);
-    position: absolute;
-    overflow: hidden;
-    opacity: 50%;
-  }
+.reservations .table thead th {
+  font-weight: bold;
+  text-align: left;
+  padding: 20px 15px;
+}
+
+.reservations .table tbody .alignLeft {
+  text-align: left;
+}
+
+.reservations .table .dropdownDetails {
+  background-color: #f2f2f2;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  width: 100%;
+}
+
+.reservations .pagination {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin-top: 2rem;
+}
+
+.reservations .pagination li {
+  margin: 0 0.3rem;
+}
+
+/* Dodatkowe style dla aktywnej strony */
+.reservations .pagination li.active button {
+  font-weight: 700;
+  border-bottom: 1px solid black;
+}
+.reservations .pagination li button {
+  font-size: 1.1rem;
+}
+
+.reservations .pagination li button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.reservations .sortIcon {
+  color: #ccc; /* Kolor domyślny dla ikon sortowania */
+  margin-left: 10px; /* Odstęp między ikonkami a tekstem */
+}
+
+.reservations .active {
+  color: #000;
+}
+
+.reservations .sortIconActive {
+  color: #000; /* Kolor dla aktywnego sortowania */
+}
+
+.reservations .thAlignLeft {
+  display: flex;
+  justify-content: flex-start;
+}
+.reservations .thAlignLeft p {
+  margin-right: 20px;
+}
+
+.reservations .thAlignRight {
+  margin-left: auto;
+}
+.reservations .thAlignRight a {
+  text-decoration: none;
+  color: black;
+  background-color: #f2f2f2;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.3s ease;
+}
+.reservations .thAlignRight a:hover {
+  background-color: #e1e0e0;
+}
+
+.reservations .actions {
+  text-decoration: underline;
+}
+
+.reservations .actions:hover {
+  cursor: pointer;
+  color: rgb(61, 61, 61);
+}
+
+.backdrop {
+  width: 100vw;
+  height: 100vw;
+  z-index: 1;
+  background-color: rgb(58, 58, 58);
+  position: absolute;
+  overflow: hidden;
+  opacity: 50%;
+}

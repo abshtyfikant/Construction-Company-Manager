@@ -103,15 +103,17 @@ export default function Comments({ serviceId, isOpen }) {
                             if (serviceId === comment.serviceId) {
                                 return (
                                     <div className='comment-content'>
-                                        <p>{comment.author}</p>
-                                        <p>{comment.date.slice(0, 10)}</p>
-                                        <p>{comment.content}</p>
+                                        <div className='comment-content__header'>
+                                            <p className='author'>{comment.author}</p>
+                                            <p className='date'>{comment.date.slice(0, 10)}</p>
+                                        </div>
+                                        <p className='content'>{comment.content}</p>
                                     </div>
                                 )
                             }
                         }) : <p>No comments</p>}
                     </div>
-                    <div className="input">
+                    <div className="comment-input">
                         <input
                             id='new-comment'
                             type="text"
@@ -126,7 +128,7 @@ export default function Comments({ serviceId, isOpen }) {
             );
         }
     };
-    console.log(serviceId)
+
     return (
         <div className={`comments-${isOpen ? "visible" : "hidden"}`}>
             {handlePopup()}

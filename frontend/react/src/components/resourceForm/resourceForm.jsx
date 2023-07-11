@@ -145,7 +145,7 @@ export default function ResourceForm({ defaultValue, method }) {
           </div>
           <div className="button-container">
             <button type="submit">Zatwierdź</button>
-            {method === 'patch' &&
+            {method === '' &&
               <button
                 onClick={(e) => { handleDelete(e) }}
                 disabled={checkAlloc() ? true : false}

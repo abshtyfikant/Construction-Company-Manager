@@ -10,7 +10,7 @@ export default function EditReservation () {
     return (
         <div className={classes.container}>
             <GridMenuHeader headerTitle="Edytowanie raportu" />
-            <ReservationForm defaultValue={location.state.reservation} method={"patch"} />
+            <ReservationForm defaultValue={location.state.reservation} method={"put"} />
         </div>
     );
 }
