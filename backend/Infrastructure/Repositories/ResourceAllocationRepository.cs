@@ -47,6 +47,14 @@ public class ResourceAllocationRepository : IResourceAllocationRepository
         return allocation;
     }
 
+    public double GetMaxQuantity(int resourceId)
+    {
+        if (!_dbContext.Resources.Any(s => s.Id == resourceId))
+            throw new Exception("Resource not found");
+        var max = _dbContext.Resources.FirstOrDefault(i => i.Id == resourceId).Quantity;
+        return max;
+    }
+
     public void UpdateAllocation(ServiceResource allocation)
     {
         _dbContext.Attach(allocation);
