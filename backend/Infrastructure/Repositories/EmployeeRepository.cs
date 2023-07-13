@@ -1,5 +1,6 @@
 ﻿using Domain.Interfaces.Repository;
 using Domain.Model;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Repositories;
 
@@ -41,7 +42,7 @@ public class EmployeeRepository : IEmployeeRepository
     public void DeleteEmployee(int employeeId)
     {
         var assignments = _dbContext.Assignments.Where(i => i.EmployeeId == employeeId);
-        if (assignments is not null)
+        if (!assignments.IsNullOrEmpty())
         {
             throw new Exception("Employee is assigned to service");
         }

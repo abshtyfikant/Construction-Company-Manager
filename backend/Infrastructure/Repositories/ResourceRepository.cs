@@ -1,5 +1,6 @@
 ﻿using Domain.Interfaces.Repository;
 using Domain.Model;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Repositories;
 
@@ -16,7 +17,7 @@ public class ResourceRepository : IResourceRepository
     {
         var resource = _dbContext.Resources.Find(id);
         var allocations = _dbContext.ResourceAllocations.Where(x => x.ResourceId == id);
-        if (allocations is not null)
+        if (!allocations.IsNullOrEmpty())
         {
             throw new Exception("Resource is allocated");
         }   
