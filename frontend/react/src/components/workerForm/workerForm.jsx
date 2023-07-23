@@ -146,6 +146,7 @@ export default function WorkerForm({ defaultValue, method }) {
                                     ref={firstNameRef}
                                     defaultValue={defaultValue ? defaultValue.firstName : null}
                                     disabled={method === 'put' ? true : false}
+                                    required
                                 />
                             </label>
                             <label>
@@ -156,6 +157,7 @@ export default function WorkerForm({ defaultValue, method }) {
                                     ref={lastNameRef}
                                     defaultValue={defaultValue ? defaultValue.lastName : null}
                                     disabled={method === 'put' ? true : false}
+                                    required
                                 />
                             </label>
                             <label>
@@ -165,6 +167,7 @@ export default function WorkerForm({ defaultValue, method }) {
                                     name="city"
                                     ref={cityRef}
                                     defaultValue={defaultValue ? defaultValue.city : null}
+                                    required
                                 />
                             </label>
                             <label>
@@ -173,6 +176,7 @@ export default function WorkerForm({ defaultValue, method }) {
                             <select
                                 onChange={(e) => { setSpecialization(e.target.value) }}
                                 value={specialization}
+                                required
                             >
                                 <option value=''>Wybierz z listy</option>
                                 {fetchedSpecializations && fetchedSpecializations.map((specialization) => {
@@ -190,6 +194,7 @@ export default function WorkerForm({ defaultValue, method }) {
                                     name="hourlyRate"
                                     ref={hourlyRateRef}
                                     defaultValue={defaultValue ? defaultValue.ratePerHour : null}
+                                    required
                                 />
                             </label>
                         </div>

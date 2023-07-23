@@ -5,14 +5,27 @@ import GridMenuHeader from '../components/gridMenuHeader';
 import { Link, useLoaderData, useNavigate, defer, json } from 'react-router-dom';
 import classes from './styles/reservations.module.css';
 import Comments from '../components/comments';
+import Loading from '../components/loading';
 
 function Accordion({ reservation, index, handleOpenComments }) {
   const navigate = useNavigate();
   const [openDetails, setOpenDetails] = useState(false);
+  const [sumMaterials, setSumMaterials] = useState();
+
+  const calcSumMaterials = () => {
+    let tmpSumMaterials = 0;
+    tmpSumMaterials += reservation?.materials?.map((material) => {
+      console.log(tmpSumMaterials)
+      return (
+        parseFloat(material.price) * parseFloat(material.quantity)
+      );
+    });
+    setSumMaterials(tmpSumMaterials)
+  }
 
   return (
     <>
-      <tr key={index} onClick={() => setOpenDetails((prev) => !prev)}>
+      <tr key={index} onClick={() => {setOpenDetails((prev) => !prev); calcSumMaterials();}}>
         <td>{reservation.id}</td>
         <td>{reservation.serviceType}</td>
         <td>{reservation.beginDate.slice(0, 10)}</td>
@@ -31,26 +44,28 @@ function Accordion({ reservation, index, handleOpenComments }) {
             <p>Zespół wykonawczy:</p>
             {reservation.workers && reservation.workers.map((worker) => {
               return (
-                <p>{worker.name} {worker.surname}</p>
+                <p key={worker.id}>{worker.name} {worker.surname}</p>
               );
             })}
           </td>
           <td colSpan={3}>
             <p>Przydział zasobów:</p>
+            <p>Nazwa | Ilość | Jednostka </p>
             {reservation.resources && reservation.resources.map((resource) => {
               return (
-                <p>{resource.name} {resource.quantity} {resource.unit}</p>
+                <p key={resource.id}>{resource.name} {resource.quantity} {resource.unit}</p>
               );
             })}
             <p>Materiały:</p>
+            <p>Nazwa | Cena | Ilość | Jednostka </p>
             {reservation.materials && reservation.materials.map((material) => {
               return (
-                <p>{material.name} {material.quantity} {material.unit}</p>
+                <p key={material.id}>{material.name} | {material.price} | {material.quantity} | {material.unit}</p>
               );
             })}
           </td>
           <td colSpan={3}>
-            <p>Koszt materiałów:</p>
+            <p>Koszt materiałów: {sumMaterials}</p>
             <p>Koszt pracowników:</p>
             <p
               className={classes.actions}
@@ -82,10 +97,11 @@ function Reservations() {
   const maxVisiblePages = 5; // Maksymalna liczba widocznych stron paginacji
   const ellipsis = '...'; // Symbol kropek const [openComments, setOpenComments] = useState(false);
   const [openComments, setOpenComments] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Funkcja pobierająca dane raportów z API
   async function fetchReservations() {
-    let tmpReservations = {};
+    let tmpReservations = [];
     try {
       const response = await fetch('https://localhost:7098/api/Service', {
         headers: {
@@ -130,7 +146,7 @@ function Reservations() {
             'Authorization': 'Bearer ' + token,
           },
         });
-  
+
         if (response.ok) {
           const data = await response.json();
           reservation.resources = data;
@@ -148,7 +164,7 @@ function Reservations() {
             'Authorization': 'Bearer ' + token,
           },
         });
-  
+
         if (response.ok) {
           const data = await response.json();
           reservation.workers = data;
@@ -166,7 +182,7 @@ function Reservations() {
             'Authorization': 'Bearer ' + token,
           },
         });
-  
+
         if (response.ok) {
           const data = await response.json();
           reservation.materials = data;
@@ -176,9 +192,10 @@ function Reservations() {
       } catch (error) {
         console.log('Błąd podczas komunikacji z API:', error);
       }
+      setIsLoading(false);
     })
 
-    
+
     console.log(tmpReservations);
     setReservations(tmpReservations);
   }
@@ -267,9 +284,9 @@ function Reservations() {
     // Renderowanie wierszy rezerwacji
     return currentReservations.map((reservation, index) => (
       <>
-      {console.log(currentReservations)}
+        {console.log(currentReservations)}
         <Accordion reservation={reservation} index={index} handleOpenComments={handleOpenComments} />
-        <Comments isOpen={openComments} serviceId={reservation.id}/>
+        <Comments isOpen={openComments} serviceId={reservation.id} />
       </>
     ));
   };
@@ -361,6 +378,7 @@ function Reservations() {
 
   return (
     <section className={classes.reservations}>
+    <Loading isVisible={isLoading}/>
       <span
         className={classes.backdrop}
         style={{ display: openComments ? 'block' : 'none' }}

@@ -3,6 +3,7 @@ import * as React from 'react';
 import { useNavigate, json, defer, useLoaderData } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faX } from '@fortawesome/free-solid-svg-icons';
+import ErrorMsg from '../errorMsg';
 
 export default function ReservationForm({ defaultValue, method }) {
     const token = localStorage.getItem('token');
@@ -33,6 +34,7 @@ export default function ReservationForm({ defaultValue, method }) {
     const [tmpWorker, setTmpWorker] = React.useState({});
     const [tmpSpec, setTmpSpec] = React.useState();
     const [tmpResource, setTmpResource] = React.useState({});
+    const [openDateErrorMsg, setOpenDateErrorMsg] = React.useState(false);
 
 
     const fetchData = React.useCallback(async () => {
@@ -46,6 +48,7 @@ export default function ReservationForm({ defaultValue, method }) {
             });
 
             if (!response.ok) {
+                alert("Coś poszło nie tak przy pobieraniu danych. Spróbuj ponownie za chwilę.1")
                 throw json(
                     { message: 'Could not fetch reports.' },
                     {
@@ -58,7 +61,7 @@ export default function ReservationForm({ defaultValue, method }) {
             setFetchedWorkers(data);
 
         } catch (error) {
-            //setError("Something went wrong, try again.");
+            alert("Coś poszło nie tak przy pobieraniu danych. Spróbuj ponownie za chwilę.")
         }
 
         try {
@@ -70,6 +73,7 @@ export default function ReservationForm({ defaultValue, method }) {
                 },
             });
             if (!response.ok) {
+                alert("Coś poszło nie tak przy pobieraniu danych. Spróbuj ponownie za chwilę.")
                 throw json(
                     { message: 'Could not fetch reports.' },
                     {
@@ -82,7 +86,7 @@ export default function ReservationForm({ defaultValue, method }) {
             setFetchedAssignments(data);
 
         } catch (error) {
-            //setError("Something went wrong, try again.");
+            alert("Coś poszło nie tak przy pobieraniu danych. Spróbuj ponownie za chwilę.")
         }
 
         try {
@@ -94,6 +98,7 @@ export default function ReservationForm({ defaultValue, method }) {
                 },
             });
             if (!response.ok) {
+                alert("Coś poszło nie tak przy pobieraniu danych. Spróbuj ponownie za chwilę.")
                 throw json(
                     { message: 'Could not fetch reports.' },
                     {
@@ -106,7 +111,7 @@ export default function ReservationForm({ defaultValue, method }) {
             setFetchedResAlloc(data);
 
         } catch (error) {
-            //setError("Something went wrong, try again.");
+            alert("Coś poszło nie tak przy pobieraniu danych. Spróbuj ponownie za chwilę.")
         }
 
         try {
@@ -118,6 +123,7 @@ export default function ReservationForm({ defaultValue, method }) {
                 },
             });
             if (!response.ok) {
+                alert("Coś poszło nie tak przy pobieraniu danych. Spróbuj ponownie za chwilę.")
                 throw new Error('Something went wrong!');
             }
 
@@ -125,7 +131,8 @@ export default function ReservationForm({ defaultValue, method }) {
             setFetchedSpecializations(data);
 
         } catch (error) {
-            //setError("Something went wrong, try again.");
+            alert("Coś poszło nie tak przy pobieraniu danych. Spróbuj ponownie za chwilę.")
+
         }
 
         try {
@@ -138,6 +145,7 @@ export default function ReservationForm({ defaultValue, method }) {
             });
 
             if (!response.ok) {
+                alert("Coś poszło nie tak przy pobieraniu danych. Spróbuj ponownie za chwilę.")
                 throw json(
                     { message: 'Could not fetch reports.' },
                     {
@@ -150,7 +158,7 @@ export default function ReservationForm({ defaultValue, method }) {
             setFetchedResources(data);
 
         } catch (error) {
-            //setError("Something went wrong, try again.");
+            alert("Coś poszło nie tak przy pobieraniu danych. Spróbuj ponownie za chwilę.")
         }
 
         try {
@@ -162,6 +170,7 @@ export default function ReservationForm({ defaultValue, method }) {
                 },
             });
             if (!response.ok) {
+                alert("Coś poszło nie tak przy pobieraniu danych. Spróbuj ponownie za chwilę.")
                 throw json(
                     { message: 'Could not fetch reports.' },
                     {
@@ -174,13 +183,22 @@ export default function ReservationForm({ defaultValue, method }) {
             setFetchedClients(data);
 
         } catch (error) {
-            //setError("Something went wrong, try again.");
+            alert("Coś poszło nie tak przy pobieraniu danych. Spróbuj ponownie za chwilę.")
+
         }
     });
 
     React.useEffect(() => {
         fetchData();
     }, [fetchData]);
+
+    React.useEffect(() => {
+        if (startDate.length === 0 || endDate >= startDate) {
+            setOpenDateErrorMsg(false);
+        } else {
+            setOpenDateErrorMsg(true);
+        }
+    }, [startDate, endDate])
 
     const submitClient = async () => {
         if (!client) {
@@ -204,6 +222,7 @@ export default function ReservationForm({ defaultValue, method }) {
             }
 
             if (!response.ok) {
+                alert("Coś poszło nie tak przy dodawaniu rezerwacji. Spróbuj ponownie za chwilę.1")
                 throw json({ message: 'Could not save client.' }, { status: 500 });
             }
             const data = await response.json();
@@ -240,6 +259,7 @@ export default function ReservationForm({ defaultValue, method }) {
         }
 
         if (!response.ok) {
+            alert("Coś poszło nie tak przy dodawaniu rezerwacji. Spróbuj ponownie za chwilę.2")
             throw json({ message: 'Could not save reservation.' }, { status: 500 });
         }
         const data = await response.json();
@@ -250,7 +270,6 @@ export default function ReservationForm({ defaultValue, method }) {
     const submitMaterials = async (serviceId) => {
         let data = [];
         materials.forEach(async material => {
-            material.id = 0;
             material.serviceId = serviceId;
 
             const response = await fetch('https://localhost:7098/api/Material', {
@@ -267,6 +286,7 @@ export default function ReservationForm({ defaultValue, method }) {
             }
 
             if (!response.ok) {
+                alert("Coś poszło nie tak przy dodawaniu rezerwacji. Spróbuj ponownie za chwilę.3")
                 throw json({ message: 'Could not save material.' }, { status: 500 });
             }
             data = [...data, await response.json()];
@@ -303,6 +323,7 @@ export default function ReservationForm({ defaultValue, method }) {
             }
 
             if (!response.ok) {
+                alert("Coś poszło nie tak przy dodawaniu rezerwacji. Spróbuj ponownie za chwilę.4")
                 throw json({ message: 'Could not save resource allocation.' }, { status: 500 });
             }
             data = [...data, await response.json()];
@@ -320,6 +341,8 @@ export default function ReservationForm({ defaultValue, method }) {
                 employeeId: worker.id,
                 serviceId: reservationId,
                 function: worker.function,
+                beginDate: startDate,
+                endDate: endDate,
             };
 
             const response = await fetch('https://localhost:7098/api/Assignment', {
@@ -331,7 +354,8 @@ export default function ReservationForm({ defaultValue, method }) {
                 body: JSON.stringify(workersAllocationData),
             });
 
-            if (response.status === 422) {
+            if (response.status === 400) {
+                alert("Coś poszło nie tak przy dodawaniu rezerwacji. Spróbuj ponownie za chwilę.5")
                 return response;
             }
 
@@ -347,20 +371,26 @@ export default function ReservationForm({ defaultValue, method }) {
     //Handle form submit - request
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const submittedClient = await submitClient();
-        if (submittedClient.id != undefined) {
-            var submittedReservation = await submitReservation(submittedClient.id);
-            if (submittedReservation.id != undefined) {
-                const response = await Promise.allSettled([submitMaterials(submittedReservation.id), submitResourcesAllocation(submittedReservation.id),
-                submitWorkersAllocation(submittedReservation.id)]);
+        if (!openDateErrorMsg) {
+            const submittedClient = await submitClient();
+            if (submittedClient.id != undefined) {
+                var submittedReservation = await submitReservation(submittedClient.id);
+                if (submittedReservation.id != undefined) {
+                    const response = await Promise.allSettled([submitMaterials(submittedReservation.id), submitResourcesAllocation(submittedReservation.id),
+                    submitWorkersAllocation(submittedReservation.id)]);
+                } else {
+                    alert("Coś poszło nie tak przy dodawaniu rezerwacji. Spróbuj ponownie za chwilę.6")
+                    throw json({ message: 'Something went wrong.' }, { status: 500 });
+                }
             } else {
+                alert("Coś poszło nie tak przy dodawaniu rezerwacji. Spróbuj ponownie za chwilę.7")
                 throw json({ message: 'Something went wrong.' }, { status: 500 });
             }
+            console.log("all submitted");
+            return navigate('/rezerwacje');
         } else {
-            throw json({ message: 'Something went wrong.' }, { status: 500 });
+            return;
         }
-        console.log("all submitted");
-        return navigate('/rezerwacje');
     };
 
     const handlePopupOpen = (e, type) => {
@@ -401,7 +431,7 @@ export default function ReservationForm({ defaultValue, method }) {
             name: resourceNameRef.current.value,
             unit: resourceUnitRef.current.value,
             price: resourceUnitRef.current.value,
-            quantinty: resourceAmountRef.current.value,
+            quantity: resourceAmountRef.current.value,
         }
         setMaterials([...materials, material]);
         setPopupOpen(false);
@@ -451,20 +481,6 @@ export default function ReservationForm({ defaultValue, method }) {
                     })}
                 </select>
 
-                <select
-                    onChange={(e) => { tmpWorker.function = e.target.value }}
-                    className={classes.formInput}
-                    disabled={tmpWorker ? false : true}
-                >
-                    <option value=''>Wybierz z listy</option>
-                    {fetchedSpecializations && fetchedSpecializations.map((specialization) => {
-                        return (
-                            <option key={specialization.id} value={specialization.id}>
-                                {specialization.name}
-                            </option>
-                        )
-                    })}
-                </select>
                 <button
                     onClick={(e) => {
                         e.preventDefault();
@@ -631,6 +647,7 @@ export default function ReservationForm({ defaultValue, method }) {
                             type='date'
                             value={startDate}
                             onChange={(e) => setStartDate(e.target.value)}
+                            max={endDate}
                             required
                         />
                         <input
@@ -638,10 +655,18 @@ export default function ReservationForm({ defaultValue, method }) {
                             id='end-date'
                             type='date'
                             value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
+                            onChange={(e) => {
+                                if (startDate.length > 0 && e.target.value >= startDate) {
+                                    setEndDate(e.target.value);
+                                } else {
+                                    setEndDate(null);
+                                }
+                            }}
+                            min={startDate}
                             required
                         />
                     </div>
+                    <ErrorMsg isVisible={openDateErrorMsg} message="Data końcowa nie może być wcześniejsza niż data rozpoczęcia!" />
                     <label htmlFor='city' className={classes.label}>Miasto:</label>
                     <input
                         className={classes.formInput}

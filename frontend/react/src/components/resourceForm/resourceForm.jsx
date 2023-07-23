@@ -120,6 +120,7 @@ export default function ResourceForm({ defaultValue, method }) {
                   id='resourceName'
                   ref={nameRef}
                   defaultValue={defaultValue ? defaultValue.name : null}
+                  required
                 />
               </label>
               <label htmlFor='quantity'> Ilość: </label>
@@ -129,10 +130,12 @@ export default function ResourceForm({ defaultValue, method }) {
                 id='quantity'
                 ref={quantityRef}
                 defaultValue={defaultValue ? defaultValue.quantity : null}
+                required
               />
               <select
                 onChange={(e) => { setUnit(e.target.value) }}
                 value={unit}
+                required
               >
                 <option value=''>Wybierz z listy</option>
                 <option value='m2'>m<sup>2</sup></option>
