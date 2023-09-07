@@ -79,8 +79,10 @@ export async function action({ request }) {
   }
 
   const resData = await response.json();
-
+  const expiration = new Date();
+  expiration.setTime(expiration.getTime() + (1*60*60*1000));
   localStorage.setItem('token', resData.token);
+  localStorage.setItem('expiration', expiration)
   localStorage.setItem('userId', resData.id);
 
   return redirect('/menu');

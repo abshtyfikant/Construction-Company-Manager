@@ -7,18 +7,18 @@ import ErrorMsg from '../errorMsg';
 
 export default function ReservationForm({ defaultValue, method }) {
     const token = localStorage.getItem('token');
-    const [client, setClient] = React.useState(defaultValue ? (defaultValue.client ? defaultValue.client : undefined) : undefined);
+    const [client, setClient] = React.useState(defaultValue?.client ? defaultValue.client : undefined);
     const clientFirstNameRef = React.useRef();
     const clientLastNameRef = React.useRef();
     const clientCityRef = React.useRef();
     const navigate = useNavigate();
-    const [city, setCity] = React.useState(defaultValue ? (defaultValue.city ? defaultValue.city : '') : '');
-    const [startDate, setStartDate] = React.useState(defaultValue ? (defaultValue.beginDate ? defaultValue.beginDate : '') : '');
-    const [endDate, setEndDate] = React.useState(defaultValue ? (defaultValue.endDate ? defaultValue.endDate : '') : '');
-    const [serviceType, setServiceType] = React.useState(defaultValue ? (defaultValue.serviceType ? defaultValue.serviceType : '') : '');
-    const [workers, setWorkers] = React.useState(defaultValue ? (defaultValue.workers ? defaultValue.workers : []) : []);
-    const [materials, setMaterials] = React.useState(defaultValue ? (defaultValue.materials ? defaultValue.materials : []) : []);
-    const [resources, setResources] = React.useState(defaultValue ? (defaultValue.resources ? defaultValue.resources : []) : []);
+    const [city, setCity] = React.useState(defaultValue?.city ? defaultValue.city : '');
+    const [startDate, setStartDate] = React.useState(defaultValue?.beginDate ? defaultValue.beginDate : '');
+    const [endDate, setEndDate] = React.useState(defaultValue?.endDate ? defaultValue.endDate : '');
+    const [serviceType, setServiceType] = React.useState(defaultValue?.serviceType ? defaultValue.serviceType : '');
+    const [workers, setWorkers] = React.useState(defaultValue?.workers ? defaultValue.workers : []);
+    const [materials, setMaterials] = React.useState(defaultValue?.materials ? defaultValue.materials : []);
+    const [resources, setResources] = React.useState(defaultValue?.resources ? defaultValue.resources : []);
     const [fetchedWorkers, setFetchedWorkers] = React.useState();
     const [fetchedResources, setFetchedResources] = React.useState();
     const [fetchedClients, setFetchedClients] = React.useState();
@@ -35,108 +35,10 @@ export default function ReservationForm({ defaultValue, method }) {
     const [tmpSpec, setTmpSpec] = React.useState();
     const [tmpResource, setTmpResource] = React.useState({});
     const [openDateErrorMsg, setOpenDateErrorMsg] = React.useState(false);
-
-
-    const fetchData = React.useCallback(async () => {
+    console.log(defaultValue)
+    const fetchDataBase = async (url, setFunction) => {
         try {
-            const response = await fetch('https://localhost:7098/api/Employee', {
-                method: 'get',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token,
-                },
-            });
-
-            if (!response.ok) {
-                alert("Coś poszło nie tak przy pobieraniu danych. Spróbuj ponownie za chwilę.1")
-                throw json(
-                    { message: 'Could not fetch reports.' },
-                    {
-                        status: 500,
-                    }
-                );
-            }
-
-            const data = await response.json();
-            setFetchedWorkers(data);
-
-        } catch (error) {
-            alert("Coś poszło nie tak przy pobieraniu danych. Spróbuj ponownie za chwilę.")
-        }
-
-        try {
-            const response = await fetch('https://localhost:7098/api/Assignment', {
-                method: 'get',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token,
-                },
-            });
-            if (!response.ok) {
-                alert("Coś poszło nie tak przy pobieraniu danych. Spróbuj ponownie za chwilę.")
-                throw json(
-                    { message: 'Could not fetch reports.' },
-                    {
-                        status: 500,
-                    }
-                );
-            }
-
-            const data = await response.json();
-            setFetchedAssignments(data);
-
-        } catch (error) {
-            alert("Coś poszło nie tak przy pobieraniu danych. Spróbuj ponownie za chwilę.")
-        }
-
-        try {
-            const response = await fetch('https://localhost:7098/api/ResourceAllocation', {
-                method: 'get',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token,
-                },
-            });
-            if (!response.ok) {
-                alert("Coś poszło nie tak przy pobieraniu danych. Spróbuj ponownie za chwilę.")
-                throw json(
-                    { message: 'Could not fetch reports.' },
-                    {
-                        status: 500,
-                    }
-                );
-            }
-
-            const data = await response.json();
-            setFetchedResAlloc(data);
-
-        } catch (error) {
-            alert("Coś poszło nie tak przy pobieraniu danych. Spróbuj ponownie za chwilę.")
-        }
-
-        try {
-            const response = await fetch('https://localhost:7098/api/Specialization', {
-                method: 'get',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token,
-                },
-            });
-            if (!response.ok) {
-                alert("Coś poszło nie tak przy pobieraniu danych. Spróbuj ponownie za chwilę.")
-                throw new Error('Something went wrong!');
-            }
-
-            const data = await response.json();
-            setFetchedSpecializations(data);
-
-        } catch (error) {
-            alert("Coś poszło nie tak przy pobieraniu danych. Spróbuj ponownie za chwilę.")
-
-        }
-
-        try {
-            const response = await fetch('https://localhost:7098/api/Resource', {
+            const response = await fetch(url, {
                 method: 'get',
                 headers: {
                     'Content-Type': 'application/json',
@@ -155,42 +57,25 @@ export default function ReservationForm({ defaultValue, method }) {
             }
 
             const data = await response.json();
-            setFetchedResources(data);
+            setFunction(data);
 
         } catch (error) {
             alert("Coś poszło nie tak przy pobieraniu danych. Spróbuj ponownie za chwilę.")
         }
+    }
 
-        try {
-            const response = await fetch('https://localhost:7098/api/Client', {
-                method: 'get',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token,
-                },
-            });
-            if (!response.ok) {
-                alert("Coś poszło nie tak przy pobieraniu danych. Spróbuj ponownie za chwilę.")
-                throw json(
-                    { message: 'Could not fetch reports.' },
-                    {
-                        status: 500,
-                    }
-                );
-            }
-
-            const data = await response.json();
-            setFetchedClients(data);
-
-        } catch (error) {
-            alert("Coś poszło nie tak przy pobieraniu danych. Spróbuj ponownie za chwilę.")
-
-        }
-    });
+    const fetchData = async () => {
+        fetchDataBase('https://localhost:7098/api/Employee', setFetchedWorkers);
+        fetchDataBase('https://localhost:7098/api/Assignment', setFetchedAssignments);
+        fetchDataBase('https://localhost:7098/api/Specialization', setFetchedSpecializations);
+        fetchDataBase('https://localhost:7098/api/Resource', setFetchedResources);
+        fetchDataBase('https://localhost:7098/api/Client', setFetchedClients);
+        fetchDataBase('https://localhost:7098/api/ResourceAllocation', setFetchedResAlloc)
+    };
 
     React.useEffect(() => {
         fetchData();
-    }, [fetchData]);
+    }, []);
 
     React.useEffect(() => {
         if (startDate.length === 0 || endDate >= startDate) {
@@ -222,11 +107,10 @@ export default function ReservationForm({ defaultValue, method }) {
             }
 
             if (!response.ok) {
-                alert("Coś poszło nie tak przy dodawaniu rezerwacji. Spróbuj ponownie za chwilę.1")
+                alert("Coś poszło nie tak przy dodawaniu rezerwacji. Spróbuj ponownie za chwilę.")
                 throw json({ message: 'Could not save client.' }, { status: 500 });
             }
             const data = await response.json();
-            console.log("client submitted");
             return data;
         } else {
             return client;
@@ -235,7 +119,7 @@ export default function ReservationForm({ defaultValue, method }) {
 
     const submitReservation = async (clientId) => {
         const reservationData = {
-            id: 0,
+            id: defaultValue?.id ?? 0,
             clientId: clientId,
             serviceType: serviceType,
             beginDate: startDate,
@@ -243,8 +127,44 @@ export default function ReservationForm({ defaultValue, method }) {
             city: city,
             serviceStatus: "",
             paymentStatus: "",
+            assigments:
+                workers.map((worker) => {
+                    return ({
+                        id: worker.id ?? 0,
+                        employeeId: worker.employeeId,
+                        serviceId: 0,
+                        function: worker.function ?? "",
+                        beginDate: startDate,
+                        endDate: endDate
+                    })
+                })
+            ,
+            resources:
+                resources.map((resource) => {
+                    return ({
+                        id: resource.id ?? 0,
+                        resourceId: resource.resourceId,
+                        serviceId: 0,
+                        allocatedQuantity: Number(resource.quantity),
+                        beginDate: startDate,
+                        endDate: endDate
+                    })
+                })
+            ,
+            materials:
+                materials.map(material => {
+                    return ({
+                        id: material.id ?? 0,
+                        serviceId: material.serviceId,
+                        name: material.name,
+                        unit: material.unit,
+                        price: material.price,
+                        quantity: material.quantity
+                    })
+                })
         };
-
+        console.log(reservationData);
+        console.log(JSON.stringify(reservationData));
         const response = await fetch('https://localhost:7098/api/Service', {
             method: method,
             headers: {
@@ -259,113 +179,10 @@ export default function ReservationForm({ defaultValue, method }) {
         }
 
         if (!response.ok) {
-            alert("Coś poszło nie tak przy dodawaniu rezerwacji. Spróbuj ponownie za chwilę.2")
+            alert("Coś poszło nie tak przy dodawaniu rezerwacji. Spróbuj ponownie za chwilę.")
             throw json({ message: 'Could not save reservation.' }, { status: 500 });
         }
-        const data = await response.json();
         console.log("reservation submitted");
-        return data;
-    };
-
-    const submitMaterials = async (serviceId) => {
-        let data = [];
-        materials.forEach(async material => {
-            material.serviceId = serviceId;
-
-            const response = await fetch('https://localhost:7098/api/Material', {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token,
-                },
-                body: JSON.stringify(material),
-            });
-
-            if (response.status === 422) {
-                return response;
-            }
-
-            if (!response.ok) {
-                alert("Coś poszło nie tak przy dodawaniu rezerwacji. Spróbuj ponownie za chwilę.3")
-                throw json({ message: 'Could not save material.' }, { status: 500 });
-            }
-            data = [...data, await response.json()];
-            console.log("material submitted");
-
-        });
-        return data;
-    };
-
-    const submitResourcesAllocation = async (reservationId) => {
-        let data = [];
-        let resourcesAllocationData = {};
-        resources.forEach(async (resource) => {
-            resourcesAllocationData = {
-                id: 0,
-                resourceId: resource.id,
-                serviceId: reservationId,
-                allocatedQuantity: resource.quantity,
-                beginDate: startDate,
-                endDate: endDate,
-            };
-
-            const response = await fetch('https://localhost:7098/api/ResourceAllocation', {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token,
-                },
-                body: JSON.stringify(resourcesAllocationData),
-            });
-
-            if (response.status === 422) {
-                return response;
-            }
-
-            if (!response.ok) {
-                alert("Coś poszło nie tak przy dodawaniu rezerwacji. Spróbuj ponownie za chwilę.4")
-                throw json({ message: 'Could not save resource allocation.' }, { status: 500 });
-            }
-            data = [...data, await response.json()];
-        });
-        console.log("resources submitted");
-        return data;
-    };
-
-    const submitWorkersAllocation = async (reservationId) => {
-        let data = [];
-        let workersAllocationData = {};
-        workers.forEach(async (worker) => {
-            workersAllocationData = {
-                id: 0,
-                employeeId: worker.id,
-                serviceId: reservationId,
-                function: worker.function,
-                beginDate: startDate,
-                endDate: endDate,
-            };
-
-            const response = await fetch('https://localhost:7098/api/Assignment', {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token,
-                },
-                body: JSON.stringify(workersAllocationData),
-            });
-
-            if (response.status === 400) {
-                alert("Coś poszło nie tak przy dodawaniu rezerwacji. Spróbuj ponownie za chwilę.5")
-                return response;
-            }
-
-            if (!response.ok) {
-                throw json({ message: 'Could not save workers.' }, { status: 500 });
-            }
-            data = [...data, await response.json()];
-        });
-        console.log("worker submitted");
-        return data;
     };
 
     //Handle form submit - request
@@ -375,18 +192,10 @@ export default function ReservationForm({ defaultValue, method }) {
             const submittedClient = await submitClient();
             if (submittedClient.id != undefined) {
                 var submittedReservation = await submitReservation(submittedClient.id);
-                if (submittedReservation.id != undefined) {
-                    const response = await Promise.allSettled([submitMaterials(submittedReservation.id), submitResourcesAllocation(submittedReservation.id),
-                    submitWorkersAllocation(submittedReservation.id)]);
-                } else {
-                    alert("Coś poszło nie tak przy dodawaniu rezerwacji. Spróbuj ponownie za chwilę.6")
-                    throw json({ message: 'Something went wrong.' }, { status: 500 });
-                }
             } else {
-                alert("Coś poszło nie tak przy dodawaniu rezerwacji. Spróbuj ponownie za chwilę.7")
+                alert("Coś poszło nie tak przy dodawaniu rezerwacji. Spróbuj ponownie za chwilę.")
                 throw json({ message: 'Something went wrong.' }, { status: 500 });
             }
-            console.log("all submitted");
             return navigate('/rezerwacje');
         } else {
             return;
@@ -401,7 +210,7 @@ export default function ReservationForm({ defaultValue, method }) {
 
     const checkResAllocation = (resource) => {
         let availableQuant = resource.quantity;
-        fetchedResAlloc.map((resAlloc) => {
+        fetchedResAlloc?.map((resAlloc) => {
             if (resource.id === resAlloc.resourceId) {
                 if (endDate >= resAlloc.beginDate && startDate <= resAlloc.endDate) {
                     availableQuant -= resAlloc.allocatedQuantity;
@@ -413,7 +222,7 @@ export default function ReservationForm({ defaultValue, method }) {
     };
 
     const checkAssignments = (worker) => {
-        fetchedAssignments.map((assign) => {
+        fetchedAssignments?.map((assign) => {
             if (worker.id === assign.employeeIdId) {
                 if (endDate >= assign.beginDate && startDate <= assign.endDate) {
                     return false;
@@ -423,14 +232,13 @@ export default function ReservationForm({ defaultValue, method }) {
         return true;
     };
 
-
     const handleAddMaterial = (e) => {
         e.preventDefault();
         const material = {
             id: 0,
             name: resourceNameRef.current.value,
             unit: resourceUnitRef.current.value,
-            price: resourceUnitRef.current.value,
+            price: resourcePriceRef.current.value,
             quantity: resourceAmountRef.current.value,
         }
         setMaterials([...materials, material]);
@@ -484,7 +292,14 @@ export default function ReservationForm({ defaultValue, method }) {
                 <button
                     onClick={(e) => {
                         e.preventDefault();
-                        setWorkers([tmpWorker, ...workers]);
+                        setWorkers([{
+                            id: undefined,
+                            employeeId: tmpWorker.id,
+                            serviceId: 0,
+                            function: tmpWorker.function ?? "",
+                            beginDate: startDate,
+                            endDate: endDate
+                        }, ...workers]);
                         setPopupOpen(false);
                     }}>
                     Dodaj pracownika
@@ -534,8 +349,14 @@ export default function ReservationForm({ defaultValue, method }) {
                 <button
                     onClick={(e) => {
                         e.preventDefault();
-                        console.log(tmpResource)
-                        setResources([tmpResource, ...resources]);
+                        setResources([{
+                            id: undefined,
+                            resourceId: tmpResource.id,
+                            serviceId: 0,
+                            allocatedQuantity: Number(tmpResource.quantity),
+                            beginDate: startDate,
+                            endDate: endDate
+                        }, ...resources]);
                         setPopupOpen(false);
                     }}>
                     Dodaj zasób
@@ -645,7 +466,7 @@ export default function ReservationForm({ defaultValue, method }) {
                             className={classes.formInput}
                             id='start-date'
                             type='date'
-                            value={startDate}
+                            value={startDate.slice(0, 10)}
                             onChange={(e) => setStartDate(e.target.value)}
                             max={endDate}
                             required
@@ -654,7 +475,7 @@ export default function ReservationForm({ defaultValue, method }) {
                             className={classes.formInput}
                             id='end-date'
                             type='date'
-                            value={endDate}
+                            value={endDate.slice(0, 10)}
                             onChange={(e) => {
                                 if (startDate.length > 0 && e.target.value >= startDate) {
                                     setEndDate(e.target.value);
@@ -685,6 +506,7 @@ export default function ReservationForm({ defaultValue, method }) {
                                 a.id == e.target.value))
                         }}
                         className={classes.formInput}
+                        value={client.id}
                     >
                         <option value=''>Wybierz z listy</option>
                         {fetchedClients && fetchedClients.map((client) => {
@@ -743,7 +565,7 @@ export default function ReservationForm({ defaultValue, method }) {
                             <ul className={classes.list}>
                                 {workers.map((worker) => (
                                     <li key={worker.id}>
-                                        {worker.firstName} {worker.lastName}
+                                        {worker.employee}
                                         <FontAwesomeIcon
                                             icon={faX}
                                             onClick={() => {

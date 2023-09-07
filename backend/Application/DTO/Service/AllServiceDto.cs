@@ -3,12 +3,13 @@ using Application.DTO.Material;
 using Application.DTO.ResourceAllocation;
 using Application.Mapping;
 using AutoMapper;
+using Domain.Model;
 using FluentValidation;
 
 
 namespace Application.DTO.Service;
 
-public class NewServiceDto : IMapFrom<Domain.Model.Service>
+public class AllServiceDto : IMapFrom<Domain.Model.Service>
 {
     public int Id { get; set; }
     public int ClientId { get; set; }
@@ -18,16 +19,19 @@ public class NewServiceDto : IMapFrom<Domain.Model.Service>
     public string ServiceStatus { get; set; }
     public string PaymentStatus { get; set; }
     public string City { get; set; }
+    public List<NewMaterialDto> Materials { get; set; }
+    public List<NewResourceAllocationDto> Resources { get; set; }
+    public List<NewAssignmentDto> Assigments { get; set; }
 
     public static void Mapping(Profile profile)
     {
-        profile.CreateMap<NewServiceDto, Domain.Model.Service>().ReverseMap();
+        profile.CreateMap<AllServiceDto, Domain.Model.Service>().ReverseMap();
     }
 }
 
-public class NewServiceValidation : AbstractValidator<NewServiceDto>
+public class AllServiceDtoValidation : AbstractValidator<AllServiceDto>
 {
-    public NewServiceValidation()
+    public AllServiceDtoValidation()
     {
         RuleFor(x => x.ServiceType).NotEmpty().MaximumLength(255);
         RuleFor(x => x.ClientId).NotEmpty();
@@ -36,5 +40,8 @@ public class NewServiceValidation : AbstractValidator<NewServiceDto>
         RuleFor(x => x.ServiceStatus).NotEmpty();
         RuleFor(x => x.PaymentStatus).NotEmpty();
         RuleFor(x => x.City).NotEmpty().MaximumLength(255);
+        RuleFor(x => x.Materials).NotEmpty();
+        RuleFor(x => x.Resources).NotEmpty();
+        RuleFor(x => x.Assigments).NotEmpty();
     }
 }

@@ -13,17 +13,17 @@ function Root() {
       return;
     }
 
-    //if (token === 'EXPIRED') {
-    //  submit(null, { action: '/logout', method: 'post' });
-    //  return;
-    //}
+    if (token === 'EXPIRED') {
+      submit(null, { action: '/logout', method: 'post' });
+      return;
+    }
 
-    //const tokenDuration = getTokenDuration();
-    //console.log(tokenDuration);
+    const tokenDuration = getTokenDuration();
+    console.log(tokenDuration);
 
-    //setTimeout(() => {
-    //  submit(null, { action: '/logout', method: 'post' });
-    //}, tokenDuration);
+    setTimeout(() => {
+      submit(null, { action: '/logout', method: 'post' });
+    }, tokenDuration);
   }, [token, submit]);
 
   return (

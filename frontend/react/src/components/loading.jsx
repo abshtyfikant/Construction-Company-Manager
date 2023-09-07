@@ -4,7 +4,7 @@ function Loading ({isVisible}) {
 
     return (
         <div className={`${isVisible ? classes.loading : classes.hidden}`}>
-            <p>Ładowanie...</p>
+            <p className={classes.text}>Ładowanie...</p>
         </div>
     );
 }

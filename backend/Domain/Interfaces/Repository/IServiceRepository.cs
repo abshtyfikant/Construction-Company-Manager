@@ -5,8 +5,8 @@ namespace Domain.Interfaces.Repository;
 public interface IServiceRepository
 {
     void DeleteService(int serviceId);
-    int AddService(Service service);
+    int AddService(Service service, List<Assignment> assignments, List<ServiceResource> resources, List<Material> materials);
     IQueryable<Service> GetAllServices();
     Service GetService(int serviceId);
-    void UpdateService(Service service);
+    void UpdateService(Service service, List<Assignment> assignments, List<ServiceResource> resources, List<Material> materials);
 }

@@ -117,7 +117,7 @@ function ReportGeneration() {
           >
             <option value=''>Wybierz z listy</option>
             {fetchedServices && fetchedServices.map((service) => (
-              <option key={service.id} value={service.id}>{service.name}</option>
+              <option key={service.id} value={service.id}>{service.serviceType}</option>
             ))}
           </select>
         );
@@ -158,7 +158,7 @@ function ReportGeneration() {
 
     return navigate('/raporty');
   };
-console.log(selectedVal)
+
   return (
     <div className={classes.container}>
       <GridMenuHeader headerTitle="Generowanie raportu" />

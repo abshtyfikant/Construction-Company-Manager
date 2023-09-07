@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp, faCaretDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import GridMenuHeader from '../components/gridMenuHeader';
-import { Link, useLoaderData, useNavigate, defer, json } from 'react-router-dom';
+import { Link, useNavigate, defer, json } from 'react-router-dom';
 import classes from './styles/reservations.module.css';
 import Comments from '../components/comments';
 import Loading from '../components/loading';
@@ -10,22 +10,19 @@ import Loading from '../components/loading';
 function Accordion({ reservation, index, handleOpenComments }) {
   const navigate = useNavigate();
   const [openDetails, setOpenDetails] = useState(false);
-  const [sumMaterials, setSumMaterials] = useState();
+  const [sumMaterials, setSumMaterials] = useState(0);
 
   const calcSumMaterials = () => {
-    let tmpSumMaterials = 0;
-    tmpSumMaterials += reservation?.materials?.map((material) => {
-      console.log(tmpSumMaterials)
-      return (
-        parseFloat(material.price) * parseFloat(material.quantity)
-      );
+    let tmpSumMaterials = 0.0;
+    reservation?.materials?.forEach((material) => {
+        tmpSumMaterials += Number(material.price) * Number(material.quantity)
     });
     setSumMaterials(tmpSumMaterials)
   }
 
   return (
     <>
-      <tr key={index} onClick={() => {setOpenDetails((prev) => !prev); calcSumMaterials();}}>
+      <tr key={index} onClick={() => { setOpenDetails((prev) => !prev); calcSumMaterials(); }}>
         <td>{reservation.id}</td>
         <td>{reservation.serviceType}</td>
         <td>{reservation.beginDate.slice(0, 10)}</td>
@@ -44,7 +41,7 @@ function Accordion({ reservation, index, handleOpenComments }) {
             <p>Zespół wykonawczy:</p>
             {reservation.workers && reservation.workers.map((worker) => {
               return (
-                <p key={worker.id}>{worker.name} {worker.surname}</p>
+                <p key={worker.employeeId}>{worker.worker}</p>
               );
             })}
           </td>
@@ -53,7 +50,7 @@ function Accordion({ reservation, index, handleOpenComments }) {
             <p>Nazwa | Ilość | Jednostka </p>
             {reservation.resources && reservation.resources.map((resource) => {
               return (
-                <p key={resource.id}>{resource.name} {resource.quantity} {resource.unit}</p>
+                <p key={resource.resourceId}>{resource.name} {resource.allocatedQuantity} {resource.unit}</p>
               );
             })}
             <p>Materiały:</p>
@@ -83,7 +80,6 @@ function Accordion({ reservation, index, handleOpenComments }) {
     </>
   )
 }
-
 
 function Reservations() {
   const navigate = useNavigate();
@@ -195,8 +191,6 @@ function Reservations() {
       setIsLoading(false);
     })
 
-
-    console.log(tmpReservations);
     setReservations(tmpReservations);
   }
 
@@ -284,7 +278,6 @@ function Reservations() {
     // Renderowanie wierszy rezerwacji
     return currentReservations.map((reservation, index) => (
       <>
-        {console.log(currentReservations)}
         <Accordion reservation={reservation} index={index} handleOpenComments={handleOpenComments} />
         <Comments isOpen={openComments} serviceId={reservation.id} />
       </>
@@ -378,7 +371,7 @@ function Reservations() {
 
   return (
     <section className={classes.reservations}>
-    <Loading isVisible={isLoading}/>
+      <Loading isVisible={isLoading} />
       <span
         className={classes.backdrop}
         style={{ display: openComments ? 'block' : 'none' }}
@@ -442,10 +435,6 @@ async function loadReservations() {
   const response = await fetch('');
 
   if (!response.ok) {
-    // return { isError: true, message: 'Could not fetch events.' };
-    // throw new Response(JSON.stringify({ message: 'Could not fetch events.' }), {
-    //   status: 500,
-    // });
     throw json(
       { message: 'Could not fetch reservations.' },
       {
