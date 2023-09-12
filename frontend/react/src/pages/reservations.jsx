@@ -15,7 +15,7 @@ function Accordion({ reservation, index, handleOpenComments }) {
   const calcSumMaterials = () => {
     let tmpSumMaterials = 0.0;
     reservation?.materials?.forEach((material) => {
-        tmpSumMaterials += Number(material.price) * Number(material.quantity)
+      tmpSumMaterials += Number(material.price) * Number(material.quantity)
     });
     setSumMaterials(tmpSumMaterials)
   }
@@ -70,7 +70,11 @@ function Accordion({ reservation, index, handleOpenComments }) {
             >
               + Modyfikuj rezerwację
             </p>
-            <p className={classes.actions}>+ Generuj raport</p>
+            <p className={classes.actions}
+              onClick={() => { navigate("/generowanie-raportu", { state: { reservation: reservation } }) }}
+            >
+              + Generuj raport
+            </p>
             <p onClick={() => handleOpenComments(true)} className={classes.actions}>+ Dodaj komentarz</p>
           </td>
         </tr>

@@ -9,16 +9,14 @@ export default function ResourceForm({ defaultValue, method }) {
   const navigate = useNavigate();
   const quantityRef = React.useRef();
   const nameRef = React.useRef();
-  const [unit, setUnit] = React.useState(defaultValue ? (defaultValue.unit ? defaultValue.unit : undefined) : undefined);
   const [allocation, setAllocation] = React.useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
-      id: 0,
+      id: defaultValue?.id?? 0,
       name: nameRef.current.value,
-      quantity: quantityRef.current.value,
-      //unit: unit,
+      quantity: Number(quantityRef.current.value),
     };
 
     const response = await fetch('https://localhost:7098/api/Resource', {
@@ -37,8 +35,7 @@ export default function ResourceForm({ defaultValue, method }) {
     if (!response.ok) {
       throw json({ message: 'Could not save reservation.' }, { status: 500 });
     }
-    const data = await response.json();
-
+    
     return navigate('/stan-zasobow');
   };
 
@@ -79,7 +76,7 @@ export default function ResourceForm({ defaultValue, method }) {
 
       if (!response.ok) {
         throw json(
-          { message: 'Could not fetch reports.' },
+          { message: 'Could not fetch resource.' },
           {
             status: 500,
           }
@@ -96,7 +93,7 @@ export default function ResourceForm({ defaultValue, method }) {
 
   React.useEffect(() => {
     getAlloc();
-  }, [getAlloc]);
+  }, []);
 
   const checkAlloc = () => {
     if (allocation.length > 0) {
@@ -105,7 +102,7 @@ export default function ResourceForm({ defaultValue, method }) {
       return false;
     }
   };
-  console.log(unit);
+
   return (
     <div>
       <div className='container'>
@@ -132,23 +129,11 @@ export default function ResourceForm({ defaultValue, method }) {
                 defaultValue={defaultValue ? defaultValue.quantity : null}
                 required
               />
-              <select
-                onChange={(e) => { setUnit(e.target.value) }}
-                value={unit}
-                required
-              >
-                <option value=''>Wybierz z listy</option>
-                <option value='m2'>m<sup>2</sup></option>
-                <option value='m3'>m<sup>3</sup></option>
-                <option value='m'>m</option>
-                <option value='kg'>kg</option>
-                <option value='szt'>szt</option>
-              </select>
             </div>
           </div>
           <div className="button-container">
             <button type="submit">Zatwierdź</button>
-            {method === '' &&
+            {method === 'put' &&
               <button
                 onClick={(e) => { handleDelete(e) }}
                 disabled={checkAlloc() ? true : false}

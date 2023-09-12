@@ -7,7 +7,6 @@ function Root() {
   const submit = useSubmit();
   // const navigation = useNavigation();
   useEffect(() => {
-    console.log(token);
     if (!token) {
       submit(null, { action: '/logout', method: 'post' });
       return;
@@ -19,7 +18,6 @@ function Root() {
     }
 
     const tokenDuration = getTokenDuration();
-    console.log(tokenDuration);
 
     setTimeout(() => {
       submit(null, { action: '/logout', method: 'post' });

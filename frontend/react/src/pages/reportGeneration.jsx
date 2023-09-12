@@ -1,22 +1,23 @@
 import GridMenuHeader from '../components/gridMenuHeader';
 import classes from './styles/reportGeneration.module.css';
 import * as React from 'react';
-import { useNavigate, json } from 'react-router-dom';
+import { useNavigate, json, useLocation } from 'react-router-dom';
 
 const types = [
   'raport o zarobkach firmy', 'raport o zarobkach pracownika', 'raport o kosztach', 'raport z usługi'
 ];
 
 function ReportGeneration() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const userId = localStorage.getItem('userId');
   const [description, setDescription] = React.useState('');
-  const navigate = useNavigate();
   const [city, setCity] = React.useState('');
   const [startDate, setStartDate] = React.useState('');
   const [endDate, setEndDate] = React.useState('');
-  const [reportType, setReportType] = React.useState('');
-  const [selectedVal, setSelectedVal] = React.useState('');
+  const [reportType, setReportType] = React.useState(location.state?.reservation ? 'raport z usługi' : "");
+  const [selectedVal, setSelectedVal] = React.useState(location.state?.reservation?.id ?? '');
   const [fetchedWorkers, setFetchedWorkers] = React.useState('');
   const [fetchedServices, setFetchedServices] = React.useState('');
 
@@ -114,6 +115,7 @@ function ReportGeneration() {
             id='reservation'
             onChange={(e) => setSelectedVal(e.target.value)}
             required
+            value={selectedVal}
           >
             <option value=''>Wybierz z listy</option>
             {fetchedServices && fetchedServices.map((service) => (
@@ -154,7 +156,6 @@ function ReportGeneration() {
     if (!response.ok) {
       throw json({ message: 'Could not save reservation.' }, { status: 500 });
     }
-    const data = await response.json();
 
     return navigate('/raporty');
   };
@@ -176,6 +177,7 @@ function ReportGeneration() {
               id='report-type'
               onChange={(e) => setReportType(e.target.value)}
               reqiured
+              value={reportType}
             >
               <option value=''>Wybierz z listy</option>
               {types.map((type) => (
