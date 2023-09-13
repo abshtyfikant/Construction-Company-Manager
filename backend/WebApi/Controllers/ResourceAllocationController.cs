@@ -44,6 +44,7 @@ public class ResourceAllocationController : ControllerBase
     public ActionResult Create([FromBody] NewResourceAllocationDto newResourceAllocation)
     {
         if (!ModelState.IsValid) return BadRequest();
+        if (newResourceAllocation.EndDate > newResourceAllocation.BeginDate) return BadRequest();
         if (newResourceAllocation.Id > 0) return StatusCode(StatusCodes.Status500InternalServerError);
         var resourceAllocationId = _resourceAllocationService.AddResourceAllocation(newResourceAllocation);
         newResourceAllocation.Id = resourceAllocationId;
@@ -66,6 +67,7 @@ public class ResourceAllocationController : ControllerBase
     public IActionResult Update(int id, [FromBody] UpdateResourceAllocationDto resourceAllocation)
     {
         if (id <= 0) return BadRequest();
+        if (resourceAllocation.EndDate > resourceAllocation.BeginDate) return BadRequest();
         if (!ModelState.IsValid) return BadRequest();
         _resourceAllocationService.UpdateResourceAllocation(resourceAllocation);
         return NoContent();
