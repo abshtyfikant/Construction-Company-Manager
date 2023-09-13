@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretUp, faCaretDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faCaretUp, faCaretDown, faChevronLeft, faChevronRight, faTrash } from '@fortawesome/free-solid-svg-icons';
 import GridMenuHeader from '../components/gridMenuHeader';
 import { Link, useLoaderData, useNavigate, defer, json } from 'react-router-dom';
 import classes from './styles/workers.module.css';
 
 function Workers() {
+  const token = localStorage.getItem('token');
   const navigate = useNavigate();
   const [workers, setWorkers] = useState([]);
   const [sortBy, setSortBy] = useState('');
@@ -17,7 +18,7 @@ function Workers() {
   const ellipsis = '...';
   const [openDetails, setOpenDetails] = useState(false);
 
-  const fetchWorkers = async (token) => {
+  const fetchWorkers = async () => {
     try {
       const response = await fetch('https://localhost:7098/api/Employee', {
         headers: {
@@ -38,14 +39,36 @@ function Workers() {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-
-    fetchWorkers(token)
+    fetchWorkers()
       .catch((error) => {
         console.log('Błąd podczas pobierania danych pracowników:', error);
       });
   }, []);
 
+  const handleDelete = async (e, id) => {
+    const response = await fetch('https://localhost:7098/api/Employee/' + id, {
+        method: 'delete',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+        },
+    });
+
+    if (!response.ok) {
+        // return { isError: true, message: 'Could not fetch project.' };
+        // throw new Response(JSON.stringify({ message: 'Could not fetch project.' }), {
+        //   status: 500,
+        // });
+        throw json(
+            { message: 'Could not fetch resource.' },
+            {
+                status: 500,
+            }
+        );
+    } else {
+        return navigate('/pracownicy');
+    }
+};
 
   const sortWorkers = (column) => {
     if (sortBy === column) {
@@ -129,7 +152,7 @@ function Workers() {
           <td>{worker.mainSpecialization}</td>
           <td className={classes.alignLeft}>{worker.ratePerHour}</td>
           <td className={classes.alignRight}>
-           <button onClick={() => { navigate("/edytuj-pracownika", { state: { worker: worker } }) }}>Edytuj</button>
+            <button onClick={() => { navigate("/edytuj-pracownika", { state: { worker: worker } }) }}>Edytuj</button>
           </td>
         </tr>
       </>

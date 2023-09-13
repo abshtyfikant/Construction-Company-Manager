@@ -16,7 +16,6 @@ function Accordion({ resource, index, resourcesAllocation }) {
         <td className={classes.alignLeft}>{resource.quantity}</td>
         <td className={classes.alignRight}>
           <button onClick={() => { navigate("/edytuj-zasob", { state: { resource: resource } }) }}>Edytuj</button>
-          <FontAwesomeIcon icon={faCaretDown} className={classes.sortIcon} />
         </td>
       </tr>
       {openDetails ? (resourcesAllocation && resourcesAllocation.forEach(allocation => {
@@ -58,8 +57,6 @@ function Resources() {
   const resourcesPerPage = 10; // Liczba raportów na stronie
   const maxVisiblePages = 5; // Maksymalna liczba widocznych stron paginacji
   const ellipsis = '...'; // Symbol kropek
-  const [openDetails, setOpenDetails] = useState(false);
-
 
   // Funkcja pobierająca dane raportów z API
   async function fetchResources() {
@@ -99,12 +96,11 @@ function Resources() {
       console.log('Błąd podczas komunikacji z API:', error);
     }
   }
+  
   // Efekt, który pobiera dane raportów z API przy ładowaniu komponentu
   useEffect(() => {
     fetchResources();
   }, []);
-
-
 
   // Funkcja sortująca zasoby po kliknięciu w nagłówek kolumny
   const sortResources = (column) => {
@@ -185,10 +181,6 @@ function Resources() {
       </>
     ));
   };
-
-  const openResourceDetails = () => {
-
-  }
 
   // Funkcja zmieniająca aktualną stronę
   const handlePageChange = (pageNumber) => {

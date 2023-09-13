@@ -8,16 +8,6 @@ function Login() {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === 'submitting';
 
-  const handleLogin = () => {
-    if (email === 'admin' && password === 'admin') {
-      console.log('Zalogowano pomyślnie');
-      navigate('/menu'); // Ścieżka do zakładki z kafelkami
-    } else {
-      console.log('Błąd logowania');
-      alert('Błąd logowania');
-    }
-  };
-
   return (
     <section className='center-container'>
       <Form className="logowanie" method='post'>

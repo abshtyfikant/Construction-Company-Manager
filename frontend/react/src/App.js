@@ -12,7 +12,7 @@ import Resources, {loader as resourcesLoader} from './pages/resources/resources.
 import AddWorker from './pages/addWorker.jsx';
 import RemoveWorker from './pages/removeWorker.jsx';
 import AddResource from './pages/addResource.jsx';
-import { checkAuthLoader, tokenLoader } from './util/auth';
+import { tokenLoader } from './util/auth';
 import Root from './pages/root.jsx';
 import HomePage from './pages/home.jsx';
 import Register, { action as registerAuthAction } from './pages/register.jsx';
@@ -21,6 +21,7 @@ import ReportDetails, {loader as reportDetailsLoader} from './pages/reportDetail
 import AddSpecialization from './pages/addSpecialization.jsx'
 import EditWorker from './pages/editWorker.jsx';
 import EditResource from './pages/editResource.jsx';
+import NotFound from './pages/notFound.jsx';
 
 const router = createBrowserRouter([
   {
@@ -115,6 +116,10 @@ const router = createBrowserRouter([
         element: <AddSpecialization />,
       },
     ],
+  },
+  {
+    path:"*",
+    element: <NotFound />,
   },
 ]);
 
