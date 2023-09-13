@@ -77,8 +77,7 @@ public class ServiceController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult Update([FromBody] AllServiceDto newService)
     {
-        if (!ModelState.IsValid) return BadRequest();
-        if (newService.Id <= 0) return BadRequest();
+        if (!this.ModelState.IsValid || newService.Id <=0 ) return BadRequest();
         var onlyService = new NewServiceDto
         {
             Id = newService.Id,

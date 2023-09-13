@@ -1,10 +1,6 @@
-﻿using Application.DTO.Assigment;
-using Application.DTO.Material;
-using Application.DTO.ResourceAllocation;
-using Application.Mapping;
+﻿using Application.Mapping;
 using AutoMapper;
 using FluentValidation;
-
 
 namespace Application.DTO.Service;
 

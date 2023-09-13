@@ -26,22 +26,13 @@ internal class ServiceService : IServiceService
         var mappedService = _mapper.Map<Service>(service);
 
         var mappedAssignments = new List<Assignment> { };
-        foreach(var assignment in assignments)
-        {
-            mappedAssignments.Add(_mapper.Map<Assignment>(assignment));
-        }
+        mappedAssignments.AddRange(assignments.Select(assignment => this._mapper.Map<Assignment>(assignment)));
 
         var mappedResources = new List<ServiceResource> { };
-        foreach (var resource in resources)
-        {
-            mappedResources.Add(_mapper.Map<ServiceResource>(resource));
-        }
+        mappedResources.AddRange(resources.Select(resource => this._mapper.Map<ServiceResource>(resource)));
 
         var mappedMaterials = new List<Material> { };
-        foreach (var material in materials)
-        {
-            mappedMaterials.Add(_mapper.Map<Material>(material));
-        }
+        mappedMaterials.AddRange(materials.Select(material => this._mapper.Map<Material>(material)));
 
         var id = _serviceRepo.AddService(mappedService, mappedAssignments, mappedResources, mappedMaterials);
         return id;
@@ -73,22 +64,13 @@ internal class ServiceService : IServiceService
         var mappedService = _mapper.Map<Service>(service);
 
         var mappedAssignments = new List<Assignment> { };
-        foreach (var assignment in assignments)
-        {
-            mappedAssignments.Add(_mapper.Map<Assignment>(assignment));
-        }
+        mappedAssignments.AddRange(assignments.Select(assignment => this._mapper.Map<Assignment>(assignment)));
 
         var mappedResources = new List<ServiceResource> { };
-        foreach (var resource in resources)
-        {
-            mappedResources.Add(_mapper.Map<ServiceResource>(resource));
-        }
+        mappedResources.AddRange(resources.Select(resource => this._mapper.Map<ServiceResource>(resource)));
 
         var mappedMaterials = new List<Material> { };
-        foreach (var material in materials)
-        {
-            mappedMaterials.Add(_mapper.Map<Material>(material));
-        }
+        mappedMaterials.AddRange(materials.Select(material => this._mapper.Map<Material>(material)));
 
         _serviceRepo.UpdateService(mappedService, mappedAssignments, mappedResources, mappedMaterials);
         return service;
