@@ -128,15 +128,15 @@ public class EmployeeRepository : IEmployeeRepository
         if (!_dbContext.Specializations.Any(s => s.Id == specializationId))
             throw new Exception("Specialization not found");
 
-        if (!_dbContext.Employees.Any(s => s.Id == employeeId))
-            throw new Exception("Employee not found");
-
-        var employee = _dbContext.Employees.Find(employeeId);
+        var employee = this._dbContext.Employees.FirstOrDefault(i => i.Id == employeeId);
         if (employee is not null)
         {
-            _dbContext.Attach(employee);
-            _dbContext.Entry(employee).Property("MainSpecializationId").IsModified = true;
+            employee.MainSpecializationId = specializationId;
             _dbContext.SaveChanges();
+        }
+        else
+        {
+            throw new Exception("Employee not found");
         }
     }
 
