@@ -41,9 +41,9 @@ function ReportDetails() {
         <div className='container'>
         <p>Typ raportu: {report.reportType}</p>
         <div className='divider'></div>
-        <p>Data od: {report.beginDate}</p>
+        <p>Data od: {report.beginDate.slice(0, 10)}</p>
         <div className='divider'></div>
-        <p>Data do: {report.endDate}</p>
+        <p>Data do: {report.endDate.slice(0, 10)}</p>
         <div className='divider'></div>
         <p>Miasto: {report.city}</p>
         <div className='divider'></div>

@@ -9,8 +9,8 @@ export default function ReservationForm({ defaultValue, method }) {
     const token = localStorage.getItem('token');
     const [client, setClient] = React.useState(defaultValue?.client ?? undefined);
     const [city, setCity] = React.useState(defaultValue?.city ?? '');
-    const [startDate, setStartDate] = React.useState(defaultValue?.beginDate ?? '');
-    const [endDate, setEndDate] = React.useState(defaultValue?.endDate ?? '');
+    const [startDate, setStartDate] = React.useState(defaultValue?.beginDate.slice(0, 10) ?? '');
+    const [endDate, setEndDate] = React.useState(defaultValue?.endDate.slice(0, 10) ?? '');
     const [serviceType, setServiceType] = React.useState(defaultValue?.serviceType ?? '');
     const [workers, setWorkers] = React.useState(defaultValue?.workers ?? []);
     const [materials, setMaterials] = React.useState(defaultValue?.materials ?? []);
@@ -32,6 +32,7 @@ export default function ReservationForm({ defaultValue, method }) {
     const clientCityRef = React.useRef();
     const [openDateErrorMsg, setOpenDateErrorMsg] = React.useState(false);
     const [tmpSpec, setTmpSpec] = React.useState();
+    const [specName, setSpecName] = React.useState();
     const [tmpResource, setTmpResource] = React.useState({});
     const [paymentStatus, setPaymentStatus] = React.useState(defaultValue?.paymentStatus ?? '');
     const [serviceStatus, setServiceStatus] = React.useState(defaultValue?.serviceStatus ?? '');
@@ -135,7 +136,7 @@ export default function ReservationForm({ defaultValue, method }) {
                         employeeId: worker.employeeId,
                         serviceId: 0,
                         function: worker.function ?? "",
-                        beginDate: worker.startDate,
+                        startDate: worker.startDate,
                         endDate: worker.endDate
                     })
                 })
@@ -146,8 +147,8 @@ export default function ReservationForm({ defaultValue, method }) {
                         id: resource.id ?? 0,
                         resourceId: resource.resourceId,
                         serviceId: 0,
-                        allocatedQuantity: resource.quantity,
-                        beginDate: resource.startDate,
+                        allocatedQuantity: resource.allocatedQuantity,
+                        beginDate: resource.beginDate,
                         endDate: resource.endDate
                     })
                 })
@@ -256,7 +257,8 @@ export default function ReservationForm({ defaultValue, method }) {
                 <h1>Dodaj pracownika</h1>
                 <select
                     onChange={(e) => {
-                        setTmpSpec(e.target.value);
+                        setTmpSpec(e.target.value.split(" ")[0]);
+                        setSpecName(e.target.value.split(" ")[1]);
                     }}
                     className={classes.formInput}
                     required
@@ -264,7 +266,7 @@ export default function ReservationForm({ defaultValue, method }) {
                     <option value=''>Wybierz z listy</option>
                     {fetchedSpecializations && fetchedSpecializations.map((specialization) => {
                         return (
-                            <option key={specialization.id} value={specialization.id}>
+                            <option key={specialization.id} value={specialization.id + " " + specialization.name}>
                                 {specialization.name}
                             </option>
                         )
@@ -326,17 +328,16 @@ export default function ReservationForm({ defaultValue, method }) {
                 <button
                     onClick={(e) => {
                         e.preventDefault();
-
-                        if (tmpWorker?.id && tmpWorker.startDate && tmpWorker.endDate) {
+console.log(specName);
+                        if (tmpWorker?.id && specName && tmpWorker.startDate && tmpWorker.endDate) {
                             setWorkers([{
                                 id: undefined,
                                 employeeId: tmpWorker.id,
                                 serviceId: 0,
-                                function: tmpWorker.function ?? "",
-                                beginDate: tmpWorker.startDate,
+                                function: specName ?? "",
+                                startDate: tmpWorker.startDate,
                                 endDate: tmpWorker.endDate,
-                                firstName: tmpWorker.firstName,
-                                lastName: tmpWorker.lastName,
+                                employee: tmpWorker.firstName + " " + tmpWorker.lastName,
                             }, ...workers]);
                             setPopupOpen(false);
                         }
@@ -378,7 +379,7 @@ export default function ReservationForm({ defaultValue, method }) {
                     })}
                 </select>
                 <input type="number"
-                    onChange={(e) => { setTmpResource({ ...tmpResource, quantity: Number(e.target.value) }); console.log(checkResAllocation(fetchedResources.find((resource) => resource.id === tmpResource.id))) }}
+                    onChange={(e) => { setTmpResource({ ...tmpResource, quantity: e.target.value }); }}
                     className={classes.formInput}
                     disabled={Object.keys(tmpResource).length === 0}
                     min="1"
@@ -414,9 +415,12 @@ export default function ReservationForm({ defaultValue, method }) {
                 </div>
                 <button
                     onClick={(e) => {
-                        console.log(tmpResource)
-                        if (tmpResource.id && tmpResource.quantity <= checkResAllocation(fetchedResources.find((resource) => resource.id === tmpResource.id)) && tmpResource.startDate && tmpResource.endDate) {
-                            e.preventDefault();
+                        console.log(tmpResource);
+                        e.preventDefault();
+                        if (tmpResource.id &&
+                            tmpResource.quantity <= checkResAllocation(fetchedResources.find((resource) => resource.id === tmpResource.id)) &&
+                            tmpResource.startDate &&
+                            tmpResource.endDate) {
                             setResources([{
                                 id: undefined,
                                 resourceId: tmpResource.id,
@@ -424,7 +428,7 @@ export default function ReservationForm({ defaultValue, method }) {
                                 allocatedQuantity: tmpResource.quantity,
                                 beginDate: tmpResource.startDate,
                                 endDate: tmpResource.endDate,
-                                name: tmpResource.name
+                                resourceName: tmpResource.name
                             }, ...resources]);
                             setPopupOpen(false);
                             setTmpResource({});
@@ -537,7 +541,7 @@ export default function ReservationForm({ defaultValue, method }) {
                             className={classes.formInput}
                             id='start-date'
                             type='date'
-                            value={startDate.slice(0, 10)}
+                            value={startDate}
                             onChange={(e) => setStartDate(e.target.value)}
                             max={endDate}
                             required
@@ -546,7 +550,7 @@ export default function ReservationForm({ defaultValue, method }) {
                             className={classes.formInput}
                             id='end-date'
                             type='date'
-                            value={endDate.slice(0, 10)}
+                            value={endDate}
                             onChange={(e) => {
                                 if (startDate.length > 0 && e.target.value >= startDate) {
                                     setEndDate(e.target.value);
@@ -658,7 +662,7 @@ export default function ReservationForm({ defaultValue, method }) {
                             <ul className={classes.list}>
                                 {workers.map((worker) => (
                                     <li key={worker.id}>
-                                        {worker.firstName + " " + worker.lastName}
+                                        {worker.employee}
                                         <FontAwesomeIcon
                                             icon={faX}
                                             onClick={() => {
@@ -682,11 +686,12 @@ export default function ReservationForm({ defaultValue, method }) {
                             + Dodaj zasoby
                         </button>
                         <p>Przydzielone zasoby:</p>
+                        <p>Nazwa | Ilość </p>
                         {Object.keys(resources).length !== 0 &&
                             <ul className={classes.list}>
                                 {resources.map((resource) => (
                                     <li key={resource.id}>
-                                        {resource.name}
+                                        {resource.resourceName} | {resource.quantity}
                                         <FontAwesomeIcon
                                             icon={faX}
                                             onClick={() => {
@@ -710,11 +715,12 @@ export default function ReservationForm({ defaultValue, method }) {
                             + Dodaj materiały
                         </button>
                         <p>Materiały:</p>
+                        <p>Nazwa | Cena | Ilość | Jednostka </p>
                         {Object.keys(materials).length !== 0 &&
                             <ul className={classes.list}>
                                 {materials.map((material) => (
                                     <li key={material.id}>
-                                        {material.name}
+                                        {material.name} | {material.price} | {material.quantity} | {material.unit}
                                         <FontAwesomeIcon
                                             icon={faX}
                                             onClick={() => {

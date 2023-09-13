@@ -10,7 +10,8 @@ import Loading from '../components/loading';
 function Accordion({ reservation, index, handleOpenComments }) {
   const navigate = useNavigate();
   const [openDetails, setOpenDetails] = useState(false);
-  const [sumMaterials, setSumMaterials] = useState(0);
+  const [sumMaterials, setSumMaterials] = useState(0.0);
+  const [sumWorkers, setSumWorkers] = useState(0.0);
 
   const calcSumMaterials = () => {
     let tmpSumMaterials = 0.0;
@@ -18,6 +19,14 @@ function Accordion({ reservation, index, handleOpenComments }) {
       tmpSumMaterials += Number(material.price) * Number(material.quantity)
     });
     setSumMaterials(tmpSumMaterials)
+  }
+
+  const calcSumWorkers = () => {
+    let tmpSumWorkers = 0.0;
+    reservation?.workers?.forEach((worker) => {
+
+    });
+    setSumWorkers(tmpSumWorkers)
   }
 
   return (
@@ -38,23 +47,28 @@ function Accordion({ reservation, index, handleOpenComments }) {
         <tr className={classes.dropdownDetails}>
           <td colSpan={3}>
             <p>Klient: {reservation.client?.firstName} {reservation.client?.lastName}</p>
-            <p>Zespół wykonawczy:</p>
+            <p><b>Zespół wykonawczy:</b></p>
+            <p><b>Imię i nazwisko | Specjalizacja | Stawka | Od | Do</b></p>
             {reservation.workers && reservation.workers.map((worker) => {
               return (
-                <p key={worker.employeeId}>{worker.worker}</p>
+                <p key={worker.employeeId}>
+                {worker.employee} | {worker.function} | {worker.ratePerHour} | {worker.startDate?.slice(0, 10)} | {worker.endDate?.slice(0, 10)}
+                </p>
               );
             })}
           </td>
           <td colSpan={3}>
-            <p>Przydział zasobów:</p>
-            <p>Nazwa | Ilość | Jednostka </p>
+            <p><b>Przydział zasobów:</b></p>
+            <p><b>Nazwa | Ilość | Od | Do</b></p>
             {reservation.resources && reservation.resources.map((resource) => {
               return (
-                <p key={resource.resourceId}>{resource.name} {resource.allocatedQuantity} {resource.unit}</p>
+                <p key={resource.resourceId}>
+                {resource.resourceName} | {resource.allocatedQuantity} | {resource.beginDate?.slice(0, 10)} | {resource.endDate?.slice(0, 10)}
+                </p>
               );
             })}
-            <p>Materiały:</p>
-            <p>Nazwa | Cena | Ilość | Jednostka </p>
+            <p><b>Materiały:</b></p>
+            <p><b>Nazwa | Cena | Ilość | Jednostka</b></p>
             {reservation.materials && reservation.materials.map((material) => {
               return (
                 <p key={material.id}>{material.name} | {material.price} | {material.quantity} | {material.unit}</p>
@@ -63,7 +77,7 @@ function Accordion({ reservation, index, handleOpenComments }) {
           </td>
           <td colSpan={3}>
             <p>Koszt materiałów: {sumMaterials}</p>
-            <p>Koszt pracowników:</p>
+            <p>Koszt pracowników: {sumWorkers}</p>
             <p
               className={classes.actions}
               onClick={() => { navigate("/edytuj-rezerwacje", { state: { reservation: reservation } }) }}

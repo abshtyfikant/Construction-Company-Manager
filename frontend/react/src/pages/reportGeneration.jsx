@@ -18,9 +18,9 @@ function ReportGeneration() {
   const [endDate, setEndDate] = React.useState('');
   const [reportType, setReportType] = React.useState(location.state?.reservation ? 'raport z usługi' : "");
   const [selectedVal, setSelectedVal] = React.useState(location.state?.reservation?.id ?? '');
-  const [fetchedWorkers, setFetchedWorkers] = React.useState('');
-  const [fetchedServices, setFetchedServices] = React.useState('');
-
+  const [fetchedWorkers, setFetchedWorkers] = React.useState([]);
+  const [fetchedServices, setFetchedServices] = React.useState([]);
+console.log(startDate)
   const fetchData = React.useCallback(async () => {
     try {
       const response = await fetch('https://localhost:7098/api/Employee', {
@@ -64,8 +64,15 @@ function ReportGeneration() {
 
   React.useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, []);
 
+  React.useEffect(() => {
+    if (reportType !== "raport z usługi") { return; }
+    console.log(fetchedServices)
+    const foundService = fetchedServices?.find((service) => service.id === selectedVal);
+    setStartDate(foundService?.beginDate);
+    setEndDate(foundService?.endDate);
+  }, [selectedVal, reportType]);
 
   const renderSelect = () => {
     switch (reportType) {
@@ -133,8 +140,8 @@ function ReportGeneration() {
       serviceId: selectedVal,
       reportType: reportType,
       description: description,
-      beginDate: startDate,
-      endDate: endDate,
+      beginDate: startDate.length > 10 ? startDate.slice(0, 10) : startDate,
+      endDate: endDate.length > 10 ? endDate.slice(0, 10) : endDate,
       amount: 0,
       city: city,
       userId: userId
