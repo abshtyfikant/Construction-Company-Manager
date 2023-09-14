@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretUp, faCaretDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import GridMenuHeader from '../../components/gridMenuHeader';
-import { Link, useNavigate, defer, json } from 'react-router-dom';
-import classes from './resources.module.css';
+import React, { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCaretUp,
+  faCaretDown,
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
+import GridMenuHeader from "../../components/gridMenuHeader";
+import { Link, useNavigate, defer, json } from "react-router-dom";
+import classes from "./resources.module.css";
 
 function Accordion({ resource, index, resourcesAllocation }) {
   const navigate = useNavigate();
@@ -15,84 +20,87 @@ function Accordion({ resource, index, resourcesAllocation }) {
         <td>{resource.name}</td>
         <td className={classes.alignLeft}>{resource.quantity}</td>
         <td className={classes.alignRight}>
-          <button onClick={() => { navigate("/edytuj-zasob", { state: { resource: resource } }) }}>Edytuj</button>
+          <button
+            onClick={() => {
+              navigate("/edytuj-zasob", { state: { resource: resource } });
+            }}
+          >
+            Edytuj
+          </button>
         </td>
       </tr>
-      {openDetails ? (resourcesAllocation && resourcesAllocation.forEach(allocation => {
-        if (resource.id === allocation.serviceId) {
-          <tr className={classes.dropdownDetails}>
-            <td>
-              <p>Ilość:</p>
-              {allocation.quantity &&
-                <p>{allocation.quantity}</p>
-              }
-            </td>
-            <td>
-              <p>Data od:</p>
-              {allocation.beginDate}
-            </td>
-            <td>
-              <p>Data do:</p>
-              {allocation.endDate}
-            </td>
-          </tr>
-        }
-      }))
-        : null
-      }
+      {openDetails
+        ? resourcesAllocation &&
+          resourcesAllocation.forEach((allocation) => {
+            if (resource.id === allocation.serviceId) {
+              <tr className={classes.dropdownDetails}>
+                <td>
+                  <p>Ilość:</p>
+                  {allocation.quantity && <p>{allocation.quantity}</p>}
+                </td>
+                <td>
+                  <p>Data od:</p>
+                  {allocation.beginDate}
+                </td>
+                <td>
+                  <p>Data do:</p>
+                  {allocation.endDate}
+                </td>
+              </tr>;
+            }
+          })
+        : null}
     </>
-  )
+  );
 }
-
 
 function Resources() {
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   const [resources, setResources] = useState([]);
   const [resourcesAllocation, setResourcesAllocation] = useState([]);
-  const [sortBy, setSortBy] = useState(''); // Kolumna, według której sortujemy
+  const [sortBy, setSortBy] = useState(""); // Kolumna, według której sortujemy
   const [sortOrder, setSortOrder] = useState(null); // Kierunek sortowania (asc/desc/null)
   const [isDefaultSort, setIsDefaultSort] = useState(true); // Informacja o domyślnym sortowaniu
   const [currentPage, setCurrentPage] = useState(1); // Aktualna strona
   const resourcesPerPage = 10; // Liczba raportów na stronie
   const maxVisiblePages = 5; // Maksymalna liczba widocznych stron paginacji
-  const ellipsis = '...'; // Symbol kropek
+  const ellipsis = "..."; // Symbol kropek
 
   // Funkcja pobierająca dane raportów z API
   async function fetchResources() {
     try {
-      const response = await fetch('https://localhost:7098/api/Resource', {
+      const response = await fetch("https://localhost:7098/api/Resource", {
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token,
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
         },
       });
 
       if (response.ok) {
         const data = await response.json();
         setResources(data);
-      } 
-    } catch (error) {
-      
-    }
+      }
+    } catch (error) {}
 
     try {
-      const response = await fetch('https://localhost:7098/api/ResourceAllocation', {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token,
-        },
-      });
+      const response = await fetch(
+        "https://localhost:7098/api/ResourceAllocation",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
         setResourcesAllocation(data);
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   }
-  
+
   // Efekt, który pobiera dane raportów z API przy ładowaniu komponentu
   useEffect(() => {
     fetchResources();
@@ -101,16 +109,16 @@ function Resources() {
   // Funkcja sortująca zasoby po kliknięciu w nagłówek kolumny
   const sortResources = (column) => {
     if (sortBy === column) {
-      if (sortOrder === 'asc') {
-        setSortOrder('desc');
-      } else if (sortOrder === 'desc') {
-        setSortBy('');
+      if (sortOrder === "asc") {
+        setSortOrder("desc");
+      } else if (sortOrder === "desc") {
+        setSortBy("");
         setSortOrder(null);
         setIsDefaultSort(true);
       }
     } else {
       setSortBy(column);
-      setSortOrder('asc');
+      setSortOrder("asc");
       setIsDefaultSort(false);
     }
   };
@@ -118,18 +126,24 @@ function Resources() {
   // Funkcja renderująca ikonki sortowania
   const renderSortIcons = (column) => {
     if (sortBy === column) {
-      if (sortOrder === 'asc') {
+      if (sortOrder === "asc") {
         return (
           <div>
-            <FontAwesomeIcon icon={faCaretUp} className={`${classes.sortIcon} ${classes.sortIconActive}`} />
+            <FontAwesomeIcon
+              icon={faCaretUp}
+              className={`${classes.sortIcon} ${classes.sortIconActive}`}
+            />
             <FontAwesomeIcon icon={faCaretDown} className={classes.sortIcon} />
           </div>
         );
-      } else if (sortOrder === 'desc') {
+      } else if (sortOrder === "desc") {
         return (
           <div>
             <FontAwesomeIcon icon={faCaretUp} className={classes.sortIcon} />
-            <FontAwesomeIcon icon={faCaretDown} className={`${classes.sortIcon} ${classes.sortIconActive}`} />
+            <FontAwesomeIcon
+              icon={faCaretDown}
+              className={`${classes.sortIcon} ${classes.sortIconActive}`}
+            />
           </div>
         );
       }
@@ -144,7 +158,7 @@ function Resources() {
 
   // Efekt, który resetuje sortowanie po zmianie strony
   useEffect(() => {
-    setSortBy('');
+    setSortBy("");
     setSortOrder(null);
     setIsDefaultSort(true);
   }, [currentPage]);
@@ -156,10 +170,10 @@ function Resources() {
     if (sortBy) {
       sortedResources.sort((a, b) => {
         if (a[sortBy] < b[sortBy]) {
-          return sortOrder === 'asc' ? -1 : 1;
+          return sortOrder === "asc" ? -1 : 1;
         }
         if (a[sortBy] > b[sortBy]) {
-          return sortOrder === 'asc' ? 1 : -1;
+          return sortOrder === "asc" ? 1 : -1;
         }
         return 0;
       });
@@ -168,12 +182,19 @@ function Resources() {
     // Paginacja zasobów
     const indexOfLastResource = currentPage * resourcesPerPage;
     const indexOfFirstResource = indexOfLastResource - resourcesPerPage;
-    const currentResources = sortedResources.slice(indexOfFirstResource, indexOfLastResource);
+    const currentResources = sortedResources.slice(
+      indexOfFirstResource,
+      indexOfLastResource
+    );
 
     // Renderowanie wierszy zasobów
     return currentResources.map((resource, index) => (
       <>
-        <Accordion resource={resource} index={index} reresourcesAllocation={resourcesAllocation} />
+        <Accordion
+          resource={resource}
+          index={index}
+          reresourcesAllocation={resourcesAllocation}
+        />
       </>
     ));
   };
@@ -201,14 +222,20 @@ function Resources() {
 
   const renderPaginationItem = (pageNumber, label) => {
     return (
-      <li key={pageNumber} className={currentPage === pageNumber ? `${classes.active}` : `${''}`}>
+      <li
+        key={pageNumber}
+        className={currentPage === pageNumber ? `${classes.active}` : `${""}`}
+      >
         <button onClick={() => handlePageChange(pageNumber)}>{label}</button>
       </li>
     );
   };
 
   pagination.push(
-    <li key="prev" className={currentPage === 1 ? `${classes.disabled}` : `${''}`}>
+    <li
+      key="prev"
+      className={currentPage === 1 ? `${classes.disabled}` : `${""}`}
+    >
       <button onClick={handlePrevPage}>
         <FontAwesomeIcon icon={faChevronLeft} />
       </button>
@@ -256,7 +283,10 @@ function Resources() {
   }
 
   pagination.push(
-    <li key="next" className={currentPage === pageNumbers ? `${classes.disabled}` : `${''}`}>
+    <li
+      key="next"
+      className={currentPage === pageNumbers ? `${classes.disabled}` : `${""}`}
+    >
       <button onClick={handleNextPage}>
         <FontAwesomeIcon icon={faChevronRight} />
       </button>
@@ -270,15 +300,11 @@ function Resources() {
         <table className={classes.table}>
           <thead>
             <tr>
-              <th onClick={() => sortResources('id')}>
-                <div>
-                  Id zasobu {renderSortIcons('id')}
-                </div>
+              <th onClick={() => sortResources("id")}>
+                <div>Id zasobu {renderSortIcons("id")}</div>
               </th>
-              <th onClick={() => sortResources('resourceName')}>
-                <div>
-                  Nazwa zasobu {renderSortIcons('resourceName')}
-                </div>
+              <th onClick={() => sortResources("resourceName")}>
+                <div>Nazwa zasobu {renderSortIcons("resourceName")}</div>
               </th>
               <th>
                 <div className={classes.thAlignLeft}>
@@ -301,7 +327,7 @@ function Resources() {
 export default Resources;
 
 async function loadRespurces() {
-  const response = await fetch('');
+  const response = await fetch("");
 
   if (!response.ok) {
     // return { isError: true, message: 'Could not fetch events.' };
@@ -309,7 +335,7 @@ async function loadRespurces() {
     //   status: 500,
     // });
     throw json(
-      { message: 'Could not fetch resources.' },
+      { message: "Could not fetch resources." },
       {
         status: 500,
       }

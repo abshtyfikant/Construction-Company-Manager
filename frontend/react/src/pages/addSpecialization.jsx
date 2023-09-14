@@ -1,10 +1,10 @@
-import GridMenuHeader from '../components/gridMenuHeader';
-import '../css/add-specialization.css';
-import * as React from 'react';
-import { useNavigate, json } from 'react-router-dom';
+import GridMenuHeader from "../components/gridMenuHeader";
+import "../css/add-specialization.css";
+import * as React from "react";
+import { useNavigate, json } from "react-router-dom";
 
 export default function AddSpecialization() {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const nameRef = React.useRef();
 
@@ -15,11 +15,11 @@ export default function AddSpecialization() {
       name: nameRef.current.value,
     };
 
-    const response = await fetch('https://localhost:7098/api/Specialization', {
-      method: 'post',
+    const response = await fetch("https://localhost:7098/api/Specialization", {
+      method: "post",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token,
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
       },
       body: JSON.stringify(specData),
     });
@@ -29,16 +29,16 @@ export default function AddSpecialization() {
     }
 
     if (!response.ok) {
-      throw json({ message: 'Could not save worker.' }, { status: 500 });
+      throw json({ message: "Could not save worker." }, { status: 500 });
     }
     const data = await response.json();
-    return navigate('/menu'); // Przekierowanie po dodaniu pracownika
+    return navigate("/menu"); // Przekierowanie po dodaniu pracownika
   };
 
   return (
-    <div className='add-specialization'>
+    <div className="add-specialization">
       <GridMenuHeader headerTitle="Dodaj specjalizację" />
-      <div className='container'>
+      <div className="container">
         <form onSubmit={handleSubmit}>
           <div className="label-container">
             <div className="column">

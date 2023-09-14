@@ -5,7 +5,7 @@
   align-items: center;
   margin-top: 50px;
 }
-.reports .table{
+.reports .table {
   text-align: center;
   border-collapse: collapse;
   width: 50%;
@@ -16,19 +16,19 @@
 .reports table th:nth-child(5) {
   cursor: default;
 }
-.reports table thead tr{
+.reports table thead tr {
   height: 50px;
 }
-.reports table th > div{
+.reports table th > div {
   display: flex;
   align-items: center;
   align-content: center;
   justify-content: center;
 }
-.reports table th > div > div{
+.reports table th > div > div {
   display: grid;
 }
-.reports table th > div > div >svg:first-child{
+.reports table th > div > div > svg:first-child {
   margin-bottom: -7px;
 }
 .reports .table {
@@ -57,7 +57,7 @@
   padding: 20px 15px;
 }
 
-.reports .table tbody .align-left{
+.reports .table tbody .align-left {
   text-align: left;
 }
 
@@ -71,7 +71,6 @@
 
 .reports .pagination li {
   margin: 0 0.3rem;
-
 }
 
 /* Dodatkowe style dla aktywnej strony */
@@ -106,8 +105,8 @@
   display: flex;
   justify-content: flex-start;
 }
-.reports .th-align-left p{
-margin-right: 20px;
+.reports .th-align-left p {
+  margin-right: 20px;
 }
 
 .reports .th-align-right {
@@ -117,21 +116,21 @@ margin-right: 20px;
   text-decoration: none;
   color: black;
   background-color: #f2f2f2;
-  padding: 0.5rem 1rem ;
+  padding: 0.5rem 1rem;
   transition: background-color 0.3s ease;
 }
 .reports .th-align-right a:hover {
   background-color: #e1e0e0;
 }
 
-.reports .raport-btn a{
+.reports .raport-btn a {
   color: white;
   text-decoration: none;
   background-color: grey;
   padding: 5px 10px;
   border-radius: 15px;
 }
-.reports .raport-btn a:hover{
+.reports .raport-btn a:hover {
   background-color: rgb(179, 178, 178);
 }
 /* koniec reports */

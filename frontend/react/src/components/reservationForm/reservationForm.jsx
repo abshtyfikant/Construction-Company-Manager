@@ -1,6 +1,6 @@
 import classes from './reservationForm.module.css';
 import * as React from 'react';
-import { useNavigate, json, defer, useLoaderData } from 'react-router-dom';
+import { useNavigate, json } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import ErrorMsg from '../errorMsg';
@@ -15,6 +15,7 @@ export default function ReservationForm({ defaultValue, method }) {
     const [workers, setWorkers] = React.useState(defaultValue?.workers ?? []);
     const [materials, setMaterials] = React.useState(defaultValue?.materials ?? []);
     const [resources, setResources] = React.useState(defaultValue?.resources ?? []);
+    const [price, setPrice] = React.useState(defaultValue?.price ?? 0.0);
     const [fetchedWorkers, setFetchedWorkers] = React.useState();
     const [fetchedResources, setFetchedResources] = React.useState([]);
     const [fetchedClients, setFetchedClients] = React.useState();
@@ -127,6 +128,7 @@ export default function ReservationForm({ defaultValue, method }) {
             beginDate: startDate,
             endDate: endDate,
             city: city,
+            price: price,
             serviceStatus: serviceStatus,
             paymentStatus: paymentStatus,
             assigments:
@@ -165,6 +167,7 @@ export default function ReservationForm({ defaultValue, method }) {
                     })
                 })
         };
+
         const response = await fetch('https://localhost:7098/api/Service', {
             method: method,
             headers: {
@@ -182,7 +185,6 @@ export default function ReservationForm({ defaultValue, method }) {
             alert("Coś poszło nie tak przy dodawaniu rezerwacji. Spróbuj ponownie za chwilę.")
             throw json({ message: 'Could not save reservation.' }, { status: 500 });
         }
-        alert("Dodano rezerwację.")
     };
 
     //Handle form submit - request
@@ -567,6 +569,16 @@ export default function ReservationForm({ defaultValue, method }) {
                         value={city}
                         placeholder='Dodaj miasto...'
                         onChange={(e) => setCity(e.target.value)}
+                        required
+                    />
+                    <label htmlFor='price' className={classes.label}>Cena za usługę:</label>
+                    <input
+                        className={classes.formInput}
+                        id='price'
+                        type='number'
+                        value={price}
+                        placeholder='Dodaj cenę...'
+                        onInput={(e) => setPrice(e.target.value)}
                         required
                     />
                     <label htmlFor='payment-status' className={classes.label}>Status płatności:</label>

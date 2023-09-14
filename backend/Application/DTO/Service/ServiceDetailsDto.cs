@@ -13,7 +13,7 @@ public class ServiceDetailsDto : IMapFrom<Domain.Model.Service>
     public string City { get; set; }
     public string ServiceStatus { get; set; }
     public string PaymentStatus { get; set; }
-
+    public double Price { get; set; }
     public void Mapping(Profile profile)
     {
         profile.CreateMap<Domain.Model.Service, ServiceDetailsDto>()
@@ -24,6 +24,7 @@ public class ServiceDetailsDto : IMapFrom<Domain.Model.Service>
             .ForMember(d => d.EndDate, opt => opt.MapFrom(s => s.EndDate))
             .ForMember(d => d.City, opt => opt.MapFrom(s => s.City))
             .ForMember(d => d.ServiceStatus, opt => opt.MapFrom(s => s.ServiceStatus))
-            .ForMember(d => d.PaymentStatus, opt => opt.MapFrom(s => s.PaymentStatus));
+            .ForMember(d => d.PaymentStatus, opt => opt.MapFrom(s => s.PaymentStatus))
+            .ForMember(d => d.Price, opt => opt.MapFrom(s => s.Price));
     }
 }

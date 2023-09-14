@@ -1,11 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretUp, faCaretDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import GridMenuHeader from '../components/gridMenuHeader';
-import { Link, useNavigate, defer, json } from 'react-router-dom';
-import classes from './styles/reservations.module.css';
-import Comments from '../components/comments';
-import Loading from '../components/loading';
+import React, { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCaretUp,
+  faCaretDown,
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
+import GridMenuHeader from "../components/gridMenuHeader";
+import { Link, useNavigate, defer, json } from "react-router-dom";
+import classes from "./styles/reservations.module.css";
+import Comments from "../components/comments";
+import Loading from "../components/loading";
 
 function Accordion({ reservation, index, handleOpenComments }) {
   const navigate = useNavigate();
@@ -16,22 +21,26 @@ function Accordion({ reservation, index, handleOpenComments }) {
   const calcSumMaterials = () => {
     let tmpSumMaterials = 0.0;
     reservation?.materials?.forEach((material) => {
-      tmpSumMaterials += Number(material.price) * Number(material.quantity)
+      tmpSumMaterials += Number(material.price) * Number(material.quantity);
     });
-    setSumMaterials(tmpSumMaterials)
-  }
+    setSumMaterials(tmpSumMaterials);
+  };
 
   const calcSumWorkers = () => {
     let tmpSumWorkers = 0.0;
-    reservation?.workers?.forEach((worker) => {
-
-    });
-    setSumWorkers(tmpSumWorkers)
-  }
+    reservation?.workers?.forEach((worker) => {});
+    setSumWorkers(tmpSumWorkers);
+  };
 
   return (
     <>
-      <tr key={index} onClick={() => { setOpenDetails((prev) => !prev); calcSumMaterials(); }}>
+      <tr
+        key={index}
+        onClick={() => {
+          setOpenDetails((prev) => !prev);
+          calcSumMaterials();
+        }}
+      >
         <td>{reservation.id}</td>
         <td>{reservation.serviceType}</td>
         <td>{reservation.beginDate.slice(0, 10)}</td>
@@ -46,70 +55,107 @@ function Accordion({ reservation, index, handleOpenComments }) {
       {openDetails ? (
         <tr className={classes.dropdownDetails}>
           <td colSpan={3}>
-            <p>Klient: {reservation.client?.firstName} {reservation.client?.lastName}</p>
-            <p><b>Zespół wykonawczy:</b></p>
-            <p><b>Imię i nazwisko | Specjalizacja | Stawka | Od | Do</b></p>
-            {reservation.workers && reservation.workers.map((worker) => {
-              return (
-                <p key={worker.employeeId}>
-                {worker.employee} | {worker.function} | {worker.ratePerHour} | {worker.startDate?.slice(0, 10)} | {worker.endDate?.slice(0, 10)}
-                </p>
-              );
-            })}
+            <p>
+              Klient: {reservation.client?.firstName}{" "}
+              {reservation.client?.lastName}
+            </p>
+            <p>
+              <b>Zespół wykonawczy:</b>
+            </p>
+            <p>
+              <b>Imię i nazwisko | Specjalizacja | Stawka | Od | Do</b>
+            </p>
+            {reservation.workers &&
+              reservation.workers.map((worker) => {
+                return (
+                  <p key={worker.employeeId}>
+                    {worker.employee} | {worker.function} | {worker.ratePerHour}{" "}
+                    | {worker.startDate?.slice(0, 10)} |{" "}
+                    {worker.endDate?.slice(0, 10)}
+                  </p>
+                );
+              })}
           </td>
           <td colSpan={3}>
-            <p><b>Przydział zasobów:</b></p>
-            <p><b>Nazwa | Ilość | Od | Do</b></p>
-            {reservation.resources && reservation.resources.map((resource) => {
-              return (
-                <p key={resource.resourceId}>
-                {resource.resourceName} | {resource.allocatedQuantity} | {resource.beginDate?.slice(0, 10)} | {resource.endDate?.slice(0, 10)}
-                </p>
-              );
-            })}
-            <p><b>Materiały:</b></p>
-            <p><b>Nazwa | Cena | Ilość | Jednostka</b></p>
-            {reservation.materials && reservation.materials.map((material) => {
-              return (
-                <p key={material.id}>{material.name} | {material.price} | {material.quantity} | {material.unit}</p>
-              );
-            })}
+            <p>
+              <b>Przydział zasobów:</b>
+            </p>
+            <p>
+              <b>Nazwa | Ilość | Od | Do</b>
+            </p>
+            {reservation.resources &&
+              reservation.resources.map((resource) => {
+                return (
+                  <p key={resource.resourceId}>
+                    {resource.resourceName} | {resource.allocatedQuantity} |{" "}
+                    {resource.beginDate?.slice(0, 10)} |{" "}
+                    {resource.endDate?.slice(0, 10)}
+                  </p>
+                );
+              })}
+            <p>
+              <b>Materiały:</b>
+            </p>
+            <p>
+              <b>Nazwa | Cena | Ilość | Jednostka</b>
+            </p>
+            {reservation.materials &&
+              reservation.materials.map((material) => {
+                return (
+                  <p key={material.id}>
+                    {material.name} | {material.price} | {material.quantity} |{" "}
+                    {material.unit}
+                  </p>
+                );
+              })}
           </td>
           <td colSpan={3}>
             <p>Koszt materiałów: {sumMaterials}</p>
             <p>Koszt pracowników: {sumWorkers}</p>
             <p
               className={classes.actions}
-              onClick={() => { navigate("/edytuj-rezerwacje", { state: { reservation: reservation } }) }}
+              onClick={() => {
+                navigate("/edytuj-rezerwacje", {
+                  state: { reservation: reservation },
+                });
+              }}
             >
               + Modyfikuj rezerwację
             </p>
-            <p className={classes.actions}
-              onClick={() => { navigate("/generowanie-raportu", { state: { reservation: reservation } }) }}
+            <p
+              className={classes.actions}
+              onClick={() => {
+                navigate("/generowanie-raportu", {
+                  state: { reservation: reservation },
+                });
+              }}
             >
               + Generuj raport
             </p>
-            <p onClick={() => handleOpenComments(true)} className={classes.actions}>+ Dodaj komentarz</p>
+            <p
+              onClick={() => handleOpenComments(true)}
+              className={classes.actions}
+            >
+              + Dodaj komentarz
+            </p>
           </td>
         </tr>
-      )
-        : null
-      }
+      ) : null}
     </>
-  )
+  );
 }
 
 function Reservations() {
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   const [reservations, setReservations] = useState([]); // Dane raportów z API
-  const [sortBy, setSortBy] = useState(''); // Kolumna, według której sortujemy
+  const [sortBy, setSortBy] = useState(""); // Kolumna, według której sortujemy
   const [sortOrder, setSortOrder] = useState(null); // Kierunek sortowania (asc/desc/null)
   const [isDefaultSort, setIsDefaultSort] = useState(true); // Informacja o domyślnym sortowaniu
   const [currentPage, setCurrentPage] = useState(1); // Aktualna strona
   const reservationsPerPage = 10; // Liczba raportów na stronie
   const maxVisiblePages = 5; // Maksymalna liczba widocznych stron paginacji
-  const ellipsis = '...'; // Symbol kropek const [openComments, setOpenComments] = useState(false);
+  const ellipsis = "..."; // Symbol kropek const [openComments, setOpenComments] = useState(false);
   const [openComments, setOpenComments] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -117,10 +163,10 @@ function Reservations() {
   async function fetchReservations() {
     let tmpReservations = [];
     try {
-      const response = await fetch('https://localhost:7098/api/Service', {
+      const response = await fetch("https://localhost:7098/api/Service", {
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token,
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
         },
       });
 
@@ -128,76 +174,80 @@ function Reservations() {
         const data = await response.json();
         tmpReservations = data;
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
 
     tmpReservations.map(async (reservation) => {
       try {
-        const response = await fetch('https://localhost:7098/api/Client/' + reservation.clientId, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token,
-          },
-        });
+        const response = await fetch(
+          "https://localhost:7098/api/Client/" + reservation.clientId,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
 
         if (response.ok) {
           const data = await response.json();
           reservation.client = data;
         }
-      } catch (error) {
-
-      }
+      } catch (error) {}
 
       try {
-        const response = await fetch('https://localhost:7098/api/ResourceAllocation/Service/' + reservation.id, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token,
-          },
-        });
+        const response = await fetch(
+          "https://localhost:7098/api/ResourceAllocation/Service/" +
+            reservation.id,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
 
         if (response.ok) {
           const data = await response.json();
           reservation.resources = data;
         }
-      } catch (error) {
-        
-      }
+      } catch (error) {}
 
       try {
-        const response = await fetch('https://localhost:7098/api/Assignment/GetServiceAssignments/' + reservation.id, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token,
-          },
-        });
+        const response = await fetch(
+          "https://localhost:7098/api/Assignment/GetServiceAssignments/" +
+            reservation.id,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
 
         if (response.ok) {
           const data = await response.json();
           reservation.workers = data;
         }
-      } catch (error) {
-
-      }
+      } catch (error) {}
 
       try {
-        const response = await fetch('https://localhost:7098/api/Material/GetByService/' + reservation.id, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token,
-          },
-        });
+        const response = await fetch(
+          "https://localhost:7098/api/Material/GetByService/" + reservation.id,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
 
         if (response.ok) {
           const data = await response.json();
           reservation.materials = data;
         }
-      } catch (error) {
-        
-      }
+      } catch (error) {}
       setIsLoading(false);
-    })
+    });
 
     setReservations(tmpReservations);
   }
@@ -210,16 +260,16 @@ function Reservations() {
   // Funkcja sortująca rezerwacje po kliknięciu w nagłówek kolumny
   const sortReservations = (column) => {
     if (sortBy === column) {
-      if (sortOrder === 'asc') {
-        setSortOrder('desc');
-      } else if (sortOrder === 'desc') {
-        setSortBy('');
+      if (sortOrder === "asc") {
+        setSortOrder("desc");
+      } else if (sortOrder === "desc") {
+        setSortBy("");
         setSortOrder(null);
         setIsDefaultSort(true);
       }
     } else {
       setSortBy(column);
-      setSortOrder('asc');
+      setSortOrder("asc");
       setIsDefaultSort(false);
     }
   };
@@ -227,18 +277,24 @@ function Reservations() {
   // Funkcja renderująca ikonki sortowania
   const renderSortIcons = (column) => {
     if (sortBy === column) {
-      if (sortOrder === 'asc') {
+      if (sortOrder === "asc") {
         return (
           <div>
-            <FontAwesomeIcon icon={faCaretUp} className={`${classes.sortIcon} ${classes.sortIconActive}`} />
+            <FontAwesomeIcon
+              icon={faCaretUp}
+              className={`${classes.sortIcon} ${classes.sortIconActive}`}
+            />
             <FontAwesomeIcon icon={faCaretDown} className={classes.sortIcon} />
           </div>
         );
-      } else if (sortOrder === 'desc') {
+      } else if (sortOrder === "desc") {
         return (
           <div>
             <FontAwesomeIcon icon={faCaretUp} className={classes.sortIcon} />
-            <FontAwesomeIcon icon={faCaretDown} className={`${classes.sortIcon} ${classes.sortIconActive}`} />
+            <FontAwesomeIcon
+              icon={faCaretDown}
+              className={`${classes.sortIcon} ${classes.sortIconActive}`}
+            />
           </div>
         );
       }
@@ -253,7 +309,7 @@ function Reservations() {
 
   // Efekt, który resetuje sortowanie po zmianie strony
   useEffect(() => {
-    setSortBy('');
+    setSortBy("");
     setSortOrder(null);
     setIsDefaultSort(true);
   }, [currentPage]);
@@ -269,10 +325,10 @@ function Reservations() {
     if (sortBy) {
       sortedReservations.sort((a, b) => {
         if (a[sortBy] < b[sortBy]) {
-          return sortOrder === 'asc' ? -1 : 1;
+          return sortOrder === "asc" ? -1 : 1;
         }
         if (a[sortBy] > b[sortBy]) {
-          return sortOrder === 'asc' ? 1 : -1;
+          return sortOrder === "asc" ? 1 : -1;
         }
         return 0;
       });
@@ -280,13 +336,21 @@ function Reservations() {
 
     // Paginacja rezerwacji
     const indexOfLastReservation = currentPage * reservationsPerPage;
-    const indexOfFirstReservation = indexOfLastReservation - reservationsPerPage;
-    const currentReservations = sortedReservations.slice(indexOfFirstReservation, indexOfLastReservation);
+    const indexOfFirstReservation =
+      indexOfLastReservation - reservationsPerPage;
+    const currentReservations = sortedReservations.slice(
+      indexOfFirstReservation,
+      indexOfLastReservation
+    );
 
     // Renderowanie wierszy rezerwacji
     return currentReservations.map((reservation, index) => (
       <>
-        <Accordion reservation={reservation} index={index} handleOpenComments={handleOpenComments} />
+        <Accordion
+          reservation={reservation}
+          index={index}
+          handleOpenComments={handleOpenComments}
+        />
         <Comments isOpen={openComments} serviceId={reservation.id} />
       </>
     ));
@@ -315,14 +379,20 @@ function Reservations() {
 
   const renderPaginationItem = (pageNumber, label) => {
     return (
-      <li key={pageNumber} className={currentPage === pageNumber ? `${classes.active}` : `${''}`}>
+      <li
+        key={pageNumber}
+        className={currentPage === pageNumber ? `${classes.active}` : `${""}`}
+      >
         <button onClick={() => handlePageChange(pageNumber)}>{label}</button>
       </li>
     );
   };
 
   pagination.push(
-    <li key="prev" className={currentPage === 1 ? `${classes.disabled}` : `${''}`}>
+    <li
+      key="prev"
+      className={currentPage === 1 ? `${classes.disabled}` : `${""}`}
+    >
       <button onClick={handlePrevPage}>
         <FontAwesomeIcon icon={faChevronLeft} />
       </button>
@@ -370,7 +440,10 @@ function Reservations() {
   }
 
   pagination.push(
-    <li key="next" className={currentPage === pageNumbers ? `${classes.disabled}` : `${''}`}>
+    <li
+      key="next"
+      className={currentPage === pageNumbers ? `${classes.disabled}` : `${""}`}
+    >
       <button onClick={handleNextPage}>
         <FontAwesomeIcon icon={faChevronRight} />
       </button>
@@ -382,37 +455,28 @@ function Reservations() {
       <Loading isVisible={isLoading} />
       <span
         className={classes.backdrop}
-        style={{ display: openComments ? 'block' : 'none' }}
-        onClick={() => setOpenComments(false)} />
+        style={{ display: openComments ? "block" : "none" }}
+        onClick={() => setOpenComments(false)}
+      />
       <GridMenuHeader headerTitle="Rezerwacje" />
       <div className={classes.tableContainer}>
         <table className={classes.table}>
           <thead>
             <tr>
-              <th onClick={() => sortReservations('id')}>
-                <div>
-                  Id usługi {renderSortIcons('id')}
-                </div>
+              <th onClick={() => sortReservations("id")}>
+                <div>Id usługi {renderSortIcons("id")}</div>
               </th>
-              <th onClick={() => sortReservations('serviceType')}>
-                <div>
-                  Typ usługi {renderSortIcons('serviceType')}
-                </div>
+              <th onClick={() => sortReservations("serviceType")}>
+                <div>Typ usługi {renderSortIcons("serviceType")}</div>
               </th>
-              <th onClick={() => sortReservations('beginDate')}>
-                <div>
-                  Data od {renderSortIcons('beginDate')}
-                </div>
+              <th onClick={() => sortReservations("beginDate")}>
+                <div>Data od {renderSortIcons("beginDate")}</div>
               </th>
-              <th onClick={() => sortReservations('endDate')}>
-                <div>
-                  Data do {renderSortIcons('endDate')}
-                </div>
+              <th onClick={() => sortReservations("endDate")}>
+                <div>Data do {renderSortIcons("endDate")}</div>
               </th>
-              <th onClick={() => sortReservations('city')}>
-                <div>
-                  Miasto {renderSortIcons('city')}
-                </div>
+              <th onClick={() => sortReservations("city")}>
+                <div>Miasto {renderSortIcons("city")}</div>
               </th>
               <th>
                 <div className={classes.thAlignLeft}>
@@ -440,11 +504,11 @@ function Reservations() {
 export default Reservations;
 
 async function loadReservations() {
-  const response = await fetch('');
+  const response = await fetch("");
 
   if (!response.ok) {
     throw json(
-      { message: 'Could not fetch reservations.' },
+      { message: "Could not fetch reservations." },
       {
         status: 500,
       }

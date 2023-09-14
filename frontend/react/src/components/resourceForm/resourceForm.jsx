@@ -1,11 +1,11 @@
-import './resourceForm.css';
-import { useNavigate, json } from 'react-router-dom';
-import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import "./resourceForm.css";
+import { useNavigate, json } from "react-router-dom";
+import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export default function ResourceForm({ defaultValue, method }) {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const quantityRef = React.useRef();
   const nameRef = React.useRef();
@@ -14,16 +14,16 @@ export default function ResourceForm({ defaultValue, method }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
-      id: defaultValue?.id?? 0,
+      id: defaultValue?.id ?? 0,
       name: nameRef.current.value,
       quantity: Number(quantityRef.current.value),
     };
 
-    const response = await fetch('https://localhost:7098/api/Resource', {
+    const response = await fetch("https://localhost:7098/api/Resource", {
       method: method,
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token,
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
       },
       body: JSON.stringify(formData),
     });
@@ -33,20 +33,23 @@ export default function ResourceForm({ defaultValue, method }) {
     }
 
     if (!response.ok) {
-      throw json({ message: 'Could not save reservation.' }, { status: 500 });
+      throw json({ message: "Could not save reservation." }, { status: 500 });
     }
-    
-    return navigate('/stan-zasobow');
+
+    return navigate("/stan-zasobow");
   };
 
   const handleDelete = async (e) => {
-    const response = await fetch('https://localhost:7098/api/Resource/' + defaultValue.id, {
-      method: 'delete',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token,
-      },
-    });
+    const response = await fetch(
+      "https://localhost:7098/api/Resource/" + defaultValue.id,
+      {
+        method: "delete",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
 
     if (!response.ok) {
       // return { isError: true, message: 'Could not fetch project.' };
@@ -54,29 +57,33 @@ export default function ResourceForm({ defaultValue, method }) {
       //   status: 500,
       // });
       throw json(
-        { message: 'Could not fetch resource.' },
+        { message: "Could not fetch resource." },
         {
           status: 500,
         }
       );
     } else {
-      return navigate('/stan-zasobow');
+      return navigate("/stan-zasobow");
     }
   };
 
   const getAlloc = async () => {
     try {
-      const response = await fetch('https://localhost:7098/api/ResourceAllocation/Resource/' + defaultValue.id, {
-        method: 'get',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token,
-        },
-      });
+      const response = await fetch(
+        "https://localhost:7098/api/ResourceAllocation/Resource/" +
+          defaultValue.id,
+        {
+          method: "get",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
 
       if (!response.ok) {
         throw json(
-          { message: 'Could not fetch resource.' },
+          { message: "Could not fetch resource." },
           {
             status: 500,
           }
@@ -85,7 +92,6 @@ export default function ResourceForm({ defaultValue, method }) {
 
       const data = await response.json();
       setAllocation(data);
-
     } catch (error) {
       //setError("Something went wrong, try again.");
     }
@@ -105,7 +111,7 @@ export default function ResourceForm({ defaultValue, method }) {
 
   return (
     <div>
-      <div className='container'>
+      <div className="container">
         <form onSubmit={handleSubmit}>
           <div className="label-container">
             <div className="column">
@@ -114,17 +120,17 @@ export default function ResourceForm({ defaultValue, method }) {
                 <input
                   type="text"
                   name="resourceName"
-                  id='resourceName'
+                  id="resourceName"
                   ref={nameRef}
                   defaultValue={defaultValue ? defaultValue.name : null}
                   required
                 />
               </label>
-              <label htmlFor='quantity'> Ilość: </label>
+              <label htmlFor="quantity"> Ilość: </label>
               <input
                 type="text"
                 name="quantity"
-                id='quantity'
+                id="quantity"
                 ref={quantityRef}
                 defaultValue={defaultValue ? defaultValue.quantity : null}
                 required
@@ -133,13 +139,16 @@ export default function ResourceForm({ defaultValue, method }) {
           </div>
           <div className="button-container">
             <button type="submit">Zatwierdź</button>
-            {method === 'put' &&
+            {method === "put" && (
               <button
-                onClick={(e) => { handleDelete(e) }}
+                onClick={(e) => {
+                  handleDelete(e);
+                }}
                 disabled={checkAlloc() ? true : false}
               >
                 <FontAwesomeIcon icon={faTrash} />
-              </button>}
+              </button>
+            )}
           </div>
         </form>
       </div>

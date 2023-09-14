@@ -1,42 +1,48 @@
-import React, { useState } from 'react';
-import { useNavigate, redirect, json, Form, Link, useNavigation } from 'react-router-dom';
+import React, { useState } from "react";
+import {
+  useNavigate,
+  redirect,
+  json,
+  Form,
+  useNavigation,
+} from "react-router-dom";
 
 function Register() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const navigate = useNavigate();
   const navigation = useNavigation();
-  const isSubmitting = navigation.state === 'submitting';
+  const isSubmitting = navigation.state === "submitting";
 
   return (
-    <section className='center-container'>
-      <Form className="logowanie" method='post'>
+    <section className="center-container">
+      <Form className="logowanie" method="post">
         <h1>Zarejestruj się</h1>
         <input
           type="text"
           placeholder="Imię"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
-          id='firstName'
-          name='firstName'
+          id="firstName"
+          name="firstName"
         />
-         <input
+        <input
           type="text"
           placeholder="Nazwisko"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
-          id='lastName'
-          name='lastName'
+          id="lastName"
+          name="lastName"
         />
         <input
           type="email"
           placeholder="Adres e-mail"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          id='email'
-          name='email'
+          id="email"
+          name="email"
         />
         <br />
         <input
@@ -44,17 +50,16 @@ function Register() {
           placeholder="Hasło"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          id='password'
-          name='password'
+          id="password"
+          name="password"
         />
         <br />
         {/*<button onClick={handleRegister}>Zaloguj</button>*/}
         <button disabled={isSubmitting}>
-          {isSubmitting ? 'Logowanie...' : 'Zaloguj'}
+          {isSubmitting ? "Logowanie..." : "Zaloguj"}
         </button>
       </Form>
     </section>
-
   );
 }
 
@@ -66,16 +71,16 @@ export async function action({ request }) {
 
   const data = await request.formData();
   const authData = {
-    firstName: data.get('firstName'),
-    lastName: data.get('lastName'),
-    email: data.get('email'),
-    password: data.get('password'),
+    firstName: data.get("firstName"),
+    lastName: data.get("lastName"),
+    email: data.get("email"),
+    password: data.get("password"),
   };
 
-  const response = await fetch('https://localhost:7098/auth/Register', {
-    method: 'POST',
+  const response = await fetch("https://localhost:7098/auth/Register", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(authData),
   });
@@ -85,16 +90,16 @@ export async function action({ request }) {
   }
 
   if (!response.ok) {
-    throw json({ message: 'Could not authenticate user.' }, { status: 500 });
+    throw json({ message: "Could not authenticate user." }, { status: 500 });
   }
 
   const resData = await response.json();
   const token = resData.token;
 
-  localStorage.setItem('token', token);
+  localStorage.setItem("token", token);
   const expiration = new Date();
   expiration.setHours(expiration.getHours() + 1);
-  localStorage.setItem('expiration', expiration.toISOString());
+  localStorage.setItem("expiration", expiration.toISOString());
 
-  return redirect('/menu');
+  return redirect("/menu");
 }

@@ -11,6 +11,7 @@ public class Service
     public string ServiceStatus { get; set; }
     public string PaymentStatus { get; set; }
     public string City { get; set; }
+    public decimal Price { get; set; }
     public List<ServiceResource> ServiceResources { get; set; }
     public ICollection<Resource> Resources { get; set; }
     public List<Comment> Comments { get; set; }

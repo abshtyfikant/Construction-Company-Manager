@@ -1,5 +1,5 @@
-import React from 'react';
-import { FaPlus } from 'react-icons/fa';
+import React from "react";
+import { FaPlus } from "react-icons/fa";
 
 const GraySquareWithPlus = () => {
   return (

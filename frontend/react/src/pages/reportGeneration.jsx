@@ -1,61 +1,66 @@
-import GridMenuHeader from '../components/gridMenuHeader';
-import classes from './styles/reportGeneration.module.css';
-import * as React from 'react';
-import { useNavigate, json, useLocation } from 'react-router-dom';
+import GridMenuHeader from "../components/gridMenuHeader";
+import classes from "./styles/reportGeneration.module.css";
+import * as React from "react";
+import { useNavigate, json, useLocation } from "react-router-dom";
 
 const types = [
-  'raport o zarobkach firmy', 'raport o zarobkach pracownika', 'raport o kosztach', 'raport z usługi'
+  "raport o zarobkach firmy",
+  "raport o zarobkach pracownika",
+  "raport o kosztach",
+  "raport z usługi",
 ];
 
 function ReportGeneration() {
   const location = useLocation();
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
-  const userId = localStorage.getItem('userId');
-  const [description, setDescription] = React.useState('');
-  const [city, setCity] = React.useState('');
-  const [startDate, setStartDate] = React.useState('');
-  const [endDate, setEndDate] = React.useState('');
-  const [reportType, setReportType] = React.useState(location.state?.reservation ? 'raport z usługi' : "");
-  const [selectedVal, setSelectedVal] = React.useState(location.state?.reservation?.id ?? '');
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+  const [description, setDescription] = React.useState("");
+  const [city, setCity] = React.useState("");
+  const [startDate, setStartDate] = React.useState("");
+  const [endDate, setEndDate] = React.useState("");
+  const [reportType, setReportType] = React.useState(
+    location.state?.reservation ? "raport z usługi" : ""
+  );
+  const [selectedVal, setSelectedVal] = React.useState(
+    location.state?.reservation?.id ?? ""
+  );
   const [fetchedWorkers, setFetchedWorkers] = React.useState([]);
   const [fetchedServices, setFetchedServices] = React.useState([]);
   const fetchData = React.useCallback(async () => {
     try {
-      const response = await fetch('https://localhost:7098/api/Employee', {
-        method: 'get',
+      const response = await fetch("https://localhost:7098/api/Employee", {
+        method: "get",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token,
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
         },
       });
 
       if (!response.ok) {
-        throw new Error('Something went wrong!');
+        throw new Error("Something went wrong!");
       }
 
       const data = await response.json();
       setFetchedWorkers(data);
-
     } catch (error) {
       //setError("Something went wrong, try again.");
     }
 
     try {
-      const response = await fetch('https://localhost:7098/api/Service', {
-        method: 'get',
+      const response = await fetch("https://localhost:7098/api/Service", {
+        method: "get",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token,
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
         },
       });
       if (!response.ok) {
-        throw new Error('Something went wrong!');
+        throw new Error("Something went wrong!");
       }
 
       const data = await response.json();
       setFetchedServices(data);
-
     } catch (error) {
       //setError("Something went wrong, try again.");
     }
@@ -66,66 +71,76 @@ function ReportGeneration() {
   }, []);
 
   React.useEffect(() => {
-    if (reportType !== "raport z usługi") { return; }
-    const foundService = fetchedServices?.find((service) => service.id === selectedVal);
+    if (reportType !== "raport z usługi") {
+      return;
+    }
+    const foundService = fetchedServices?.find(
+      (service) => service.id === selectedVal
+    );
     setStartDate(foundService?.beginDate);
     setEndDate(foundService?.endDate);
   }, [selectedVal, reportType]);
 
   const renderSelect = () => {
     switch (reportType) {
-      case 'raport o zarobkach firmy':
+      case "raport o zarobkach firmy":
         return (
           <select
             className={classes.formInput}
-            id='worker'
+            id="worker"
             onChange={(e) => setSelectedVal(e.target.value)}
             disabled
           >
-            <option value=''>Wybierz z listy</option>
+            <option value="">Wybierz z listy</option>
           </select>
         );
 
-      case 'raport o zarobkach pracownika':
+      case "raport o zarobkach pracownika":
         return (
           <select
             className={classes.formInput}
-            id='worker'
+            id="worker"
             onChange={(e) => setSelectedVal(e.target.value)}
             required
           >
-            <option value=''>Wybierz z listy</option>
-            {fetchedWorkers && fetchedWorkers.map((worker) => (
-              <option key={worker.id} value={worker.id}>{worker.firstName} {worker.lastName}</option>
-            ))}
+            <option value="">Wybierz z listy</option>
+            {fetchedWorkers &&
+              fetchedWorkers.map((worker) => (
+                <option key={worker.id} value={worker.id}>
+                  {worker.firstName} {worker.lastName}
+                </option>
+              ))}
           </select>
         );
 
-      case 'raport o kosztach':
+      case "raport o kosztach":
         return (
           <select
             className={classes.formInput}
-            id='worker'
+            id="worker"
             onChange={(e) => setSelectedVal(e.target.value)}
             disabled
           >
-            <option value=''>Wybierz z listy</option>
+            <option value="">Wybierz z listy</option>
           </select>
         );
 
-      case 'raport z usługi':
+      case "raport z usługi":
         return (
           <select
             className={classes.formInput}
-            id='reservation'
+            id="reservation"
             onChange={(e) => setSelectedVal(e.target.value)}
             required
             value={selectedVal}
           >
-            <option value=''>Wybierz z listy</option>
-            {fetchedServices && fetchedServices.map((service) => (
-              <option key={service.id} value={service.id}>{service.serviceType}</option>
-            ))}
+            <option value="">Wybierz z listy</option>
+            {fetchedServices &&
+              fetchedServices.map((service) => (
+                <option key={service.id} value={service.id}>
+                  {service.serviceType}
+                </option>
+              ))}
           </select>
         );
     }
@@ -142,14 +157,14 @@ function ReportGeneration() {
       endDate: endDate.length > 10 ? endDate.slice(0, 10) : endDate,
       amount: 0,
       city: city,
-      userId: userId
+      userId: userId,
     };
 
-    const response = await fetch('https://localhost:7098/api/Report', {
-      method: 'post',
+    const response = await fetch("https://localhost:7098/api/Report", {
+      method: "post",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token,
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
       },
       body: JSON.stringify(reportData),
     });
@@ -159,10 +174,10 @@ function ReportGeneration() {
     }
 
     if (!response.ok) {
-      throw json({ message: 'Could not save reservation.' }, { status: 500 });
+      throw json({ message: "Could not save reservation." }, { status: 500 });
     }
 
-    return navigate('/raporty');
+    return navigate("/raporty");
   };
 
   return (
@@ -171,68 +186,87 @@ function ReportGeneration() {
       <form onSubmit={handleSubmit} className={classes.formContainer}>
         <div className={classes.formContent}>
           <div className={classes.splitSection}>
-            <label htmlFor='report-type' className={classes.label}>Rodzaj raportu:</label>
-            {reportType === 'raport o zarobkach pracownika' ||
-              reportType === 'raport z usługi' ?
-              <label htmlFor='worker' className={classes.label}>
-                Wybierz {reportType === 'raport o zarobkach pracownika' ? 'pracownika' : 'usługę'}
-              </label> : <br></br>}
+            <label htmlFor="report-type" className={classes.label}>
+              Rodzaj raportu:
+            </label>
+            {reportType === "raport o zarobkach pracownika" ||
+            reportType === "raport z usługi" ? (
+              <label htmlFor="worker" className={classes.label}>
+                Wybierz{" "}
+                {reportType === "raport o zarobkach pracownika"
+                  ? "pracownika"
+                  : "usługę"}
+              </label>
+            ) : (
+              <br></br>
+            )}
             <select
               className={classes.formInput}
-              id='report-type'
+              id="report-type"
               onChange={(e) => setReportType(e.target.value)}
               reqiured
               value={reportType}
             >
-              <option value=''>Wybierz z listy</option>
+              <option value="">Wybierz z listy</option>
               {types.map((type) => (
-                <option key={type} value={type}>{type}</option>
+                <option key={type} value={type}>
+                  {type}
+                </option>
               ))}
             </select>
 
             {renderSelect()}
-
           </div>
-          <label htmlFor='start-date' className={classes.label}>Data od:</label>
+          <label htmlFor="start-date" className={classes.label}>
+            Data od:
+          </label>
           <input
             className={classes.formInput}
-            id='start-date'
-            type='date'
+            id="start-date"
+            type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            required={reportType === 'raport z usługi' ? false : true}
-            disabled={reportType === 'raport z usługi' ? true : false}
+            required={reportType === "raport z usługi" ? false : true}
+            disabled={reportType === "raport z usługi" ? true : false}
           />
-          <label htmlFor='end-date' className={classes.label}>Data do:</label>
+          <label htmlFor="end-date" className={classes.label}>
+            Data do:
+          </label>
           <input
             className={classes.formInput}
-            id='end-date'
-            type='date'
+            id="end-date"
+            type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            required={reportType === 'raport z usługi' ? false : true}
-            disabled={reportType === 'raport z usługi' ? true : false}
+            required={reportType === "raport z usługi" ? false : true}
+            disabled={reportType === "raport z usługi" ? true : false}
           />
-          <label htmlFor='city' className={classes.label}>Miasto (opcj.):</label>
+          <label htmlFor="city" className={classes.label}>
+            Miasto (opcj.):
+          </label>
           <input
             className={classes.formInput}
-            id='city'
-            type='text'
+            id="city"
+            type="text"
             value={city}
-            placeholder='Dodaj miasto...'
+            placeholder="Dodaj miasto..."
             onChange={(e) => setCity(e.target.value)}
           />
-          <label htmlFor='description' className={classes.label}>Opis (opcj.):</label>
+          <label htmlFor="description" className={classes.label}>
+            Opis (opcj.):
+          </label>
           <input
             className={classes.formInput}
-            id='description'
-            type='text'
+            id="description"
+            type="text"
             value={description}
-            placeholder='Dodaj opis raportu...'
+            placeholder="Dodaj opis raportu..."
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
-        <button type='submit' className={classes.submitBtn}>Generuj raport</button>
+        <button type="submit" className={classes.submitBtn}>
+          Generuj raport
+        </button>
       </form>
     </div>
   );

@@ -21,7 +21,7 @@
 }
 
 .container .formContainer .label {
-    display: block;
+  display: block;
 }
 
 .container .formContainer .formInput {
@@ -37,9 +37,9 @@
 }
 
 .container .formContainer .splitSection {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
 }
 
 .container .formContainer .submitBtn {

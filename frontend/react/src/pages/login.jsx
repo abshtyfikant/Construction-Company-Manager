@@ -1,24 +1,31 @@
-import React, { useState } from 'react';
-import { useNavigate, redirect, json, Form, Link, useNavigation } from 'react-router-dom';
+import React, { useState } from "react";
+import {
+  useNavigate,
+  redirect,
+  json,
+  Form,
+  Link,
+  useNavigation,
+} from "react-router-dom";
 
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const navigation = useNavigation();
-  const isSubmitting = navigation.state === 'submitting';
+  const isSubmitting = navigation.state === "submitting";
 
   return (
-    <section className='center-container'>
-      <Form className="logowanie" method='post'>
+    <section className="center-container">
+      <Form className="logowanie" method="post">
         <h1>Logowanie</h1>
         <input
           type="text"
           placeholder="Adres e-mail"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          id='email'
-          name='email'
+          id="email"
+          name="email"
         />
         <br />
         <input
@@ -26,17 +33,16 @@ function Login() {
           placeholder="Hasło"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          id='password'
-          name='password'
+          id="password"
+          name="password"
         />
         <br />
         {/*<button onClick={handleLogin}>Zaloguj</button>*/}
         <button disabled={isSubmitting}>
-          {isSubmitting ? 'Logowanie...' : 'Zaloguj'}
+          {isSubmitting ? "Logowanie..." : "Zaloguj"}
         </button>
       </Form>
     </section>
-
   );
 }
 
@@ -48,14 +54,14 @@ export async function action({ request }) {
 
   const data = await request.formData();
   const authData = {
-    email: data.get('email'),
-    password: data.get('password'),
+    email: data.get("email"),
+    password: data.get("password"),
   };
 
-  const response = await fetch('https://localhost:7098/auth/Login', {
-    method: 'POST',
+  const response = await fetch("https://localhost:7098/auth/Login", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(authData),
   });
@@ -65,15 +71,15 @@ export async function action({ request }) {
   }
 
   if (!response.ok) {
-    throw json({ message: 'Could not authenticate user.' }, { status: 500 });
+    throw json({ message: "Could not authenticate user." }, { status: 500 });
   }
 
   const resData = await response.json();
   const expiration = new Date();
-  expiration.setTime(expiration.getTime() + (1*60*60*1000));
-  localStorage.setItem('token', resData.token);
-  localStorage.setItem('expiration', expiration)
-  localStorage.setItem('userId', resData.id);
+  expiration.setTime(expiration.getTime() + 1 * 60 * 60 * 1000);
+  localStorage.setItem("token", resData.token);
+  localStorage.setItem("expiration", expiration);
+  localStorage.setItem("userId", resData.id);
 
-  return redirect('/menu');
+  return redirect("/menu");
 }

@@ -45,6 +45,7 @@ public class ServiceController : ControllerBase
     {
         if (!ModelState.IsValid) return BadRequest();
         if (newService.Id > 0) return StatusCode(StatusCodes.Status500InternalServerError);
+
         var onlyService = new NewServiceDto
         {
             Id = newService.Id,
@@ -55,6 +56,7 @@ public class ServiceController : ControllerBase
             ServiceStatus = newService.ServiceStatus,
             PaymentStatus = newService.PaymentStatus,
             City = newService.City,
+            Price = newService.Price,
         };
 
         var serviceId = _serviceService.AddService(onlyService, newService.Assigments, newService.Resources, newService.Materials);

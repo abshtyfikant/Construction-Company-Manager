@@ -1,143 +1,142 @@
 .resources .tableContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 50px;
-  }
-  .resources .table{
-    text-align: center;
-    border-collapse: collapse;
-    width: 50%;
-  }
-  .resources table th {
-    cursor: pointer;
-  }
-  .resources table th:nth-child(5) {
-    cursor: default;
-  }
-  .resources table thead tr{
-    height: 50px;
-  }
-  .resources table th > div{
-    display: flex;
-    align-items: center;
-    align-content: center;
-    justify-content: center;
-  }
-  .resources table th > div > div{
-    display: grid;
-  }
-  .resources table th > div > div >svg:first-child{
-    margin-bottom: -7px;
-  }
-  .resources .table {
-    border-collapse: collapse;
-    width: auto;
-  }
-  
-  /* .table thead th, */
-  .resources .table tbody td {
-    background-color: #f2f2f2;
-    border-bottom: 1px solid black;
-    border-top: 1px solid black;
-    padding: 10px 15px;
-    text-align: center;
-  }
-  .resources .table tbody td:nth-child(1) {
-    border-left: 1px solid black;
-  }
-  .resources .table tbody td:nth-child(8) {
-    border-right: 1px solid black;
-  }
-  
-  .resources .table thead th {
-    font-weight: bold;
-    text-align: left;
-    padding: 20px 15px;
-  }
-  
-  .resources .table tbody .alignLeft{
-    text-align: left;
-  }
-  
-  .resources .table .dropdownDetails {
-    background-color: #f2f2f2;
-    border-left: 1px solid black;
-    border-right: 1px solid black;
-    width: 100%;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+.resources .table {
+  text-align: center;
+  border-collapse: collapse;
+  width: 50%;
+}
+.resources table th {
+  cursor: pointer;
+}
+.resources table th:nth-child(5) {
+  cursor: default;
+}
+.resources table thead tr {
+  height: 50px;
+}
+.resources table th > div {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+}
+.resources table th > div > div {
+  display: grid;
+}
+.resources table th > div > div > svg:first-child {
+  margin-bottom: -7px;
+}
+.resources .table {
+  border-collapse: collapse;
+  width: auto;
+}
 
-  .resources .pagination {
-    display: flex;
-    justify-content: center;
-    list-style: none;
-    padding: 0;
-    margin-top: 2rem;
-  }
-  
-  .resources .pagination li {
-    margin: 0 0.3rem;
-  
-  }
-  
-  /* Dodatkowe style dla aktywnej strony */
-  .resources .pagination li.active button {
-    font-weight: 700;
-    border-bottom: 1px solid black;
-  }
-  .resources .pagination li button {
-    font-size: 1.1rem;
-  }
-  
-  .resources .pagination li button {
-    border: none;
-    background: none;
-    cursor: pointer;
-  }
-  
-  .resources .sortIcon {
-    color: #ccc; /* Kolor domyślny dla ikon sortowania */
-    margin-left: 10px; /* Odstęp między ikonkami a tekstem */
-  }
-  
-  .resources .active {
-    color: #000;
-  }
-  
-  .resources .sortIconActive {
-    color: #000; /* Kolor dla aktywnego sortowania */
-  }
-  
-  .resources .thAlignLeft {
-    display: flex;
-    justify-content: flex-start;
-  }
-  .resources .thAlignLeft p{
-    margin-right: 20px;
-  }
-  
-  .resources .thAlignRight {
-    margin-left: auto;
-  }
-  .resources .thAlignRight a {
-    text-decoration: none;
-    color: black;
-    background-color: #f2f2f2;
-    padding: 0.5rem 1rem ;
-    transition: background-color 0.3s ease;
-  }
-  .resources .thAlignRight a:hover {
-    background-color: #e1e0e0;
-  }
+/* .table thead th, */
+.resources .table tbody td {
+  background-color: #f2f2f2;
+  border-bottom: 1px solid black;
+  border-top: 1px solid black;
+  padding: 10px 15px;
+  text-align: center;
+}
+.resources .table tbody td:nth-child(1) {
+  border-left: 1px solid black;
+}
+.resources .table tbody td:nth-child(8) {
+  border-right: 1px solid black;
+}
 
-  .resources td button{
-    color: white;
-    text-decoration: none;
-    background-color: grey;
-    padding: 5px 10px;
-    border-radius: 15px;
-    border: 0;
-  }
-  .resources td button:hover{
-    background-color: rgb(179, 178, 178);
-  }
+.resources .table thead th {
+  font-weight: bold;
+  text-align: left;
+  padding: 20px 15px;
+}
+
+.resources .table tbody .alignLeft {
+  text-align: left;
+}
+
+.resources .table .dropdownDetails {
+  background-color: #f2f2f2;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  width: 100%;
+}
+
+.resources .pagination {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin-top: 2rem;
+}
+
+.resources .pagination li {
+  margin: 0 0.3rem;
+}
+
+/* Dodatkowe style dla aktywnej strony */
+.resources .pagination li.active button {
+  font-weight: 700;
+  border-bottom: 1px solid black;
+}
+.resources .pagination li button {
+  font-size: 1.1rem;
+}
+
+.resources .pagination li button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.resources .sortIcon {
+  color: #ccc; /* Kolor domyślny dla ikon sortowania */
+  margin-left: 10px; /* Odstęp między ikonkami a tekstem */
+}
+
+.resources .active {
+  color: #000;
+}
+
+.resources .sortIconActive {
+  color: #000; /* Kolor dla aktywnego sortowania */
+}
+
+.resources .thAlignLeft {
+  display: flex;
+  justify-content: flex-start;
+}
+.resources .thAlignLeft p {
+  margin-right: 20px;
+}
+
+.resources .thAlignRight {
+  margin-left: auto;
+}
+.resources .thAlignRight a {
+  text-decoration: none;
+  color: black;
+  background-color: #f2f2f2;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.3s ease;
+}
+.resources .thAlignRight a:hover {
+  background-color: #e1e0e0;
+}
+
+.resources td button {
+  color: white;
+  text-decoration: none;
+  background-color: grey;
+  padding: 5px 10px;
+  border-radius: 15px;
+  border: 0;
+}
+.resources td button:hover {
+  background-color: rgb(179, 178, 178);
+}
