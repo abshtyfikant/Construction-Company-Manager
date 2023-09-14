@@ -146,4 +146,24 @@ public class EmployeeRepository : IEmployeeRepository
             i.Assigments.All(a => a.StartDate > end || a.EndDate < start));
         return employees;
     }
+
+    public double GetEmployeeEarnings(DateTime start, DateTime end, int employeeId)
+    {
+        var employee = _dbContext.Employees.FirstOrDefault(i => i.Id == employeeId);
+        if (employee is null) throw new Exception("Employee not found");
+        var assignments = _dbContext.Assignments.Where(i =>
+            i.EmployeeId == employeeId && i.StartDate >= start && i.EndDate <= end);
+
+        var daysAssigned = new List<DateTime>();
+        foreach (var assignment in assignments)
+        {
+            for (var date = assignment.StartDate; date <= assignment.EndDate; date = date.AddDays(1))
+            {
+                daysAssigned.Add(date);
+            }
+        };
+        var workDays = daysAssigned.Where(i => i.DayOfWeek != DayOfWeek.Saturday && i.DayOfWeek != DayOfWeek.Sunday).Count();
+        var earnings = workDays * 8 * employee.RatePerHour;
+        return earnings;
+    }
 }

@@ -19,4 +19,5 @@ public interface IEmployeeService
     List<AssigmentDto> GetEmployeeAssignments(int employeeId);
     List<SpecializationDto> GetEmployeeSpecializations(int employeeId);
     List<EmployeeDto> GetAvailableEmployeesForTime(DateTime startTime, DateTime endTime);
+    double GetEmployeeEarnings(DateTime start, DateTime end, int employeeId);
 }

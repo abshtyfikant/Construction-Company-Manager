@@ -73,4 +73,5 @@ public class ReportController : ControllerBase
         _reportService.UpdateReport(newReport);
         return NoContent();
     }
+
 }

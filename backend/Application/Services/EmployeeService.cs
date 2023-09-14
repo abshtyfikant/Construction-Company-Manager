@@ -111,4 +111,9 @@ public class EmployeeService : IEmployeeService
             .ToList();
         return employees;
     }
+
+    public double GetEmployeeEarnings(DateTime start, DateTime end, int employeeId)
+    {
+        return _employeeRepository.GetEmployeeEarnings(start, end, employeeId);
+    }
 }
