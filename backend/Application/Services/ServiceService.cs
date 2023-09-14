@@ -74,4 +74,4 @@ internal class ServiceService : IServiceService
         _serviceRepo.UpdateService(mappedService, mappedAssignments, mappedResources, mappedMaterials);
         return service;
     }
-}}
+}
