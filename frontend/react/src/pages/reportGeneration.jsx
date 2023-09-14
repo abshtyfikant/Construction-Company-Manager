@@ -20,7 +20,6 @@ function ReportGeneration() {
   const [selectedVal, setSelectedVal] = React.useState(location.state?.reservation?.id ?? '');
   const [fetchedWorkers, setFetchedWorkers] = React.useState([]);
   const [fetchedServices, setFetchedServices] = React.useState([]);
-console.log(startDate)
   const fetchData = React.useCallback(async () => {
     try {
       const response = await fetch('https://localhost:7098/api/Employee', {
@@ -68,7 +67,6 @@ console.log(startDate)
 
   React.useEffect(() => {
     if (reportType !== "raport z usługi") { return; }
-    console.log(fetchedServices)
     const foundService = fetchedServices?.find((service) => service.id === selectedVal);
     setStartDate(foundService?.beginDate);
     setEndDate(foundService?.endDate);

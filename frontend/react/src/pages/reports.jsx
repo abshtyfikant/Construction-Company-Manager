@@ -28,11 +28,9 @@ function Reports() {
       if (response.ok) {
         const data = await response.json();
         setReports(data);
-      } else {
-        console.log('Błąd podczas pobierania danych z API:', response.status);
       }
     } catch (error) {
-      console.log('Błąd podczas komunikacji z API:', error);
+      
     }
   }
     // Efekt, który pobiera dane raportów z API przy ładowaniu komponentu

@@ -23,7 +23,6 @@ function RemoveWorker() {
   const handleSubmit = (event) => {
     event.preventDefault();
     // Wysyłanie danych pracownika do serwera lub innego przetwarzania
-    console.log(formData);
     navigate(''); // Przekierowanie po usunieciu pracownika
   };
 

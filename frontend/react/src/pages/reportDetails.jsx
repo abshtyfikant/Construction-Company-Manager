@@ -21,7 +21,7 @@ function ReportDetails() {
       const data = await response.json();
       setReport(data);
     } else {
-      console.log('Błąd podczas pobierania danych z API:', response.status);
+      
     }
   }
 

@@ -165,8 +165,6 @@ export default function ReservationForm({ defaultValue, method }) {
                     })
                 })
         };
-        console.log(reservationData);
-        console.log(JSON.stringify(reservationData));
         const response = await fetch('https://localhost:7098/api/Service', {
             method: method,
             headers: {
@@ -184,7 +182,7 @@ export default function ReservationForm({ defaultValue, method }) {
             alert("Coś poszło nie tak przy dodawaniu rezerwacji. Spróbuj ponownie za chwilę.")
             throw json({ message: 'Could not save reservation.' }, { status: 500 });
         }
-        console.log("reservation submitted");
+        alert("Dodano rezerwację.")
     };
 
     //Handle form submit - request
@@ -328,7 +326,6 @@ export default function ReservationForm({ defaultValue, method }) {
                 <button
                     onClick={(e) => {
                         e.preventDefault();
-console.log(specName);
                         if (tmpWorker?.id && specName && tmpWorker.startDate && tmpWorker.endDate) {
                             setWorkers([{
                                 id: undefined,
@@ -415,7 +412,6 @@ console.log(specName);
                 </div>
                 <button
                     onClick={(e) => {
-                        console.log(tmpResource);
                         e.preventDefault();
                         if (tmpResource.id &&
                             tmpResource.quantity <= checkResAllocation(fetchedResources.find((resource) => resource.id === tmpResource.id)) &&

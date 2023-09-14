@@ -30,18 +30,16 @@ function Workers() {
       if (response.ok) {
         const data = await response.json();
         setWorkers(data);
-      } else {
-        console.log('Błąd podczas pobierania danych z API:', response.status);
       }
     } catch (error) {
-      console.log('Błąd podczas komunikacji z API:', error);
+      
     }
   };
 
   useEffect(() => {
     fetchWorkers()
       .catch((error) => {
-        console.log('Błąd podczas pobierania danych pracowników:', error);
+        
       });
   }, []);
 
