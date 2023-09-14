@@ -10,4 +10,5 @@ public interface IMaterialService
     object GetMaterial(int materialId);
     object UpdateMaterial(NewMaterialDto newMaterial);
     void DeleteMaterial(int materialId);
+    double GetTotalCostInTime(DateTime startDate, DateTime endDate);
 }

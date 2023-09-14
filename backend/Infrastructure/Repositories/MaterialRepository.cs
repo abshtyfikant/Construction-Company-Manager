@@ -60,4 +60,16 @@ public class MaterialRepository : IMaterialRepository
         _dbContext.Entry(material).Property("Quantity").IsModified = true;
         _dbContext.SaveChanges();
     }
+
+    public double getTotalCostInTimeRange(DateTime startDate, DateTime endDate)
+    {
+        var services = _dbContext.Services.Where(s => s.BeginDate >= startDate && s.EndDate <= endDate);
+        var materials = _dbContext.Materials.Where(m => services.Contains(m.Service));
+        double totalCost = 0;
+        foreach (var material in materials)
+        {
+            totalCost += (double)material.Price * material.Quantity;
+        }
+        return totalCost;
+    }
 }

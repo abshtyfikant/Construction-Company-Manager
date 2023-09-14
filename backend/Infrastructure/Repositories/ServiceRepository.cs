@@ -81,37 +81,37 @@ public class ServiceRepository : IServiceRepository
             this._dbContext.Materials.Remove(material);
         }
 
-        foreach(var resource in oldResources.Where(resource => resources.All(r => r.Id != resource.Id)))
+        foreach (var resource in oldResources.Where(resource => resources.All(r => r.Id != resource.Id)))
         {
             this._dbContext.ResourceAllocations.Remove(resource);
         }
 
-        foreach(var assignment in oldAssignments.Where(assignment => assignments.All(a => a.Id != assignment.Id)))
+        foreach (var assignment in oldAssignments.Where(assignment => assignments.All(a => a.Id != assignment.Id)))
         {
             this._dbContext.Assignments.Remove(assignment);
         }
 
         // Add new materials, resources and assignments
-        foreach(var material in materials.Where(material => oldMaterials.All(m => m.Id != material.Id)))
+        foreach (var material in materials.Where(material => oldMaterials.All(m => m.Id != material.Id)))
         {
             material.ServiceId = service.Id;
             this._dbContext.Materials.Add(material);
         }
 
-        foreach(var resource in resources.Where(resource => oldResources.All(r => r.Id != resource.Id)))
+        foreach (var resource in resources.Where(resource => oldResources.All(r => r.Id != resource.Id)))
         {
             resource.ServiceId = service.Id;
             this._dbContext.ResourceAllocations.Add(resource);
         }
 
-        foreach(var assignment in assignments.Where(assignment => oldAssignments.All(a => a.Id != assignment.Id)))
+        foreach (var assignment in assignments.Where(assignment => oldAssignments.All(a => a.Id != assignment.Id)))
         {
             assignment.ServiceId = service.Id;
             this._dbContext.Assignments.Add(assignment);
         }
 
         // Update existing materials, resources and assignments
-        foreach(var material in materials.Where(material => oldMaterials.Any(m => m.Id == material.Id)))
+        foreach (var material in materials.Where(material => oldMaterials.Any(m => m.Id == material.Id)))
         {
             this._dbContext.Attach(material);
             this._dbContext.Entry(material).Property("Name").IsModified = true;
@@ -120,7 +120,7 @@ public class ServiceRepository : IServiceRepository
             this._dbContext.Entry(material).Property("Price").IsModified = true;
         }
 
-        foreach(var resource in resources.Where(resource => oldResources.Any(r => r.Id == resource.Id)))
+        foreach (var resource in resources.Where(resource => oldResources.Any(r => r.Id == resource.Id)))
         {
             this._dbContext.Attach(resource);
             this._dbContext.Entry(resource).Property("EmployeeId").IsModified = true;
@@ -129,7 +129,7 @@ public class ServiceRepository : IServiceRepository
             this._dbContext.Entry(resource).Property("AllocatedQuantity").IsModified = true;
         }
 
-        foreach(var assignment in assignments.Where(assignment => oldAssignments.Any(a => a.Id == assignment.Id)))
+        foreach (var assignment in assignments.Where(assignment => oldAssignments.Any(a => a.Id == assignment.Id)))
         {
             this._dbContext.Attach(assignment);
             this._dbContext.Entry(assignment).Property("EmployeeId").IsModified = true;
@@ -139,5 +139,12 @@ public class ServiceRepository : IServiceRepository
         }
 
         _dbContext.SaveChanges();
+    }
+
+    public double GetServiceEarnings(DateTime start, DateTime end)
+    {
+        var services = _dbContext.Services.Where(s => s.BeginDate >= start && s.EndDate <= end);
+        var earnings = services.Sum(s => s.Price);
+        return (double)earnings;
     }
 }

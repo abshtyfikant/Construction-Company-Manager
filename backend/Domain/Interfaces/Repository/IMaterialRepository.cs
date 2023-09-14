@@ -10,4 +10,5 @@ public interface IMaterialRepository
     IQueryable<Material> GetMaterialsByService(int serviceId);
     Material GetMaterial(int materialId);
     void UpdateMaterial(Material material);
+    double getTotalCostInTimeRange(DateTime startDate, DateTime endDate);
 }

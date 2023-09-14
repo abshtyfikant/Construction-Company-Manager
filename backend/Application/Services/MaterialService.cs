@@ -1,4 +1,5 @@
-﻿using Application.DTO.Material;
+﻿
+using Application.DTO.Material;
 using Application.Interfaces.Services;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -59,5 +60,10 @@ public class MaterialService : IMaterialService
         var material = _mapper.Map<Material>(newMaterial);
         _materialRepository.UpdateMaterial(material);
         return material;
+    }
+
+    public double GetTotalCostInTime(DateTime startDate, DateTime endDate)
+    {
+        return _materialRepository.getTotalCostInTimeRange(startDate, endDate);
     }
 }

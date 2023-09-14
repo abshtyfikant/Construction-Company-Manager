@@ -80,4 +80,12 @@ public class MaterialController : ControllerBase
         var list = _materialservice.GetMaterialsByServiceForList(specializationId);
         return Ok(list);
     }
+
+    [HttpGet("GetCostInTime/{begin:datetime}/{end:datetime}")]
+    public ActionResult<double> GetCostInTime(DateTime start, DateTime end)
+    {
+        if (start == null || end == null || start > end) return BadRequest();
+        var cost = _materialservice.GetTotalCostInTime(start, end);
+        return Ok(cost);
+    }
 }

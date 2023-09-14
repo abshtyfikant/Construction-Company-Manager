@@ -12,4 +12,5 @@ public interface IServiceService
     object GetService(int serviceId);
     object UpdateService(NewServiceDto service, List<NewAssignmentDto> assignments, List<NewResourceAllocationDto> resources, List<NewMaterialDto> materials);
     void DeleteService(int id);
+    double GetServiceEarnings(DateTime startDate, DateTime endDate);
 }

@@ -79,7 +79,7 @@ public class ServiceController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult Update([FromBody] AllServiceDto newService)
     {
-        if (!this.ModelState.IsValid || newService.Id <=0 ) return BadRequest();
+        if (!this.ModelState.IsValid || newService.Id <= 0) return BadRequest();
         var onlyService = new NewServiceDto
         {
             Id = newService.Id,
@@ -94,5 +94,15 @@ public class ServiceController : ControllerBase
 
         _serviceService.UpdateService(onlyService, newService.Assigments, newService.Resources, newService.Materials);
         return NoContent();
+    }
+
+    [HttpGet("GetIncome/{begin:datetime}/{end:datetime}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public ActionResult<Double> GetIncome(DateTime begin, DateTime end)
+    {
+        if (begin == null || end == null || begin > end) return BadRequest();
+        var income = _serviceService.GetServiceEarnings(begin, end);
+        return Ok(income);
     }
 }
