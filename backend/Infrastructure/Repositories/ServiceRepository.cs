@@ -147,4 +147,30 @@ public class ServiceRepository : IServiceRepository
         var earnings = services.Sum(s => s.Price);
         return (double)earnings;
     }
+
+    public double GetServiceCost(int serviceId)
+    {
+        var costs = 0.0;
+        var service = _dbContext.Services.Find(serviceId);
+        var materials = _dbContext.Materials.Where(m => m.ServiceId == serviceId);
+        var assignments = _dbContext.Assignments.Where(a => a.ServiceId == serviceId);
+
+        var materialCost = materials.Sum(m => (double)m.Price * m.Quantity);
+        costs += materialCost;
+
+        foreach (var assignment in assignments)
+        {
+            var employee = _dbContext.Employees.Find(assignment.EmployeeId);
+            if (employee is null) continue;
+            var daysAssigned = new List<DateTime>();
+            for (var date = assignment.StartDate; date <= assignment.EndDate; date = date.AddDays(1))
+            {
+                daysAssigned.Add(date);
+            }
+            var workDays = daysAssigned.Where(i => i.DayOfWeek != DayOfWeek.Saturday && i.DayOfWeek != DayOfWeek.Sunday).Count();
+            costs += workDays * 8 * employee.RatePerHour;
+        }
+
+        return costs;
+    }
 }

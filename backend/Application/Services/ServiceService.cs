@@ -80,4 +80,9 @@ internal class ServiceService : IServiceService
         var earnings = _serviceRepo.GetServiceEarnings(startDate, endDate);
         return earnings;
     }
+
+    public double GetServiceCost(int serviceId)
+    {
+        return _serviceRepo.GetServiceCost(serviceId);
+    }
 }

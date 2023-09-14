@@ -105,4 +105,13 @@ public class ServiceController : ControllerBase
         var income = _serviceService.GetServiceEarnings(begin, end);
         return Ok(income);
     }
+
+    [HttpGet("GetCost/{serviceId:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public ActionResult<Double> GetCost(int serviceId)
+    {
+        var cost = _serviceService.GetServiceCost(serviceId);
+        return Ok(cost);
+    }
 }

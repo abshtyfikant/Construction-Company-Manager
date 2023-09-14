@@ -10,4 +10,5 @@ public interface IServiceRepository
     Service GetService(int serviceId);
     void UpdateService(Service service, List<Assignment> assignments, List<ServiceResource> resources, List<Material> materials);
     double GetServiceEarnings(DateTime start, DateTime end);
+    double GetServiceCost(int serviceId);
 }
