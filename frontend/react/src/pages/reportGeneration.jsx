@@ -1,25 +1,26 @@
 import GridMenuHeader from '../components/gridMenuHeader';
 import classes from './styles/reportGeneration.module.css';
 import * as React from 'react';
-import { useNavigate, json } from 'react-router-dom';
+import { useNavigate, json, useLocation } from 'react-router-dom';
 
 const types = [
   'raport o zarobkach firmy', 'raport o zarobkach pracownika', 'raport o kosztach', 'raport z usługi'
 ];
 
 function ReportGeneration() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const userId = localStorage.getItem('userId');
   const [description, setDescription] = React.useState('');
-  const navigate = useNavigate();
   const [city, setCity] = React.useState('');
   const [startDate, setStartDate] = React.useState('');
   const [endDate, setEndDate] = React.useState('');
-  const [reportType, setReportType] = React.useState('');
-  const [selectedVal, setSelectedVal] = React.useState('');
-  const [fetchedWorkers, setFetchedWorkers] = React.useState('');
-  const [fetchedServices, setFetchedServices] = React.useState('');
-
+  const [reportType, setReportType] = React.useState(location.state?.reservation ? 'raport z usługi' : "");
+  const [selectedVal, setSelectedVal] = React.useState(location.state?.reservation?.id ?? '');
+  const [fetchedWorkers, setFetchedWorkers] = React.useState([]);
+  const [fetchedServices, setFetchedServices] = React.useState([]);
+console.log(startDate)
   const fetchData = React.useCallback(async () => {
     try {
       const response = await fetch('https://localhost:7098/api/Employee', {
@@ -63,8 +64,15 @@ function ReportGeneration() {
 
   React.useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, []);
 
+  React.useEffect(() => {
+    if (reportType !== "raport z usługi") { return; }
+    console.log(fetchedServices)
+    const foundService = fetchedServices?.find((service) => service.id === selectedVal);
+    setStartDate(foundService?.beginDate);
+    setEndDate(foundService?.endDate);
+  }, [selectedVal, reportType]);
 
   const renderSelect = () => {
     switch (reportType) {
@@ -114,10 +122,11 @@ function ReportGeneration() {
             id='reservation'
             onChange={(e) => setSelectedVal(e.target.value)}
             required
+            value={selectedVal}
           >
             <option value=''>Wybierz z listy</option>
             {fetchedServices && fetchedServices.map((service) => (
-              <option key={service.id} value={service.id}>{service.name}</option>
+              <option key={service.id} value={service.id}>{service.serviceType}</option>
             ))}
           </select>
         );
@@ -131,8 +140,8 @@ function ReportGeneration() {
       serviceId: selectedVal,
       reportType: reportType,
       description: description,
-      beginDate: startDate,
-      endDate: endDate,
+      beginDate: startDate.length > 10 ? startDate.slice(0, 10) : startDate,
+      endDate: endDate.length > 10 ? endDate.slice(0, 10) : endDate,
       amount: 0,
       city: city,
       userId: userId
@@ -154,11 +163,10 @@ function ReportGeneration() {
     if (!response.ok) {
       throw json({ message: 'Could not save reservation.' }, { status: 500 });
     }
-    const data = await response.json();
 
     return navigate('/raporty');
   };
-console.log(selectedVal)
+
   return (
     <div className={classes.container}>
       <GridMenuHeader headerTitle="Generowanie raportu" />
@@ -176,6 +184,7 @@ console.log(selectedVal)
               id='report-type'
               onChange={(e) => setReportType(e.target.value)}
               reqiured
+              value={reportType}
             >
               <option value=''>Wybierz z listy</option>
               {types.map((type) => (

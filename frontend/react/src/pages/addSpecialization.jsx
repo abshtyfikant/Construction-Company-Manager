@@ -37,7 +37,7 @@ export default function AddSpecialization() {
 
   return (
     <div className='add-specialization'>
-      <GridMenuHeader headerTitle="Dodaj pracownika" />
+      <GridMenuHeader headerTitle="Dodaj specjalizację" />
       <div className='container'>
         <form onSubmit={handleSubmit}>
           <div className="label-container">

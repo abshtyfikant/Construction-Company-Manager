@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp, faCaretDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import GridMenuHeader from '../components/gridMenuHeader';
-import { Link, useLoaderData, useNavigate, defer, json } from 'react-router-dom';
+import { Link, useNavigate, defer, json } from 'react-router-dom';
 import classes from './styles/reservations.module.css';
 import Comments from '../components/comments';
 import Loading from '../components/loading';
@@ -10,22 +10,28 @@ import Loading from '../components/loading';
 function Accordion({ reservation, index, handleOpenComments }) {
   const navigate = useNavigate();
   const [openDetails, setOpenDetails] = useState(false);
-  const [sumMaterials, setSumMaterials] = useState();
+  const [sumMaterials, setSumMaterials] = useState(0.0);
+  const [sumWorkers, setSumWorkers] = useState(0.0);
 
   const calcSumMaterials = () => {
-    let tmpSumMaterials = 0;
-    tmpSumMaterials += reservation?.materials?.map((material) => {
-      console.log(tmpSumMaterials)
-      return (
-        parseFloat(material.price) * parseFloat(material.quantity)
-      );
+    let tmpSumMaterials = 0.0;
+    reservation?.materials?.forEach((material) => {
+      tmpSumMaterials += Number(material.price) * Number(material.quantity)
     });
     setSumMaterials(tmpSumMaterials)
   }
 
+  const calcSumWorkers = () => {
+    let tmpSumWorkers = 0.0;
+    reservation?.workers?.forEach((worker) => {
+
+    });
+    setSumWorkers(tmpSumWorkers)
+  }
+
   return (
     <>
-      <tr key={index} onClick={() => {setOpenDetails((prev) => !prev); calcSumMaterials();}}>
+      <tr key={index} onClick={() => { setOpenDetails((prev) => !prev); calcSumMaterials(); }}>
         <td>{reservation.id}</td>
         <td>{reservation.serviceType}</td>
         <td>{reservation.beginDate.slice(0, 10)}</td>
@@ -41,23 +47,28 @@ function Accordion({ reservation, index, handleOpenComments }) {
         <tr className={classes.dropdownDetails}>
           <td colSpan={3}>
             <p>Klient: {reservation.client?.firstName} {reservation.client?.lastName}</p>
-            <p>Zespół wykonawczy:</p>
+            <p><b>Zespół wykonawczy:</b></p>
+            <p><b>Imię i nazwisko | Specjalizacja | Stawka | Od | Do</b></p>
             {reservation.workers && reservation.workers.map((worker) => {
               return (
-                <p key={worker.id}>{worker.name} {worker.surname}</p>
+                <p key={worker.employeeId}>
+                {worker.employee} | {worker.function} | {worker.ratePerHour} | {worker.startDate?.slice(0, 10)} | {worker.endDate?.slice(0, 10)}
+                </p>
               );
             })}
           </td>
           <td colSpan={3}>
-            <p>Przydział zasobów:</p>
-            <p>Nazwa | Ilość | Jednostka </p>
+            <p><b>Przydział zasobów:</b></p>
+            <p><b>Nazwa | Ilość | Od | Do</b></p>
             {reservation.resources && reservation.resources.map((resource) => {
               return (
-                <p key={resource.id}>{resource.name} {resource.quantity} {resource.unit}</p>
+                <p key={resource.resourceId}>
+                {resource.resourceName} | {resource.allocatedQuantity} | {resource.beginDate?.slice(0, 10)} | {resource.endDate?.slice(0, 10)}
+                </p>
               );
             })}
-            <p>Materiały:</p>
-            <p>Nazwa | Cena | Ilość | Jednostka </p>
+            <p><b>Materiały:</b></p>
+            <p><b>Nazwa | Cena | Ilość | Jednostka</b></p>
             {reservation.materials && reservation.materials.map((material) => {
               return (
                 <p key={material.id}>{material.name} | {material.price} | {material.quantity} | {material.unit}</p>
@@ -66,14 +77,18 @@ function Accordion({ reservation, index, handleOpenComments }) {
           </td>
           <td colSpan={3}>
             <p>Koszt materiałów: {sumMaterials}</p>
-            <p>Koszt pracowników:</p>
+            <p>Koszt pracowników: {sumWorkers}</p>
             <p
               className={classes.actions}
               onClick={() => { navigate("/edytuj-rezerwacje", { state: { reservation: reservation } }) }}
             >
               + Modyfikuj rezerwację
             </p>
-            <p className={classes.actions}>+ Generuj raport</p>
+            <p className={classes.actions}
+              onClick={() => { navigate("/generowanie-raportu", { state: { reservation: reservation } }) }}
+            >
+              + Generuj raport
+            </p>
             <p onClick={() => handleOpenComments(true)} className={classes.actions}>+ Dodaj komentarz</p>
           </td>
         </tr>
@@ -83,7 +98,6 @@ function Accordion({ reservation, index, handleOpenComments }) {
     </>
   )
 }
-
 
 function Reservations() {
   const navigate = useNavigate();
@@ -195,8 +209,6 @@ function Reservations() {
       setIsLoading(false);
     })
 
-
-    console.log(tmpReservations);
     setReservations(tmpReservations);
   }
 
@@ -284,7 +296,6 @@ function Reservations() {
     // Renderowanie wierszy rezerwacji
     return currentReservations.map((reservation, index) => (
       <>
-        {console.log(currentReservations)}
         <Accordion reservation={reservation} index={index} handleOpenComments={handleOpenComments} />
         <Comments isOpen={openComments} serviceId={reservation.id} />
       </>
@@ -378,7 +389,7 @@ function Reservations() {
 
   return (
     <section className={classes.reservations}>
-    <Loading isVisible={isLoading}/>
+      <Loading isVisible={isLoading} />
       <span
         className={classes.backdrop}
         style={{ display: openComments ? 'block' : 'none' }}
@@ -442,10 +453,6 @@ async function loadReservations() {
   const response = await fetch('');
 
   if (!response.ok) {
-    // return { isError: true, message: 'Could not fetch events.' };
-    // throw new Response(JSON.stringify({ message: 'Could not fetch events.' }), {
-    //   status: 500,
-    // });
     throw json(
       { message: 'Could not fetch reservations.' },
       {

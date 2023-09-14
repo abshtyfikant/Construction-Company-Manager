@@ -7,23 +7,21 @@ function Root() {
   const submit = useSubmit();
   // const navigation = useNavigation();
   useEffect(() => {
-    console.log(token);
     if (!token) {
       submit(null, { action: '/logout', method: 'post' });
       return;
     }
 
-    //if (token === 'EXPIRED') {
-    //  submit(null, { action: '/logout', method: 'post' });
-    //  return;
-    //}
+    if (token === 'EXPIRED') {
+      submit(null, { action: '/logout', method: 'post' });
+      return;
+    }
 
-    //const tokenDuration = getTokenDuration();
-    //console.log(tokenDuration);
+    const tokenDuration = getTokenDuration();
 
-    //setTimeout(() => {
-    //  submit(null, { action: '/logout', method: 'post' });
-    //}, tokenDuration);
+    setTimeout(() => {
+      submit(null, { action: '/logout', method: 'post' });
+    }, tokenDuration);
   }, [token, submit]);
 
   return (

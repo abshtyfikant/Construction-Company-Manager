@@ -41,11 +41,23 @@ public class ServiceController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public ActionResult Create([FromBody] NewServiceDto newService)
+    public ActionResult Create([FromBody] AllServiceDto newService)
     {
         if (!ModelState.IsValid) return BadRequest();
         if (newService.Id > 0) return StatusCode(StatusCodes.Status500InternalServerError);
-        var serviceId = _serviceService.AddService(newService);
+        var onlyService = new NewServiceDto
+        {
+            Id = newService.Id,
+            ClientId = newService.ClientId,
+            ServiceType = newService.ServiceType,
+            BeginDate = newService.BeginDate,
+            EndDate = newService.EndDate,
+            ServiceStatus = newService.ServiceStatus,
+            PaymentStatus = newService.PaymentStatus,
+            City = newService.City,
+        };
+
+        var serviceId = _serviceService.AddService(onlyService, newService.Assigments, newService.Resources, newService.Materials);
         newService.Id = serviceId;
         return CreatedAtRoute("GetService", new { id = serviceId }, newService);
     }
@@ -63,11 +75,22 @@ public class ServiceController : ControllerBase
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult Update([FromBody] NewServiceDto newService)
+    public IActionResult Update([FromBody] AllServiceDto newService)
     {
-        if (!ModelState.IsValid) return BadRequest();
-        if (newService.Id <= 0) return BadRequest();
-        _serviceService.UpdateService(newService);
+        if (!this.ModelState.IsValid || newService.Id <=0 ) return BadRequest();
+        var onlyService = new NewServiceDto
+        {
+            Id = newService.Id,
+            ClientId = newService.ClientId,
+            ServiceType = newService.ServiceType,
+            BeginDate = newService.BeginDate,
+            EndDate = newService.EndDate,
+            ServiceStatus = newService.ServiceStatus,
+            PaymentStatus = newService.PaymentStatus,
+            City = newService.City,
+        };
+
+        _serviceService.UpdateService(onlyService, newService.Assigments, newService.Resources, newService.Materials);
         return NoContent();
     }
 }

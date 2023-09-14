@@ -8,16 +8,6 @@ function Login() {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === 'submitting';
 
-  const handleLogin = () => {
-    if (email === 'admin' && password === 'admin') {
-      console.log('Zalogowano pomyślnie');
-      navigate('/menu'); // Ścieżka do zakładki z kafelkami
-    } else {
-      console.log('Błąd logowania');
-      alert('Błąd logowania');
-    }
-  };
-
   return (
     <section className='center-container'>
       <Form className="logowanie" method='post'>
@@ -79,8 +69,10 @@ export async function action({ request }) {
   }
 
   const resData = await response.json();
-
+  const expiration = new Date();
+  expiration.setTime(expiration.getTime() + (1*60*60*1000));
   localStorage.setItem('token', resData.token);
+  localStorage.setItem('expiration', expiration)
   localStorage.setItem('userId', resData.id);
 
   return redirect('/menu');

@@ -44,6 +44,7 @@ public class AssignmentController : ControllerBase
     public ActionResult Create([FromBody] NewAssignmentDto newAssignment)
     {
         if (!ModelState.IsValid) return BadRequest();
+        if (newAssignment.EndDate > newAssignment.StartDate) return BadRequest();
         if (newAssignment.Id > 0) return StatusCode(StatusCodes.Status500InternalServerError);
         var assignmentId = _assignmentService.AddAssignment(newAssignment);
         newAssignment.Id = assignmentId;
@@ -66,6 +67,7 @@ public class AssignmentController : ControllerBase
     public IActionResult Update(int id, [FromBody] NewAssignmentDto newAssignment)
     {
         if (id <= 0) return BadRequest();
+        if (newAssignment.EndDate > newAssignment.StartDate) return BadRequest();
         if (!ModelState.IsValid) return BadRequest();
         _assignmentService.UpdateAssignment(newAssignment);
         return NoContent();
