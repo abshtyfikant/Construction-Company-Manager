@@ -127,11 +127,9 @@ function Reservations() {
       if (response.ok) {
         const data = await response.json();
         tmpReservations = data;
-      } else {
-        console.log('Błąd podczas pobierania danych z API:', response.status);
       }
     } catch (error) {
-      console.log('Błąd podczas komunikacji z API:', error);
+      
     }
 
     tmpReservations.map(async (reservation) => {
@@ -146,11 +144,9 @@ function Reservations() {
         if (response.ok) {
           const data = await response.json();
           reservation.client = data;
-        } else {
-          console.log('Błąd podczas pobierania danych z API:', response.status);
         }
       } catch (error) {
-        console.log('Błąd podczas komunikacji z API:', error);
+
       }
 
       try {
@@ -164,11 +160,9 @@ function Reservations() {
         if (response.ok) {
           const data = await response.json();
           reservation.resources = data;
-        } else {
-          console.log('Błąd podczas pobierania danych z API:', response.status);
         }
       } catch (error) {
-        console.log('Błąd podczas komunikacji z API:', error);
+        
       }
 
       try {
@@ -182,11 +176,9 @@ function Reservations() {
         if (response.ok) {
           const data = await response.json();
           reservation.workers = data;
-        } else {
-          console.log('Błąd podczas pobierania danych z API:', response.status);
         }
       } catch (error) {
-        console.log('Błąd podczas komunikacji z API:', error);
+
       }
 
       try {
@@ -200,11 +192,9 @@ function Reservations() {
         if (response.ok) {
           const data = await response.json();
           reservation.materials = data;
-        } else {
-          console.log('Błąd podczas pobierania danych z API:', response.status);
         }
       } catch (error) {
-        console.log('Błąd podczas komunikacji z API:', error);
+        
       }
       setIsLoading(false);
     })

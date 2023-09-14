@@ -71,11 +71,9 @@ function Resources() {
       if (response.ok) {
         const data = await response.json();
         setResources(data);
-      } else {
-        console.log('Błąd podczas pobierania danych z API:', response.status);
-      }
+      } 
     } catch (error) {
-      console.log('Błąd podczas komunikacji z API:', error);
+      
     }
 
     try {
@@ -89,11 +87,9 @@ function Resources() {
       if (response.ok) {
         const data = await response.json();
         setResourcesAllocation(data);
-      } else {
-        console.log('Błąd podczas pobierania danych z API:', response.status);
       }
     } catch (error) {
-      console.log('Błąd podczas komunikacji z API:', error);
+      
     }
   }
   

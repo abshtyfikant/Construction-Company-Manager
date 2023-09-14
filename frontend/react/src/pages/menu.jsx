@@ -3,7 +3,6 @@ import { Link, Form } from 'react-router-dom';
 import GraySquareWithPlus from '../components/square';
 
 function Menu() {
-  console.log(localStorage.getItem('token'));
   return (
     <section className='menu'>
       <div className='grid-3'>
