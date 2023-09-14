@@ -116,4 +116,9 @@ public class EmployeeService : IEmployeeService
     {
         return _employeeRepository.GetEmployeeEarnings(start, end, employeeId);
     }
+
+    public double GetEmployeesEarnings(DateTime start, DateTime end)
+    {
+        return _employeeRepository.GetEmployeesEarnings(start, end);
+    }
 }

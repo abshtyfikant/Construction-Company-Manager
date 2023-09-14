@@ -94,7 +94,6 @@ public class EmployeeRepository : IEmployeeRepository
     public IQueryable<Assignment> GetEmployeeAssignments(int employeeId)
     {
         if (!_dbContext.Employees.Any(s => s.Id == employeeId)) throw new Exception("Employee not found");
-
         var assigments = _dbContext.Assignments.Where(i => i.EmployeeId == employeeId);
         return assigments;
     }
@@ -164,6 +163,17 @@ public class EmployeeRepository : IEmployeeRepository
         };
         var workDays = daysAssigned.Where(i => i.DayOfWeek != DayOfWeek.Saturday && i.DayOfWeek != DayOfWeek.Sunday).Count();
         var earnings = workDays * 8 * employee.RatePerHour;
+        return earnings;
+    }
+
+    public double GetEmployeesEarnings(DateTime start, DateTime end)
+    {
+        var employees = _dbContext.Employees;
+        var earnings = 0.0;
+        foreach (var employee in employees)
+        {
+            earnings += GetEmployeeEarnings(start, end, employee.Id);
+        }
         return earnings;
     }
 }

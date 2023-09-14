@@ -56,7 +56,6 @@ internal class ServiceService : IServiceService
             .ProjectTo<ServiceForListDto>(_mapper.ConfigurationProvider)
             .ToList();
         return services;
-        ;
     }
 
     public object UpdateService(NewServiceDto service, List<NewAssignmentDto> assignments, List<NewResourceAllocationDto> resources, List<NewMaterialDto> materials)
@@ -75,4 +74,4 @@ internal class ServiceService : IServiceService
         _serviceRepo.UpdateService(mappedService, mappedAssignments, mappedResources, mappedMaterials);
         return service;
     }
-}
+}}

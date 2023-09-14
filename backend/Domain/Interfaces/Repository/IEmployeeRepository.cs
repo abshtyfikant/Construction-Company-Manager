@@ -17,4 +17,5 @@ public interface IEmployeeRepository
     IQueryable<Specialization> GetEmployeeSpecializations(int employeeId);
     IQueryable<Employee> GetAvailableEmployeesForTime(DateTime start, DateTime end);
     double GetEmployeeEarnings(DateTime start, DateTime end, int employeeId);
+    double GetEmployeesEarnings(DateTime start, DateTime end);
 }

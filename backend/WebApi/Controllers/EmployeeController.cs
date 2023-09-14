@@ -148,4 +148,12 @@ public class EmployeeController : ControllerBase
         var earnings = _employeeService.GetEmployeeEarnings(start, end, employeeId);
         return Ok(earnings);
     }
+
+    [HttpGet($"{nameof(GetEmployeesEarnings)}/{{start:datetime}}/{{end:datetime}}", Name = "GetEmployeesEarnings")]
+    public ActionResult<double> GetEmployeesEarnings(DateTime start, DateTime end)
+    {
+        if (start > end) return BadRequest();
+        var earnings = _employeeService.GetEmployeesEarnings(start, end);
+        return Ok(earnings);
+    }
 }
