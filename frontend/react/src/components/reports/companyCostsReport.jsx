@@ -1,4 +1,4 @@
-import "../css/report-details.css";
+import "../../css/report-details.css";
 import React, { useState, useEffect } from "react";
 import { defer, json, useParams } from "react-router-dom";
 import GridMenuHeader from "../gridMenuHeader";
@@ -48,9 +48,9 @@ function CompanyCostsReport() {
         <div className="divider"></div>
         <p>Opis: {report.description}</p>
         <div className="divider"></div>
-        <p>Suma: {report.amount}</p>
+        <p>Łączne koszty: {report.amount}</p>
         <div className="divider"></div>
-        <p>Wygenerowano przez: {report.author || "Brak autora"}</p>
+        <p>Wygenerowano przez: {report.author || "admin"}</p>
       </div>
     </section>
   );

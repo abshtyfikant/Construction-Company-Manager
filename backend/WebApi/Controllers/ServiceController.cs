@@ -90,6 +90,7 @@ public class ServiceController : ControllerBase
             ServiceStatus = newService.ServiceStatus,
             PaymentStatus = newService.PaymentStatus,
             City = newService.City,
+            Price = newService.Price,
         };
 
         _serviceService.UpdateService(onlyService, newService.Assigments, newService.Resources, newService.Materials);

@@ -35,18 +35,24 @@ function Menu() {
             </Link>
           </div>
           <div>
-            <Link className="menu-element" to="/formularz-rezerwacji">
-              Formularz rezerwacji
-            </Link>
-          </div>
-          <div>
             <Link className="menu-element" to="/stan-zasobow">
-              Stan zasobów
+              Zasoby
+            </Link>
+            <Link to="/dodaj-zasob">
+              <GraySquareWithPlus />
             </Link>
           </div>
           <div>
             <Link className="menu-element" to="/pracownicy">
               Pracownicy
+            </Link>
+            <Link to="/dodaj-pracownika">
+              <GraySquareWithPlus />
+            </Link>
+          </div>
+          <div>
+            <Link className="menu-element" to="/formularz-rezerwacji">
+              Formularz rezerwacji
             </Link>
           </div>
           <div>

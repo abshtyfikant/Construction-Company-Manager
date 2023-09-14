@@ -13,7 +13,7 @@ public class ServiceDetailsDto : IMapFrom<Domain.Model.Service>
     public string City { get; set; }
     public string ServiceStatus { get; set; }
     public string PaymentStatus { get; set; }
-    public double Price { get; set; }
+    public decimal Price { get; set; }
     public void Mapping(Profile profile)
     {
         profile.CreateMap<Domain.Model.Service, ServiceDetailsDto>()

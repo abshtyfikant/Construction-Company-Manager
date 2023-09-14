@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230625120340_Init")]
-    partial class Init
+    [Migration("20230914205643_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -215,6 +215,9 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("EmployeeId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
@@ -222,13 +225,15 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ServiceId")
+                    b.Property<int?>("ServiceId")
                         .HasColumnType("int");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("ServiceId");
 
@@ -281,6 +286,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("PaymentStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ServiceStatus")
                         .IsRequired()
@@ -469,17 +477,21 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Model.Report", b =>
                 {
+                    b.HasOne("Domain.Model.Employee", "Employee")
+                        .WithMany("Reports")
+                        .HasForeignKey("EmployeeId");
+
                     b.HasOne("Domain.Model.Service", "Service")
                         .WithMany("Reports")
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ServiceId");
 
                     b.HasOne("Domain.Model.User", "User")
                         .WithMany("Reports")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Employee");
 
                     b.Navigation("Service");
 
@@ -541,6 +553,8 @@ namespace Infrastructure.Migrations
                     b.Navigation("Assigments");
 
                     b.Navigation("EmployeeSpecializations");
+
+                    b.Navigation("Reports");
                 });
 
             modelBuilder.Entity("Domain.Model.Resource", b =>

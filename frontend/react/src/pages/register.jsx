@@ -56,7 +56,7 @@ function Register() {
         <br />
         {/*<button onClick={handleRegister}>Zaloguj</button>*/}
         <button disabled={isSubmitting}>
-          {isSubmitting ? "Logowanie..." : "Zaloguj"}
+          {isSubmitting ? "Rejestracja..." : "Zarejestruj się"}
         </button>
       </Form>
     </section>
@@ -67,7 +67,6 @@ export default Register;
 
 export async function action({ request }) {
   const searchParams = new URL(request.url).searchParams;
-  //const mode = searchParams.get('mode') || 'Register';
 
   const data = await request.formData();
   const authData = {
@@ -85,8 +84,9 @@ export async function action({ request }) {
     body: JSON.stringify(authData),
   });
 
-  if (response.status === 422 || response.status === 401) {
-    return response;
+  if (response.status === 400) {
+    alert("Coś poszło nie tak. Spróbuj ponownie.");
+    return null;
   }
 
   if (!response.ok) {

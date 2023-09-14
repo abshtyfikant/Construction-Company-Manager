@@ -7,6 +7,7 @@ public class ReportDetailsDto : IMapFrom<Domain.Model.Report>
 {
     public int Id { get; set; }
     public int ServiceId { get; set; }
+    public int EmployeeId { get; set; }
     public string ReportType { get; set; }
     public string Description { get; set; }
     public DateTime BeginDate { get; set; }
@@ -20,6 +21,7 @@ public class ReportDetailsDto : IMapFrom<Domain.Model.Report>
         profile.CreateMap<Domain.Model.Report, ReportDetailsDto>()
             .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Id))
             .ForMember(d => d.ServiceId, opt => opt.MapFrom(s => s.ServiceId))
+            .ForMember(d => d.EmployeeId, opt => opt.MapFrom(s => s.EmployeeId))
             .ForMember(d => d.ReportType, opt => opt.MapFrom(s => s.ReportType))
             .ForMember(d => d.Description, opt => opt.MapFrom(s => s.Description))
             .ForMember(d => d.BeginDate, opt => opt.MapFrom(s => s.BeginDate))

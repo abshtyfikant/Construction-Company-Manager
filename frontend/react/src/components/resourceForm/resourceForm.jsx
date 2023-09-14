@@ -128,7 +128,7 @@ export default function ResourceForm({ defaultValue, method }) {
               </label>
               <label htmlFor="quantity"> Ilość: </label>
               <input
-                type="text"
+                type="number"
                 name="quantity"
                 id="quantity"
                 ref={quantityRef}

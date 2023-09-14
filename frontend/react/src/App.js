@@ -21,13 +21,14 @@ import Root from "./pages/root.jsx";
 import HomePage from "./pages/home.jsx";
 import Register, { action as registerAuthAction } from "./pages/register.jsx";
 import { action as logoutAction } from "./pages/logout.jsx";
-import ReportDetails, {
-  loader as reportDetailsLoader,
-} from "./pages/reportDetails.jsx";
 import AddSpecialization from "./pages/addSpecialization.jsx";
 import EditWorker from "./pages/editWorker.jsx";
 import EditResource from "./pages/editResource.jsx";
 import NotFound from "./pages/notFound.jsx";
+import ServiceReport from "./components/reports/serviceReport.jsx";
+import CompanyCostsReport from "./components/reports/companyCostsReport.jsx";
+import CompanyEarningsReport from "./components/reports/companyEarningsReport.jsx";
+import EmployeeReport from "./components/reports/employeeReport.jsx";
 
 const router = createBrowserRouter([
   {
@@ -65,10 +66,20 @@ const router = createBrowserRouter([
         loader: reportsLoader,
       },
       {
-        path: "raporty/:reportId",
-        id: "report-details",
-        loader: reportDetailsLoader,
-        element: <ReportDetails />,
+        path: "raport-z-uslugi/:reportId",
+        element: <ServiceReport />,
+      },
+      {
+        path: "raport-o-kosztach/:reportId",
+        element: <CompanyCostsReport />,
+      },
+      {
+        path: "raport-o-zarobkach/:reportId",
+        element: <CompanyEarningsReport />,
+      },
+      {
+        path: "raport-o-pracowniku/:reportId/:startDate/:endDate",
+        element: <EmployeeReport />,
       },
       {
         path: "generowanie-raportu",

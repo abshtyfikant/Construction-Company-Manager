@@ -92,6 +92,29 @@ function Reports() {
     setIsDefaultSort(true);
   }, [currentPage]);
 
+  const renderButton = (report) => {
+    console.log(report);
+    switch (report.reportType) {
+      case "raport z usługi":
+        return <Link to={`/raport-z-uslugi/${report.id}`}>Podgląd</Link>;
+      case "raport o kosztach":
+        return <Link to={`/raport-o-kosztach/${report.id}`}>Podgląd</Link>;
+      case "raport o zarobkach firmy":
+        return <Link to={`/raport-o-zarobkach/${report.id}`}>Podgląd</Link>;
+      case "raport o zarobkach pracownika":
+        return (
+          <Link
+            to={`/raport-o-pracowniku/${report.id}/${report.beginDate.slice(
+              0,
+              10
+            )}/${report.endDate.slice(0,10)}`}
+          >
+            Podgląd
+          </Link>
+        );
+    }
+  };
+  console.log(reports);
   // Funkcja renderująca raporty na aktualnej stronie
   const renderReports = () => {
     // Sortowanie raportów
@@ -129,9 +152,7 @@ function Reports() {
             : report.description}
         </td>
 
-        <td className="raport-btn">
-          <Link to={`/raporty/${report.id}`}>Podgląd</Link>
-        </td>
+        <td className="raport-btn">{renderButton(report)}</td>
       </tr>
     ));
   };

@@ -159,7 +159,7 @@ export default function ReservationForm({ defaultValue, method }) {
                 materials.map(material => {
                     return ({
                         id: material.id ?? 0,
-                        serviceId: material.serviceId,
+                        serviceId: 0,
                         name: material.name,
                         unit: material.unit,
                         price: material.price,
@@ -184,6 +184,7 @@ export default function ReservationForm({ defaultValue, method }) {
         if (!response.ok) {
             alert("Coś poszło nie tak przy dodawaniu rezerwacji. Spróbuj ponownie za chwilę.")
             throw json({ message: 'Could not save reservation.' }, { status: 500 });
+            return;
         }
     };
 
@@ -486,6 +487,7 @@ export default function ReservationForm({ defaultValue, method }) {
                                 className={classes.formInput}
                                 id='resource-price'
                                 type='number'
+                                step=".01"
                                 ref={resourcePriceRef}
                                 required
                             />
@@ -576,6 +578,7 @@ export default function ReservationForm({ defaultValue, method }) {
                         className={classes.formInput}
                         id='price'
                         type='number'
+                        step=".01"
                         value={price}
                         placeholder='Dodaj cenę...'
                         onInput={(e) => setPrice(e.target.value)}
@@ -666,11 +669,12 @@ export default function ReservationForm({ defaultValue, method }) {
                             + Dodaj pracownika
                         </button>
                         <p>Zespół wykonawczy:</p>
+                        Imię i nazwisko | Specjalizacja | Data od | Data do
                         {workers &&
                             <ul className={classes.list}>
                                 {workers.map((worker) => (
                                     <li key={worker.id}>
-                                        {worker.employee}
+                                        {worker.employee} | {worker.function} | {worker.startDate} | {worker.endDate}
                                         <FontAwesomeIcon
                                             icon={faX}
                                             onClick={() => {
@@ -694,12 +698,12 @@ export default function ReservationForm({ defaultValue, method }) {
                             + Dodaj zasoby
                         </button>
                         <p>Przydzielone zasoby:</p>
-                        <p>Nazwa | Ilość </p>
+                        <p>Nazwa | Ilość | Data od | Data do</p>
                         {Object.keys(resources).length !== 0 &&
                             <ul className={classes.list}>
                                 {resources.map((resource) => (
                                     <li key={resource.id}>
-                                        {resource.resourceName} | {resource.quantity}
+                                        {resource.resourceName} | {resource.allocatedQuantity} | {resource.beginDate} | {resource.endDate}
                                         <FontAwesomeIcon
                                             icon={faX}
                                             onClick={() => {

@@ -16,6 +16,7 @@ public class ServiceRepository : IServiceRepository
     {
         if (!_dbContext.Clients.Any(s => s.Id == service.ClientId)) throw new Exception("Client not found");
         _dbContext.Services.Add(service);
+        _dbContext.SaveChanges();
 
         foreach (var material in materials)
         {
@@ -70,6 +71,7 @@ public class ServiceRepository : IServiceRepository
         _dbContext.Entry(service).Property("ServiceStatus").IsModified = true;
         _dbContext.Entry(service).Property("PaymentStatus").IsModified = true;
         _dbContext.Entry(service).Property("City").IsModified = true;
+        _dbContext.Entry(service).Property("Price").IsModified = true;
 
         var oldMaterials = _dbContext.Materials.Where(m => m.ServiceId == service.Id).ToList();
         var oldResources = _dbContext.ResourceAllocations.Where(r => r.ServiceId == service.Id).ToList();
@@ -152,8 +154,8 @@ public class ServiceRepository : IServiceRepository
     {
         var costs = 0.0;
         var service = _dbContext.Services.Find(serviceId);
-        var materials = _dbContext.Materials.Where(m => m.ServiceId == serviceId);
-        var assignments = _dbContext.Assignments.Where(a => a.ServiceId == serviceId);
+        var materials = _dbContext.Materials.Where(m => m.ServiceId == serviceId).ToList();
+        var assignments = _dbContext.Assignments.Where(a => a.ServiceId == serviceId).ToList();
 
         var materialCost = materials.Sum(m => (double)m.Price * m.Quantity);
         costs += materialCost;

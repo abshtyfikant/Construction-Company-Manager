@@ -1,3 +1,15 @@
+.report-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100vw;
+}
+
+.raport {
+  width: 70%;
+}
+
 .raport .container {
   display: flex;
   flex-direction: column;

@@ -75,7 +75,7 @@ function ReportGeneration() {
       return;
     }
     const foundService = fetchedServices?.find(
-      (service) => service.id === selectedVal
+      (service) => service.id == selectedVal
     );
     setStartDate(foundService?.beginDate);
     setEndDate(foundService?.endDate);
@@ -148,19 +148,107 @@ function ReportGeneration() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const reportData = {
-      id: 0,
-      serviceId: selectedVal,
-      reportType: reportType,
-      description: description,
-      beginDate: startDate.length > 10 ? startDate.slice(0, 10) : startDate,
-      endDate: endDate.length > 10 ? endDate.slice(0, 10) : endDate,
-      amount: 0,
-      city: city,
-      userId: userId,
-    };
+    let url = "";
+    let amount = 0;
 
-    const response = await fetch("https://localhost:7098/api/Report", {
+    switch (reportType) {
+      case "raport o zarobkach pracownika":
+        url = `https://localhost:7098/api/Employee/GetEmployeeEarnings/${startDate}/${endDate}/${selectedVal}`;
+        break;
+      case "raport o kosztach":
+        url = `https://localhost:7098/api/Employee/GetEmployeesEarnings/${startDate}/${endDate}`;
+        const response1 = await fetch(url, {
+          headers: {
+            method: "get",
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+        });
+        if (response1.ok) {
+          amount += await response1.json();
+        } else {
+          alert(
+            "Wystąpił błąd podczas ładowania danych. Spróbuj ponownie za chwilę."
+          );
+          return;
+        }
+
+        url = `https://localhost:7098/api/Material/GetCostInTime/${startDate}/${endDate}`;
+        break;
+      case "raport o zarobkach firmy":
+        url = `https://localhost:7098/api/Service/GetIncome/${startDate}/${endDate}`;
+        break;
+      case "raport z usługi":
+        url = `https://localhost:7098/api/Service/GetCost/${selectedVal}`;
+        break;
+    }
+
+    const response1 = await fetch(url, {
+      headers: {
+        method: "get",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+
+    if (response1.ok) {
+      amount += await response1.json();
+    } else {
+      alert(
+        "Wystąpił błąd podczas ładowania danych. Spróbuj ponownie za chwilę."
+      );
+      return;
+    }
+
+    let reportData;
+
+    switch (reportType) {
+      case "raport o zarobkach pracownika":
+        reportData = {
+          id: 0,
+          serviceId: null,
+          employeeId: selectedVal,
+          reportType: reportType,
+          description: description,
+          beginDate: startDate.length > 10 ? startDate.slice(0, 10) : startDate,
+          endDate: endDate.length > 10 ? endDate.slice(0, 10) : endDate,
+          amount: amount,
+          city: city,
+          userId: userId,
+        };
+        break;
+      case "raport o kosztach":
+      case "raport o zarobkach firmy":
+        reportData = {
+          id: 0,
+          serviceId: null,
+          employeeId: null,
+          reportType: reportType,
+          description: description,
+          beginDate: startDate.length > 10 ? startDate.slice(0, 10) : startDate,
+          endDate: endDate.length > 10 ? endDate.slice(0, 10) : endDate,
+          amount: amount,
+          city: city,
+          userId: userId,
+        };
+        break;
+      case "raport z usługi":
+        reportData = {
+          id: 0,
+          serviceId: selectedVal,
+          employeeId: null,
+          reportType: reportType,
+          description: description,
+          beginDate: startDate.length > 10 ? startDate.slice(0, 10) : startDate,
+          endDate: endDate.length > 10 ? endDate.slice(0, 10) : endDate,
+          amount: amount,
+          city: city,
+          userId: userId,
+        };
+        break;
+    }
+    console.log(reportData);
+    const response = await fetch(`https://localhost:7098/api/Report`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -242,7 +330,7 @@ function ReportGeneration() {
             disabled={reportType === "raport z usługi" ? true : false}
           />
           <label htmlFor="city" className={classes.label}>
-            Miasto (opcj.):
+            Miasto:
           </label>
           <input
             className={classes.formInput}
@@ -250,10 +338,11 @@ function ReportGeneration() {
             type="text"
             value={city}
             placeholder="Dodaj miasto..."
+            required
             onChange={(e) => setCity(e.target.value)}
           />
           <label htmlFor="description" className={classes.label}>
-            Opis (opcj.):
+            Opis:
           </label>
           <input
             className={classes.formInput}
@@ -261,6 +350,7 @@ function ReportGeneration() {
             type="text"
             value={description}
             placeholder="Dodaj opis raportu..."
+            required
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>

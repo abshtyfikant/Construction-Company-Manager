@@ -88,10 +88,6 @@ export default function WorkerForm({ defaultValue, method }) {
     );
 
     if (!response.ok) {
-      // return { isError: true, message: 'Could not fetch project.' };
-      // throw new Response(JSON.stringify({ message: 'Could not fetch project.' }), {
-      //   status: 500,
-      // });
       throw json(
         { message: "Could not fetch resource." },
         {
@@ -136,7 +132,7 @@ export default function WorkerForm({ defaultValue, method }) {
   React.useEffect(() => {
     fetchData();
     getAlloc();
-  }, [fetchData, getAlloc]);
+  }, []);
 
   const checkAlloc = () => {
     if (allocation.length > 0) {
@@ -205,7 +201,8 @@ export default function WorkerForm({ defaultValue, method }) {
               <label>
                 Stawka godzinowa (zł/h):
                 <input
-                  type="text"
+                  type="number"
+                  step="0.01"
                   name="hourlyRate"
                   ref={hourlyRateRef}
                   defaultValue={defaultValue ? defaultValue.ratePerHour : null}

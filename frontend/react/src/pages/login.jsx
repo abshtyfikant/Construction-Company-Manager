@@ -50,7 +50,6 @@ export default Login;
 
 export async function action({ request }) {
   const searchParams = new URL(request.url).searchParams;
-  //const mode = searchParams.get('mode') || 'login';
 
   const data = await request.formData();
   const authData = {
@@ -66,12 +65,14 @@ export async function action({ request }) {
     body: JSON.stringify(authData),
   });
 
-  if (response.status === 422 || response.status === 401) {
-    return response;
+  if (response.status === 400) {
+    alert("Coś poszło nie tak. Spróbuj ponownie.");
+    return null;
   }
 
   if (!response.ok) {
     throw json({ message: "Could not authenticate user." }, { status: 500 });
+    return null;
   }
 
   const resData = await response.json();

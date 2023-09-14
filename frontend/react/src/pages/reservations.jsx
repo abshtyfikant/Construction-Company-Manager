@@ -15,22 +15,6 @@ import Loading from "../components/loading";
 function Accordion({ reservation, index, handleOpenComments }) {
   const navigate = useNavigate();
   const [openDetails, setOpenDetails] = useState(false);
-  const [sumMaterials, setSumMaterials] = useState(0.0);
-  const [sumWorkers, setSumWorkers] = useState(0.0);
-
-  const calcSumMaterials = () => {
-    let tmpSumMaterials = 0.0;
-    reservation?.materials?.forEach((material) => {
-      tmpSumMaterials += Number(material.price) * Number(material.quantity);
-    });
-    setSumMaterials(tmpSumMaterials);
-  };
-
-  const calcSumWorkers = () => {
-    let tmpSumWorkers = 0.0;
-    reservation?.workers?.forEach((worker) => {});
-    setSumWorkers(tmpSumWorkers);
-  };
 
   return (
     <>
@@ -38,7 +22,6 @@ function Accordion({ reservation, index, handleOpenComments }) {
         key={index}
         onClick={() => {
           setOpenDetails((prev) => !prev);
-          calcSumMaterials();
         }}
       >
         <td>{reservation.id}</td>
@@ -110,8 +93,7 @@ function Accordion({ reservation, index, handleOpenComments }) {
               })}
           </td>
           <td colSpan={3}>
-            <p>Koszt materiałów: {sumMaterials}</p>
-            <p>Koszt pracowników: {sumWorkers}</p>
+            <p>Cena: {reservation.price}</p>
             <p
               className={classes.actions}
               onClick={() => {

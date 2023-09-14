@@ -21,7 +21,7 @@ public class ReportController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<IEnumerable<ServiceForListDto>> Get()
+    public ActionResult<IEnumerable<ReportForListDto>> Get()
     {
         var list = _reportService.GetReportsForList();
         return Ok(list);
@@ -31,7 +31,7 @@ public class ReportController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<ServiceDetailsDto> Get(int id)
+    public ActionResult<ReportDetailsDto> Get(int id)
     {
         if (id == 0) return BadRequest();
         var report = _reportService.GetReport(id);

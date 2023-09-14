@@ -19,7 +19,7 @@ public class AllServiceDto : IMapFrom<Domain.Model.Service>
     public string ServiceStatus { get; set; }
     public string PaymentStatus { get; set; }
     public string City { get; set; }
-    public double Price { get; set; }
+    public decimal Price { get; set; }
     public List<NewMaterialDto> Materials { get; set; }
     public List<NewResourceAllocationDto> Resources { get; set; }
     public List<NewAssignmentDto> Assigments { get; set; }

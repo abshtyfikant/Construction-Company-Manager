@@ -7,7 +7,8 @@ namespace Application.DTO.Report;
 public class NewReportDto : IMapFrom<Domain.Model.Report>
 {
     public int Id { get; set; }
-    public int ServiceId { get; set; }
+    public int? ServiceId { get; set; }
+    public int? EmployeeId { get; set; }
     public string ReportType { get; set; }
     public string Description { get; set; }
     public DateTime BeginDate { get; set; }
@@ -26,7 +27,8 @@ public class NewReportValidation : AbstractValidator<NewReportDto>
 {
     public NewReportValidation()
     {
-        RuleFor(x => x.ServiceId).NotEmpty();
+        RuleFor(x => x.ServiceId);
+        RuleFor(x => x.EmployeeId);
         RuleFor(x => x.ReportType).NotEmpty().MaximumLength(50);
         RuleFor(x => x.Description).NotEmpty().MaximumLength(255);
         RuleFor(x => x.BeginDate).NotEmpty();

@@ -33,6 +33,12 @@ public class ApplicationDbContext : DbContext
             .HasForeignKey(e => e.UserId)
             .IsRequired();
 
+        builder.Entity<Report>()
+            .HasOne(e => e.Employee)
+            .WithMany(e => e.Reports)
+            .HasForeignKey(e => e.EmployeeId)
+            .IsRequired(false);
+
         builder.Entity<Employee>()
             .HasMany(e => e.Specializations)
             .WithMany(e => e.Employees)
@@ -48,7 +54,6 @@ public class ApplicationDbContext : DbContext
             .HasMany(e => e.Services)
             .WithMany(e => e.Employees)
             .UsingEntity<Assignment>();
-
 
         builder.Entity<Employee>()  
             .HasMany(e => e.Assigments)
@@ -90,7 +95,7 @@ public class ApplicationDbContext : DbContext
             .HasMany(e => e.Reports)
             .WithOne(e => e.Service)
             .HasForeignKey(e => e.ServiceId)
-            .IsRequired();
+            .IsRequired(false);
 
         builder.Entity<Service>()
             .HasMany(e => e.ServiceResources)
