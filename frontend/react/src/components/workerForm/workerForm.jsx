@@ -52,7 +52,7 @@ export default function WorkerForm({ defaultValue, method }) {
       lastName: lastNameRef.current.value,
       city: cityRef.current.value,
       ratePerHour: Number(hourlyRateRef.current.value),
-      mainSpecializationId: Number(specialization),
+      mainSpecializationId: specialization,
     };
 
     const response = await fetch("https://localhost:7098/api/Employee", {

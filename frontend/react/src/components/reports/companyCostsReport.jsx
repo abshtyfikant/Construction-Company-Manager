@@ -65,7 +65,7 @@ function CompanyCostsReport() {
           <p>Wygenerowano przez: {report.author || "admin"}</p>
         </div>
       </section>
-      <button onClick={generatePDF}>Generate pdf</button>
+      <button onClick={generatePDF}>Wygeneruj pdf</button>
     </div>
   );
 }

@@ -163,7 +163,7 @@ function Workers() {
           <td>{worker.firstName}</td>
           <td>{worker.lastName}</td>
           <td>{worker.city}</td>
-          <td>{worker.mainSpecialization}</td>
+          <td>{worker.mainSpecializationId}</td>
           <td className={classes.alignLeft}>{worker.ratePerHour}</td>
           <td className={classes.alignRight}>
             <button

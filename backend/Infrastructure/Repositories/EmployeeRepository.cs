@@ -119,6 +119,7 @@ public class EmployeeRepository : IEmployeeRepository
         _dbContext.Entry(employee).Property("LastName").IsModified = true;
         _dbContext.Entry(employee).Property("City").IsModified = true;
         _dbContext.Entry(employee).Property("RatePerHour").IsModified = true;
+        _dbContext.Entry(employee).Property("MainSpecializationId").IsModified = true;
         _dbContext.SaveChanges();
     }
 
