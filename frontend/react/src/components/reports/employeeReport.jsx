@@ -11,7 +11,7 @@ function EmployeeReport() {
   // Funkcja pobierająca dane raportu z API
   async function fetchReportDetails(id) {
     const token = localStorage.getItem("token");
-    const response = await fetch(`https://localhost:7098/api/Employee/GetEmployeeEarnings/${Number(id)}/${startDate}/${endDate}`, {
+    const response = await fetch(`https://localhost:7098/api/Report/${Number(id)}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + token,
@@ -22,9 +22,9 @@ function EmployeeReport() {
       data = await response.json();
       setReport(data);
     } else {
-      alert(
-        "Wystąpił błąd podczas ładowania danych. Spróbuj ponownie za chwilę."
-      );
+      // alert(
+      //   "Wystąpił błąd podczas ładowania danych. Spróbuj ponownie za chwilę."
+      // ); //employee undefined
       return;
     }
 
@@ -39,10 +39,10 @@ function EmployeeReport() {
       const data2 = await response2.json();
       setEmployee(data2);
     } else {
-      alert(
-        "Wystąpił błąd podczas ładowania danych. Spróbuj ponownie za chwilę."
-      );
-      return;
+      // alert(
+      //   "Wystąpił błąd podczas ładowania danych. Spróbuj ponownie za chwilę."
+      // ); //employee undefined
+      //return;
     }
   }
 

@@ -182,7 +182,7 @@ function ReportGeneration() {
         url = `https://localhost:7098/api/Service/GetCost/${selectedVal}`;
         break;
     }
-
+    alert("before sending")
     const response1 = await fetch(url, {
       headers: {
         method: "get",
