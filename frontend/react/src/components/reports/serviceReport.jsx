@@ -1,7 +1,8 @@
 import "../../css/report-details.css";
 import React, { useState, useEffect } from "react";
-import { defer, json, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import GridMenuHeader from "../gridMenuHeader";
+import jsPDF from "jspdf";
 
 function ServiceReport() {
   const { reportId } = useParams();
@@ -25,12 +26,15 @@ function ServiceReport() {
       return null;
     }
 
-    const response2 = await fetch(`https://localhost:7098/api/Service/${data.serviceId}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-    });
+    const response2 = await fetch(
+      `https://localhost:7098/api/Service/${data.serviceId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
 
     if (response2.ok) {
       const data2 = await response2.json();
@@ -51,12 +55,41 @@ function ServiceReport() {
   }
 
   const generatePDF = () => {
-    const element = document.getElementById("service-report-pdf");
+    const element = (
+      <section className="raport" id="service-report-pdf">
+        <div className="container">
+        <p>Numer raportu: {report?.id}</p>
+          <div className="divider"></div>
+          <p>Typ raportu: {report?.reportType}</p>
+          <div className="divider"></div>
+          <p>Usluga: {service?.serviceType}</p>
+          <div className="divider"></div>
+          <p>Miasto: {report?.city}</p>
+          <div className="divider"></div>
+          <p>
+            <span>Data od: {report?.beginDate.slice(0, 10)}</span>
+            <span> Data do:{report?.endDate.slice(0, 10)}</span>
+          </p>
+          <div className="divider"></div>
+          <p>Klient: {report?.city}</p>
+          <div className="divider"></div>
+          <p>Opis: {report?.description ?? "Brak"}</p>
+          <div className="divider"></div>
+          <p>Laczne koszty: {report?.amount}</p>
+          <div className="divider"></div>
+          <p>Cena: {service?.price}</p>
+          <div className="divider"></div>
+          <p>Bilans: {service?.price + report?.amount}</p>
+          <div className="divider"></div>
+          <p>Wygenerowano przez: {report?.author || "admin"}</p>
+        </div>
+      </section>
+    );
 
     if (element) {
-      const pdf = new Blob([element.innerHTML], { type: "application/pdf" });
-      const url = URL.createObjectURL(pdf);
-      window.open(url);
+      const pdf = new jsPDF();
+      pdf.text(element.innerText, 10, 10); // Add the content as text in the PDF
+      pdf.save(`report-${reportId}.pdf`);
     }
   };
 

@@ -1,7 +1,8 @@
 import "../../css/report-details.css";
 import React, { useState, useEffect } from "react";
-import { defer, json, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import GridMenuHeader from "../gridMenuHeader";
+import jsPDF from "jspdf";
 
 function CompanyEarningsReport() {
   const { reportId } = useParams();
@@ -34,25 +35,58 @@ function CompanyEarningsReport() {
     return <div>Ładowanie...</div>;
   }
 
+  const generatePDF = () => {
+    const element = (
+      <section className="raport">
+        <div className="container">
+          <p>Numer raportu: {report?.id}</p>
+          <div className="divider"></div>
+          <p>Typ raportu: {report.reportType}</p>
+          <div className="divider"></div>
+          <p>Data od: {report.beginDate.slice(0, 10)}</p>
+          <div className="divider"></div>
+          <p>Data do: {report.endDate.slice(0, 10)}</p>
+          <div className="divider"></div>
+          <p>Miasto: {report.city}</p>
+          <div className="divider"></div>
+          <p>Opis: {report.description}</p>
+          <div className="divider"></div>
+          <p>Suma: {report.amount}</p>
+          <div className="divider"></div>
+          <p>Wygenerowano przez: {report.author || "admin"}</p>
+        </div>
+      </section>
+    );
+
+    if (element) {
+      const pdf = new jsPDF();
+      pdf.text(element.innerText, 10, 10); // Add the content as text in the PDF
+      pdf.save(`report-${reportId}.pdf`);
+    }
+  };
+
   return (
-    <section className="raport">
-      <GridMenuHeader headerTitle="Raport" />
-      <div className="container">
-        <p>Typ raportu: {report.reportType}</p>
-        <div className="divider"></div>
-        <p>Data od: {report.beginDate.slice(0, 10)}</p>
-        <div className="divider"></div>
-        <p>Data do: {report.endDate.slice(0, 10)}</p>
-        <div className="divider"></div>
-        <p>Miasto: {report.city}</p>
-        <div className="divider"></div>
-        <p>Opis: {report.description}</p>
-        <div className="divider"></div>
-        <p>Suma: {report.amount}</p>
-        <div className="divider"></div>
-        <p>Wygenerowano przez: {report.author || "admin"}</p>
-      </div>
-    </section>
+    <div className="report-page">
+      <section className="raport">
+        <GridMenuHeader headerTitle="Raport" />
+        <div className="container">
+          <p>Typ raportu: {report.reportType}</p>
+          <div className="divider"></div>
+          <p>Data od: {report.beginDate.slice(0, 10)}</p>
+          <div className="divider"></div>
+          <p>Data do: {report.endDate.slice(0, 10)}</p>
+          <div className="divider"></div>
+          <p>Miasto: {report.city}</p>
+          <div className="divider"></div>
+          <p>Opis: {report.description}</p>
+          <div className="divider"></div>
+          <p>Suma: {report.amount}</p>
+          <div className="divider"></div>
+          <p>Wygenerowano przez: {report.author || "admin"}</p>
+        </div>
+      </section>
+      <button onClick={generatePDF}>Generate pdf</button>
+    </div>
   );
 }
 

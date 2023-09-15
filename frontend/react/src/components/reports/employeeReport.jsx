@@ -2,6 +2,7 @@ import "../../css/report-details.css";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import GridMenuHeader from "../gridMenuHeader";
+import jsPDF from "jspdf";
 
 function EmployeeReport() {
   const { reportId, startDate, endDate } = useParams();
@@ -11,38 +12,44 @@ function EmployeeReport() {
   // Funkcja pobierająca dane raportu z API
   async function fetchReportDetails(id) {
     const token = localStorage.getItem("token");
-    const response = await fetch(`https://localhost:7098/api/Report/${Number(id)}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-    });
+    const response = await fetch(
+      `https://localhost:7098/api/Report/${Number(id)}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
     let data;
     if (response.ok) {
       data = await response.json();
       setReport(data);
     } else {
-      // alert(
-      //   "Wystąpił błąd podczas ładowania danych. Spróbuj ponownie za chwilę."
-      // ); //employee undefined
+      alert(
+        "Wystąpił błąd podczas ładowania danych. Spróbuj ponownie za chwilę."
+      );
       return;
     }
 
-    const response2 = await fetch(`https://localhost:7098/api/Employee/GetEmployee/${data.employeeId}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-    });
+    const response2 = await fetch(
+      `https://localhost:7098/api/Employee/${data.employeeId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
 
     if (response2.ok) {
       const data2 = await response2.json();
       setEmployee(data2);
     } else {
-      // alert(
-      //   "Wystąpił błąd podczas ładowania danych. Spróbuj ponownie za chwilę."
-      // ); //employee undefined
-      //return;
+      alert(
+        "Wystąpił błąd podczas ładowania danych. Spróbuj ponownie za chwilę."
+      );
+      return;
     }
   }
 
@@ -56,27 +63,62 @@ function EmployeeReport() {
     return <div>Ładowanie...</div>;
   }
 
+  const generatePDF = () => {
+    const element = (
+      <section className="raport">
+        <div className="container">
+        <p>Numer raportu: {report?.id}</p>
+          <div className="divider"></div>
+          <p>Typ raportu: {report.reportType}</p>
+          <div className="divider"></div>
+          <p>Pracownik: {employee?.firstName + " " + employee?.lastName}</p>
+          <div className="divider"></div>
+          <p>Data od: {report.beginDate.slice(0, 10)}</p>
+          <div className="divider"></div>
+          <p>Data do: {report.endDate.slice(0, 10)}</p>
+          <div className="divider"></div>
+          <p>Miasto: {report.city}</p>
+          <div className="divider"></div>
+          <p>Opis: {report.description}</p>
+          <div className="divider"></div>
+          <p>Laczna kwota: {report.amount}</p>
+          <div className="divider"></div>
+          <p>Wygenerowano przez: {report.author || "admin"}</p>
+        </div>
+      </section>
+    );
+
+    if (element) {
+      const pdf = new jsPDF();
+      pdf.text(element.innerText, 10, 10); // Add the content as text in the PDF
+      pdf.save(`report-${reportId}.pdf`);
+    }
+  };
+
   return (
-    <section className="raport">
-      <GridMenuHeader headerTitle="Raport" />
-      <div className="container">
-        <p>Typ raportu: {report.reportType}</p>
-        <div className="divider"></div>
-        <p>Pracownik: {employee?.firstName + " " + employee?.lastName}</p>
-        <div className="divider"></div>
-        <p>Data od: {report.beginDate.slice(0, 10)}</p>
-        <div className="divider"></div>
-        <p>Data do: {report.endDate.slice(0, 10)}</p>
-        <div className="divider"></div>
-        <p>Miasto: {report.city}</p>
-        <div className="divider"></div>
-        <p>Opis: {report.description}</p>
-        <div className="divider"></div>
-        <p>Łączna kwota: {report.amount}</p>
-        <div className="divider"></div>
-        <p>Wygenerowano przez: {report.author || "admin"}</p>
-      </div>
-    </section>
+    <div className="report-page">
+      <section className="raport">
+        <GridMenuHeader headerTitle="Raport" />
+        <div className="container">
+          <p>Typ raportu: {report.reportType}</p>
+          <div className="divider"></div>
+          <p>Pracownik: {employee?.firstName + " " + employee?.lastName}</p>
+          <div className="divider"></div>
+          <p>Data od: {report.beginDate.slice(0, 10)}</p>
+          <div className="divider"></div>
+          <p>Data do: {report.endDate.slice(0, 10)}</p>
+          <div className="divider"></div>
+          <p>Miasto: {report.city}</p>
+          <div className="divider"></div>
+          <p>Opis: {report.description}</p>
+          <div className="divider"></div>
+          <p>Łączna kwota: {report.amount}</p>
+          <div className="divider"></div>
+          <p>Wygenerowano przez: {report.author || "admin"}</p>
+        </div>
+      </section>
+      <button onClick={generatePDF}>Generate pdf</button>
+    </div>
   );
 }
 
