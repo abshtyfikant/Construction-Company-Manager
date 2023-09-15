@@ -87,7 +87,7 @@ public class EmployeeRepository : IEmployeeRepository
 
     public Employee GetEmployee(int employeeId)
     {
-        var employee = _dbContext.Employees.FirstOrDefault(i => i.Id == employeeId);
+        var employee = _dbContext.Employees.Find(employeeId);
         return employee;
     }
 
